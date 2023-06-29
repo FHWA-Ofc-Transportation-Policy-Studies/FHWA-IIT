@@ -1,0 +1,5 @@
+*.swp
+/model/input
+/model/output
+/webapp/node_modules
+/webapp/dist
