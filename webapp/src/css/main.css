@@ -1,0 +1,249 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border-color:red;
+  border-width:10px;
+}
+
+.paddedDiv {
+  /* border-width:1px;
+  border-style:solid;
+  border-color: red; */
+  padding: 10px;
+}
+
+body {  
+  display: flex;
+}
+
+calcite-loader {
+  align-self: center;
+  justify-self: center;
+}
+
+#screen-shot {
+  margin: 30px;
+  border: 1px solid black
+}
+
+
+/* ------------------------------------------- */
+
+.calcite-panel {
+  --calcite-shell-panel-width: 800vw;
+  --calcite-shell-panel-max-width: 800vw;
+}
+
+.calcite-shell-panel {
+  --calcite-shell-panel-width: 800vw;
+   --calcite-shell-panel-max-width: 800vw;
+}
+
+.appHeader {
+  /* display: flex; */
+  width: 100%;
+  height: 50px; 
+  background-image: linear-gradient(#1c6da6 , #1c6da6);
+  padding-top: 7px;
+  /* border-width:1px;
+  border-style:solid;
+  border-color:#007ac2; */
+}
+
+#entryPanel {
+  display: none;
+  text-align: left;  
+  top: 60px;
+  background: white;
+  /* margin-left: 45px; */
+  width: 100%;
+} 
+
+.headerDivLeft {
+  float: left;
+  width: 66%;
+  border: 0px solid #000;
+  text-align: left;
+}
+
+.headerDivRight {
+  float: left;
+  width: 33%;
+  text-align: right;
+}
+
+.mainPageRight {
+  float: left;
+  width: 33%;
+  text-align: left;
+}
+
+.mainPageLeft {
+  float: left;
+  width: 66%;
+  border: 0px solid #000;
+  text-align: left;
+}
+
+.action {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+calcite-shell-panel {
+  --calcite-panel-width-multiplier: var(--calcite-panel-width-multiplier);
+}
+
+
+/* make the table taller and make the right margin big so 
+you can still click the zoom in and zoom out buttons */
+#table-shell {
+  height: 250px;
+  margin-right: 35px;
+} 
+
+calcite-panel[id="fars-fltr-panel"],
+calcite-panel[id="nhs-fltr-panel"],
+calcite-panel[id="tracts-fltr-panel"],
+calcite-panel[id="states-fltr-panel"],
+calcite-panel[id="neighborhoods-fltr-panel"],
+calcite-panel[id="regions-fltr-panel"],
+calcite-panel[id="disadvantaged-fltr-panel"]
+{
+  --calcite-panel-width: 25vw;
+  --calcite-panel-min-width: 15vw;
+  --calcite-panel-max-width: 35vw;
+} 
+
+/* don't diplay layer subtitle in legend */
+.esri-legend__layer-caption {
+  display:none;
+  }
+
+/* reduce spacing between patches in legend */
+.esri-legend__layer-cell {
+  padding:1px
+}
+
+/* when 4.23 came out the layers dialog was getting cut off at the right */
+.esri-layer-list__item-container {
+  margin-right:12px
+}
+
+/* reduce whitespace between legend patches */
+.esri-legend__service {
+  padding-top: 5px;
+  padding-bottom: 2px;
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#cursorText{
+  position:absolute;
+  border:1px solid black;
+  padding: 5px;
+  background: white;
+}
+
+.updateLi {
+  margin: 12px 0;
+  padding-left: 12px
+}
+
+.slider {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+/* =======================================================================
+== simple summary charts
+==========================================================================  */
+
+
+calcite-panel[data-panel-id="simple-summary-panel"] {
+  --calcite-panel-width: 40vw;
+  --calcite-panel-min-width: 40vw;
+  --calcite-panel-max-width: 40vw;
+}
+
+#simple-summary-main-div {
+  margin: 5px;
+  /* border: 2px solid greenyellow; */
+  padding: 7px;
+  height: 360px;
+  width: 330px;
+  justify-content: center;
+  align-items: center;
+}
+
+.simple-summary-stat-box {
+  border: 1px solid lightgray;
+  margin: 5px;
+  padding: 5px;
+  width: 90%;
+  /*height: 30px; */
+  padding: 5px;
+}
+
+.simple-summary-sub-container {
+  /* border: 1px solid blue; */
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 6px;
+  padding: 5px;
+}
+
+.simple-summary-canvas-container {
+  margin: 0px;
+  /* border: 2px solid red; */
+  padding: 3px;
+  height: 100;
+  width: 100%;
+  justify-content: center;
+}

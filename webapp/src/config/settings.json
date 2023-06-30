@@ -1,0 +1,85 @@
+{
+    "app_mode": "LOCAL_DEV",
+    "version" : "beta 1.0", 
+    "date": "June 30, 2023",
+    "layers": [
+        {
+            "fullName": "FARS (number of crashes)",
+            "shortName": "fars",
+            "selectors": [
+                {"name": "year", "fieldName": "YEAR", "fieldType": "integer", "fieldLabel": "Year"},
+                {"name": "fatalities", "fieldName": "FATALS", "fieldType": "integer", "fieldLabel": "Fatals"},
+                {"name": "fatalsafamer", "fieldName": "FTL_BLACK", "fieldType": "integer", "fieldLabel": "Fatals Afr. American"},
+                {"name": "fatalsamerind", "fieldName": "FTL_AMER_INDIAN ", "fieldType": "integer", "fieldLabel": "Fatals Amer. Indian"},
+                {"name": "fatalsped", "fieldName": "FTL_PEDESTRIAN", "fieldType": "integer", "fieldLabel": "Fatals Ped."},
+                {"name": "fatalsbicycle", "fieldName": "FTL_BICYCLIST", "fieldType": "integer", "fieldLabel": "Fatals Bicycle"}
+            ],
+            "charts": [
+                {"type": "simpleSum", "chartName": "Total Fatalities", "sumField": "FATALS"},
+                {"type": "simpleSum", "chartName": "African American Fatalities", "sumField": "FTL_BLACK"}
+            ]
+        },
+        {
+            "fullName": "Adjusted Urban Area Boundaries",
+            "shortName": "urban",
+            "charts": [
+                {"type": "simpleSum", "chartName": "Urban Area", "sumField": "SQ_MILES"}
+            ]
+        },
+        {
+            "fullName": "Noise Damage",
+            "shortName": "damage",
+            "selectors": [
+                {"name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class"},
+                {"name": "damage", "fieldName": "bin_dl", "fieldType": "integer", "fieldLabel": "Noise Damage Bin"}
+            ]
+        },
+        {
+            "fullName": "Noise Equity",
+            "shortName": "equity",
+            "selectors": [
+                {"name": "nonwhitedmg", "fieldName": "nonwhite_d ", "fieldType": "float", "fieldLabel": "Non-White Damage", "units": "dollars"},
+                {"name": "whitedmg", "fieldName": "white_dmg ", "fieldType": "float", "fieldLabel": "White Damage", "units": "dollars"},                
+                {"name": "blackdmg", "fieldName": "black_dmg ", "fieldType": "float", "fieldLabel": "Black Damage", "units": "dollars"},
+                {"name": "asiandmg", "fieldName": "asian_dmg ", "fieldType": "float", "fieldLabel": "Asian Damage", "units": "dollars"},
+                {"name": "nativedmg", "fieldName": "native_dmg ", "fieldType": "float", "fieldLabel": "Native Damage", "units": "dollars"},
+                {"name": "pacificdmg", "fieldName": "pacific_dm ", "fieldType": "float", "fieldLabel": "Pacific Damage", "units": "dollars"},
+                {"name": "otherdmg", "fieldName": "other_dmg ", "fieldType": "float", "fieldLabel": "Other Damage", "units": "dollars"},
+                {"name": "povertydmg", "fieldName": "poverty_dmg ", "fieldType": "float", "fieldLabel": "Poverty Damage", "units": "dollars"},
+                {"name": "nonpovertydmg", "fieldName": "nonpover_1 ", "fieldType": "float", "fieldLabel": "Non-Poverty Damage", "units": "dollars"},
+                {"name": "nonwhitendp", "fieldName": "nonwhite_n ", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio"},
+                {"name": "whitendp", "fieldName": "white_ndp ", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio"},
+                {"name": "blackndp", "fieldName": "black_ndp ", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio"},
+                {"name": "asianndp", "fieldName": "asian_ndp ", "fieldType": "float", "fieldLabel": "Asian Equity Ratio", "units": "ratio"},
+                {"name": "nativendp", "fieldName": "native_ndp ", "fieldType": "float", "fieldLabel": "Native Equity Ratio", "units": "ratio"},
+                {"name": "pacificndp", "fieldName": "pacific_nd ", "fieldType": "float", "fieldLabel": "Pacific Equity Ratio", "units": "ratio"},
+                {"name": "otherndp", "fieldName": "other_ndp ", "fieldType": "float", "fieldLabel": "Other Equity Ratio", "units": "ratio"},
+                {"name": "povertyndp", "fieldName": "poverty_ndp ", "fieldType": "float", "fieldLabel": "Poverty Equity Ratio", "units": "ratio"},
+                {"name": "nonpovertyndp", "fieldName": "nonpoverty ", "fieldType": "float", "fieldLabel": "Non-Poverty Equity Ratio", "units": "ratio"}
+            ]
+        },
+        {
+            "fullName": "ACS Population",
+            "shortName": "acs",
+            "selectors": [
+                {"name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people"},
+                {"name": "pctwhite", "fieldName": "white", "fieldType": "float", "fieldLabel": "% white", "units": "* 100"},
+                {"name": "pctnonwhite", "fieldName": "nonwhite", "fieldType": "float", "fieldLabel": "% non-white", "units": "* 100"},
+                {"name": "pctblack", "fieldName": "black", "fieldType": "float", "fieldLabel": "% black", "units": "* 100"},
+                {"name": "pctnative", "fieldName": "native", "fieldType": "float", "fieldLabel": "% native", "units": "* 100"},
+                {"name": "pctasian", "fieldName": "asian", "fieldType": "float", "fieldLabel": "% asian", "units": "* 100"},
+                {"name": "pctpacific", "fieldName": "pacific", "fieldType": "float", "fieldLabel": "% pacific", "units": "* 100"},
+                {"name": "pctother", "fieldName": "other", "fieldType": "float", "fieldLabel": "% other", "units": "* 100"},
+                {"name": "pctpoverty", "fieldName": "poverty", "fieldType": "float", "fieldLabel": "% poverty", "units": "* 100"},
+                {"name": "pctnonpoverty", "fieldName": "nonpoverty", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "* 100"}
+            ]
+        },
+        {
+            "fullName": "States",
+            "shortName": "states",
+            "selectors": [
+                {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text"}
+            ]
+        }
+    ]
+}

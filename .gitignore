@@ -1,5 +1,22 @@
 *.swp
+/.vscode
+
+# model section
 /model/input
 /model/output
+
+# webapp section
 /webapp/node_modules
 /webapp/dist
+/public/.vscode
+/webapp/prep_layers/
+/webapp/prep_layers/prep_layers_map/*
+!/webapp/prep_layers/prep_layers_map/prep_layers_map.aprx
+/webapp/prep_layers/_old/
+/webapp/prep_layers/input/
+/webapp/prep_layers/layer_to_distribute/
+/webapp/prep_layers/output/
+/webapp/build/
+/webapp/src/config/apiKey.json
+/webapp/gmb_notes.txt
+/webapp/TTET_ECAT Documentation.docx
