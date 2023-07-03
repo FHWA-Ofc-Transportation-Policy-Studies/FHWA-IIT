@@ -7,8 +7,11 @@ import ImageryLayer from '../../node_modules/@arcgis/core/layers/ImageryLayer'
 function noisePopupTemplateTitleFunction(feature) {
     return 'Noise Damage'
 }
+function airPopupTemplateTitleFunction(feature) {
+    return 'Air Damage'
+}
 
-function noisePopupTemplateContentFunction(feature) {
+function damagePopupTemplateContentFunction(feature) {
     let dmgDescrip
 
     switch (feature.graphic.attributes.F_SYSTEM) {
@@ -60,7 +63,20 @@ function noisePopupTemplateContentFunction(feature) {
 
 let noisePopupTemplate = {
     title: noisePopupTemplateTitleFunction,
-    content: noisePopupTemplateContentFunction,
+    content: damagePopupTemplateContentFunction,
+    fieldInfos: [
+        { fieldName: 'STATE_CODE' },
+        { fieldName: 'STATE_ABB' },
+        { fieldName: 'ROUTE_NUMB' },
+        { fieldName: 'F_SYSTEM' },
+        { fieldName: 'FACILITY_T' },
+        { fieldName: 'bin_dl' }
+    ]
+}
+
+let airPopupTemplate = {
+    title: airPopupTemplateTitleFunction,
+    content: damagePopupTemplateContentFunction,
     fieldInfos: [
         { fieldName: 'STATE_CODE' },
         { fieldName: 'STATE_ABB' },
@@ -72,7 +88,7 @@ let noisePopupTemplate = {
 }
 
 // equityLayer
-let equityPopupTemplate = {
+let noiseEquityPopupTemplate = {
     title: 'Noise Equity',
     overwriteActions: true,
     content: [
@@ -170,6 +186,156 @@ let equityPopupTemplate = {
                 {
                     fieldName: 'nonpover_1',
                     label: 'Noise Damage Cost: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'nonwhite_p',
+                    label: 'Population: Nonwhite',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'white_pop',
+                    label: 'Population: White',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'black_pop',
+                    label: 'Population: Black',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'asian_pop',
+                    label: 'Population: Asian',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'native_pop',
+                    label: 'Population: Native',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'pacific_po',
+                    label: 'Population: Pacific',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'other_pop',
+                    label: 'Population: Other',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'poverty_po',
+                    label: 'Population: Poverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'nonpover_2',
+                    label: 'Population: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                }
+            ]
+        }
+    ]
+}
+
+let airEquityPopupTemplate = {
+    title: 'Air Equity',
+    overwriteActions: true,
+    content: [
+        {
+            type: 'fields',
+            fieldInfos: [
+                { fieldName: 'STATE_ABB', label: 'State' },
+                { fieldName: 'name', label: 'County' },
+                { fieldName: 'GEOID', label: 'County FIPS' },
+                {
+                    fieldName: 'nonwhite_n',
+                    label: 'Air Equity Ratio: Nonwhite',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'white_ndp',
+                    label: 'Air Equity Ratio: White',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'black_ndp',
+                    label: 'Air Equity Ratio: Black',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'asian_ndp',
+                    label: 'Air Equity Ratio: Asian',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'native_ndp',
+                    label: 'Air Equity Ratio: Native',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'pacific_nd',
+                    label: 'Air Equity Ratio: Pacific',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'other_ndp',
+                    label: 'Air Equity Ratio: Other',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'poverty_nd',
+                    label: 'Air Equity Ratio: Poverty',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'nonpoverty',
+                    label: 'Air Equity Ratio: Nonpoverty',
+                    format: { digitSeparator: true, places: 2 }
+                },
+                {
+                    fieldName: 'nonwhite_d',
+                    label: 'Air Damage Cost: Nonwhite',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'white_dmg',
+                    label: 'Air Damage Cost: White',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'black_dmg',
+                    label: 'Air Damage Cost: Black',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'asian_dmg',
+                    label: 'Air Damage Cost: Asian',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'native_dmg',
+                    label: 'Air Damage Cost: Native',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'pacific_dm',
+                    label: 'Air Damage Cost: Pacific',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'other_dmg',
+                    label: 'Air Damage Cost: Other',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'poverty_dm',
+                    label: 'Air Damage Cost: Poverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'nonpover_1',
+                    label: 'Air Damage Cost: Nonpoverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
@@ -769,7 +935,7 @@ export const farsLayer = new FeatureLayer({
     }
 })
 
-export const damageLayer = new FeatureLayer({
+export const noiseDamageLayer = new FeatureLayer({
     title: 'Noise Damage',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_bin_reduced_simplified_00005/FeatureServer/0',
     visible: true,
@@ -779,35 +945,35 @@ export const damageLayer = new FeatureLayer({
     //definitionExpression: "fclass = 1"
 })
 
-//  export const airDamageLayer = new FeatureLayer({
-//     title: 'Air Damage',
-//     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
-//     visible: true,
-//     outFields: ['*'],
-//     renderer: noiseRenderer,
-//     popupTemplate: noisePopupTemplate
-//     //definitionExpression: "fclass = 1"
-// })
+ export const airDamageLayer = new FeatureLayer({
+    title: 'Air Damage',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
+    visible: true,
+    outFields: ['*'],
+    renderer: noiseRenderer,
+    popupTemplate: airPopupTemplate
+    //definitionExpression: "fclass = 1"
+})
 
-export const equityLayer = new FeatureLayer({
+export const noiseEquityLayer = new FeatureLayer({
     title: 'Noise Equity',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
     renderer: equityRendererNonWhite,
-    popupTemplate: equityPopupTemplate
+    popupTemplate: noiseEquityPopupTemplate
     //definitionExpression: "fclass = 1"
 })
 
-// export const airEquityLayer = new FeatureLayer({
-//     title: 'Air Equity',
-//     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
-//     visible: true,
-//     outFields: ['*'],
-//     renderer: equityRendererNonWhite,
-//     popupTemplate: equityPopupTemplate
-//     //definitionExpression: "fclass = 1"
-// })
+export const airEquityLayer = new FeatureLayer({
+    title: 'Air Equity',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
+    visible: true,
+    outFields: ['*'],
+    renderer: equityRendererNonWhite,
+    popupTemplate: airEquityPopupTemplate
+    //definitionExpression: "fclass = 1"
+})
 
 export const acsLayer = new FeatureLayer({
     title: 'ACS Population',

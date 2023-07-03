@@ -18,10 +18,10 @@ import apiKey from '../config/apiKey.json'
 import settings from '../config/settings.json'
 import {
     farsLayer,
-    damageLayer,
-    equityLayer,
-    // airDamageLayer,
-    // airEquityLayer,
+    noiseDamageLayer,
+    noiseEquityLayer,
+    airDamageLayer,
+    airEquityLayer,
     acsLayer,
     statesLayer,
     urbanLayer,
@@ -65,8 +65,8 @@ let defaultLayerVisibility = {}
 let layerList
 // layerviews (in most cases)
 let farsLayerView
-let damageLayerView
-let equityLayerView
+let noiseDamageLayerView
+let noiseEquityLayerView
 let airDamageLayerView
 let airEquityLayerView
 let acsLayerView
@@ -107,10 +107,10 @@ function setUpMap() {
             landcoverLayer,
             urbanLayer,
             acsLayer,
-            equityLayer,
-            damageLayer,
-            // airDamageLayer,
-            // airEquityLayer,
+            noiseEquityLayer,
+            noiseDamageLayer,
+            airEquityLayer,
+            airDamageLayer,   
             statesLayer,
             farsLayer
         ]
@@ -147,10 +147,10 @@ function onViewReady(view) {
     // this all only gets called the first time.
     let whenLayerViewsCreatedPromises = Promise.all([
         view.whenLayerView(farsLayer),
-        view.whenLayerView(damageLayer),
-        view.whenLayerView(equityLayer),
-        // view.whenLayerView(airDamageLayer),
-        // view.whenLayerView(airEquityLayer),
+        view.whenLayerView(noiseDamageLayer),
+        view.whenLayerView(noiseEquityLayer),
+        view.whenLayerView(airDamageLayer),
+        view.whenLayerView(airEquityLayer),
         view.whenLayerView(acsLayer),
         view.whenLayerView(statesLayer),
         view.whenLayerView(urbanLayer)
@@ -159,39 +159,32 @@ function onViewReady(view) {
     let layerViewsDoneUpdatingPromise = whenLayerViewsCreatedPromises.then(
         ([
             tmpFarsLayerView,
-            tmpDamageLayerView,
-            tmpEquityLayerView,
-            // tmpAirDamageLayerView,
-            // tmpAirEquityLayerView,
+            tmpNoiseDamageLayerView,
+            tmpNoiseEquityLayerView,
+            tmpAirDamageLayerView,
+            tmpAirEquityLayerView,
             tmpAcsLayerView,
             tmpStatesLayerView,
             tmpUrbanLayerView
         ]) => {
             farsLayerView = tmpFarsLayerView
-            damageLayerView = tmpDamageLayerView
-            equityLayerView = tmpEquityLayerView
-            // airDamageLayerView = tmpAirDamageLayerView
-            // airEquityLayerView = tmpAirEquityLayerView
+            noiseDamageLayerView = tmpNoiseDamageLayerView
+            noiseEquityLayerView = tmpNoiseEquityLayerView
+            airDamageLayerView = tmpAirDamageLayerView
+            airEquityLayerView = tmpAirEquityLayerView
             acsLayerView = tmpAcsLayerView
             statesLayerView = tmpStatesLayerView
             urbanLayerView = tmpUrbanLayerView
 
             return Promise.all([
                 reactiveUtils.whenOnce(() => !tmpFarsLayerView.updating),
-                reactiveUtils.whenOnce(() => !tmpDamageLayerView.updating),
-                reactiveUtils.whenOnce(() => !tmpEquityLayerView.updating),
-                // reactiveUtils.whenOnce(() => !tmpAirDamageLayerView.updating),
-                // reactiveUtils.whenOnce(() => !tmpAirEquityLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpNoiseDamageLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpNoiseEquityLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpAirDamageLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpAirEquityLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpAcsLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpStatesLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpUrbanLayerView.updating)
-
-                // watchUtils.whenFalseOnce(tmpFarsLayerView, 'updating'),
-                // watchUtils.whenFalseOnce(tmpDamageLayerView, 'updating'),
-                // watchUtils.whenFalseOnce(tmpEquityLayerView, 'updating'),
-                // watchUtils.whenFalseOnce(tmpAcsLayerView, 'updating'),
-                // watchUtils.whenFalseOnce(tmpStatesLayerView, 'updating'),
-                // watchUtils.whenFalseOnce(tmpUrbanLayerView, 'updating')
             ])
         }
     )
@@ -200,7 +193,7 @@ function onViewReady(view) {
     layerViewsDoneUpdatingPromise.then(() => {
         // these are layers that have a filter set to start
         // TODO, I think this may need to just be run for all the layers
-        let layersToUpdateOnStartUp = ['fars', 'damage', 'equity', 'acs']
+        let layersToUpdateOnStartUp = ['fars', 'noiseDamage', 'noiseEquity', 'airDamage', 'airEquity', 'acs']
         layersToUpdateOnStartUp.forEach((layerToUpdateOnStartUp) => {
             updateFilterForStandardLayer(layerToUpdateOnStartUp)
         })
@@ -216,8 +209,10 @@ function onViewReady(view) {
 
         // wire up filter events for "standard" layers
         filterSetup('fars')
-        filterSetup('damage')
-        filterSetup('equity')
+        filterSetup('noiseDamage')
+        filterSetup('noiseEquity')
+        filterSetup('airDamage')
+        filterSetup('airEquity')
         filterSetup('acs')
         // states is a bit special
         filterStatesSetup()
@@ -275,15 +270,15 @@ function onViewReady(view) {
                 view.stationary,
                 statesLayerView.updating,
                 farsLayerView.updating,
-                damageLayerView.updating,
-                equityLayerView.updating,
-                // airDamageLayerView.updating,
-                // airEquityLayerView.updating,
+                noiseDamageLayerView.updating,
+                noiseEquityLayerView.updating,
+                airDamageLayerView.updating,
+                airEquityLayerView.updating,
                 acsLayerView.updating,
                 urbanLayerView.updating
             ],
-            ([stationary, statesU, farsU, noiseU, equityU, acsU, urbanU]) => {
-                if (stationary && !statesU && !farsU && !noiseU && !equityU && !acsU && !urbanU) {
+            ([stationary, statesU, farsU, noiseDamageU, noiseEquityU, airDamageU, airEquityU, acsU, urbanU]) => {
+                if (stationary && !statesU && !farsU && !noiseDamageU && !noiseEquityU && !airDamageU && !airEquityU && !acsU && !urbanU) {
                     // no longer updating
 
                     if (!updatesRelatedToUpdatedViewComplete) {
@@ -309,8 +304,10 @@ function onViewReady(view) {
                     if (!document.querySelector("[data-panel-id='simpleChart']").hidden) {
                         document.getElementById('simple-summary-acs').innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-farsfatals').innerHTML = '&nbsp;'
-                        document.getElementById('simple-summary-damage').innerHTML = '&nbsp;'
-                        document.getElementById('simple-summary-equity').innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-noiseDamage').innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-noiseEquity').innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-airDamage').innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-airEquity').innerHTML = '&nbsp;'
 
                         // $('#simple-summary-canvas-1').remove()
                         $('.simple-summary-canvas-container').html('')
@@ -458,10 +455,10 @@ function initWidgets(view) {
         layerInfos: [
             { layer: landcoverLayer },
             { layer: farsLayer },
-            { layer: damageLayer },
-            { layer: equityLayer },
-            // { layer: airDamageLayer },
-            // { layer: airEquityLayer },
+            { layer: noiseDamageLayer },
+            { layer: noiseEquityLayer },
+            { layer: airDamageLayer },
+            { layer: airEquityLayer },
             { layer: acsLayer },
             { layer: urbanLayer }
         ]
@@ -660,10 +657,15 @@ function initWidgets(view) {
                     acsLayer.renderer = acsRendererNonWhite
             }
         })
-
+    
+    let equityLayers = [noiseEquityLayer, airEquityLayer]
+    let equitySymbologyElements = ['noiseEquity-symbology-select', 'airEquity-symbology-select']
     // WIRE UP EQUITY SYMBOLOGY EVENT
-    document
-        .getElementById('equity-symbology-select')
+    for (let i=0; i<equityLayers.length; i++){
+        let equityLayer = equityLayers[i]
+        let equitySymbologyEl = equitySymbologyElements[i]
+        document
+        .getElementById(equitySymbologyEl)
         .addEventListener('calciteSelectChange', function (event) {
             switch (event.target.value) {
                 case 'equityRendererNonWhite':
@@ -697,6 +699,7 @@ function initWidgets(view) {
                     equityLayer.renderer = equityRendererNonWhite
             }
         })
+    }
 
     document.querySelectorAll('[id$=-fltr-panel]').forEach((node) => {
         node.addEventListener('calcitePanelClose', function (event) {
@@ -756,6 +759,53 @@ function onLayerListItemCreated(event) {
     // Noise Equity
     // -----------------------------------------------------------------
     else if (event.item.title === 'Noise Equity') {
+        const item = event.item
+
+        const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
+
+        transparencySlider.on('thumb-drag', (event) => {
+            const { value } = event
+            item.layer.opacity = value
+        })
+
+        item.panel = {
+            content: transparencySlider,
+            className: 'esri-icon-sliders-horizontal',
+            title: 'Change layer transparency'
+        }
+
+        item.actionsSections = [
+            [
+                { title: 'Filter', className: 'esri-icon-filter', id: 'filter' },
+                { title: 'Symbology', className: 'esri-icon-maps', id: 'symbology' }
+            ]
+        ]
+    }
+
+    // Air Damage
+    // -----------------------------------------------------------------
+    else if (event.item.title === 'Air Damage') {
+        const item = event.item
+
+        const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
+
+        transparencySlider.on('thumb-drag', (event) => {
+            const { value } = event
+            item.layer.opacity = value
+        })
+
+        item.panel = {
+            content: transparencySlider,
+            className: 'esri-icon-sliders-horizontal',
+            title: 'Change layer transparency'
+        }
+
+        item.actionsSections = [[{ title: 'Filter', className: 'esri-icon-filter', id: 'filter' }]]
+    }
+
+    // Air Equity
+    // -----------------------------------------------------------------
+    else if (event.item.title === 'Air Equity') {
         const item = event.item
 
         const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
@@ -1049,10 +1099,10 @@ function wireUpOnLayerVisibilityChanges() {
 
     let layersToWatchForVizChanges = [
         statesLayer,
-        damageLayer,
-        equityLayer,
-        // airDamageLayer,
-        // airEquityLayer,
+        noiseDamageLayer,
+        noiseEquityLayer,
+        airDamageLayer,
+        airEquityLayer,
         acsLayer,
         farsLayer,
         urbanLayer,
@@ -1390,7 +1440,7 @@ function decisionChange(shortLayerName) {
             statesLayerView.filter = null
         }
 
-        let layersToUpdateWhenStateChanges = ['fars', 'urban', 'damage', 'equity', 'acs']
+        let layersToUpdateWhenStateChanges = ['fars', 'urban', 'noiseDamage', 'noiseEquity', 'airDamage', 'airEquity', 'acs']
 
         layersToUpdateWhenStateChanges.forEach((layerToUpdateWhenStateChanges) => {
             updateFilterForStandardLayer(layerToUpdateWhenStateChanges)
@@ -1571,134 +1621,155 @@ async function simpleSummaryUpdateAcsStat(extent) {
 }
 
 async function simpleSummaryUpdateEquityStat(extent) {
-    // get from current ND field being used to symbolize this layer
-    let demographicToUse = equityLayerView.layer.renderer.visualVariables[0].field.split('_')[0]
 
-    // get equity damage field.  This is a bit ugly due to non standard naming conventions on the fields
+    let equityViews = [noiseEquityLayerView, airEquityLayerView]
+    let equitySummaryElements = ['simple-summary-noiseEquity', 'simple-summary-airEquity']
+    let equitySummaryTextElements = ['simple-summary-noise-equity-text', 'simple-summary-air-equity-text']
 
-    let equityDamageField
+    for (let i=0; i<equityViews.length; i++){
+        let equityView = equityViews[i]
+        let equitySummaryEl = equitySummaryElements[i]
+        let equitySummaryTextEl = equitySummaryTextElements[i]
+        let damageType = equitySummaryTextElements[i].split('-')[2].charAt(0).toUpperCase() // Noise or Air
 
-    switch (demographicToUse) {
-        case 'pacific':
-        case 'poverty':
-            equityDamageField = demographicToUse + '_dm'
-            break
-        case 'nonwhite':
-            equityDamageField = demographicToUse + '_d'
-            break
-        case 'nonpoverty':
-            equityDamageField = 'nonpover_1'
-            break
-        default:
-            equityDamageField = demographicToUse + '_dmg'
-    }
+        // get from current ND field being used to symbolize this layer
+        let demographicToUse = equityView.layer.renderer.visualVariables[0].field.split('_')[0]
 
-    //console.log(demographicToUse, equityDamageField)
+        // get equity damage field.  This is a bit ugly due to non standard naming conventions on the fields
 
-    if (!equityLayerView.visible) {
-        document.getElementById('simple-summary-equity').innerHTML = '-'
-        return
-    } else {
-        // something changed and it could take a while to update so blank it out
-        document.getElementById('simple-summary-equity').innerHTML = '&nbsp;'
-    }
+        let equityDamageField
 
-    let query
-    if (equityLayerView.filter) {
-        query = equityLayerView.filter.createQuery()
-        query.extent = extent
-    } else {
-        query = equityLayerView.createQuery()
-        query.extent = extent
-    }
+        switch (demographicToUse) {
+            case 'pacific':
+            case 'poverty':
+                equityDamageField = demographicToUse + '_dm'
+                break
+            case 'nonwhite':
+                equityDamageField = demographicToUse + '_d'
+                break
+            case 'nonpoverty':
+                equityDamageField = 'nonpover_1'
+                break
+            default:
+                equityDamageField = demographicToUse + '_dmg'
+        }
 
-    query.spatialRelationship = 'within'
+        //console.log(demographicToUse, equityDamageField)
 
-    equityLayerView
-        .queryFeatures(query)
-        .then(function (results) {
-            //console.log("features = ", results.features.length)
+        if (!equityView.visible) {
+            document.getElementById(equitySummaryEl).innerHTML = '-'
+            continue
+        } else {
+            // something changed and it could take a while to update so blank it out
+            document.getElementById(equitySummaryEl).innerHTML = '&nbsp;'
+        }
 
-            // TODO not sure this is needed anymore
-            document.getElementById('simple-summary-main-div').style.display = 'block'
+        let query
+        if (equityView.filter) {
+            query = equityView.filter.createQuery()
+            query.extent = extent
+        } else {
+            query = equityView.createQuery()
+            query.extent = extent
+        }
 
-            let sum = 0
+        query.spatialRelationship = 'within'
 
-            results.features.forEach((result) => {
-                sum += result.attributes[equityDamageField]
+        equityView
+            .queryFeatures(query)
+            .then(function (results) {
+                //console.log("features = ", results.features.length)
+
+                // TODO not sure this is needed anymore
+                document.getElementById('simple-summary-main-div').style.display = 'block'
+
+                let sum = 0
+
+                results.features.forEach((result) => {
+                    sum += result.attributes[equityDamageField]
+                })
+
+                document.getElementById(equitySummaryTextEl).innerHTML =
+                    'Total' + damageType + 'Damage (' + demographicToUse + ')'
+
+                document.getElementById(equitySummaryEl).innerHTML =
+                    ' $ ' + Math.round(sum).toLocaleString('en-US')
             })
-
-            document.getElementById('simple-summary-noise-equity-text').innerHTML =
-                'Total Noise Damage (' + demographicToUse + ')'
-
-            document.getElementById('simple-summary-equity').innerHTML =
-                ' $ ' + Math.round(sum).toLocaleString('en-US')
-        })
-        .catch(function (error) {
-            console.log('query failed: ', error)
-        })
+            .catch(function (error) {
+                console.log('query failed: ', error)
+            })
+    }
 }
 
 async function simpleSummaryUpdateDamageStat(extent) {
-    if (!damageLayerView.visible) {
-        document.getElementById('simple-summary-damage').innerHTML = '-'
-        return
-    } else {
-        // something changed and it could take a while to update so blank it out
-        document.getElementById('simple-summary-damage').innerHTML = '&nbsp;'
-    }
+    let damageViews = [noiseDamageLayerView, airDamageLayerView]
+    let damageSummaryElements = ['simple-summary-noiseDamage', 'simple-summary-airDamage']
 
-    let query
-    if (damageLayerView.filter) {
-        query = damageLayerView.filter.createQuery()
-        query.extent = extent
-    } else {
-        query = damageLayerView.createQuery()
-        query.extent = extent
-    }
+    for (let i = 0; i < damageViews.length; i++){
+        let damageView = damageViews[i]
+        let damageSummaryEl = damageSummaryElements[i]
+        // console.log("updating damageview", damageView.layer.title, 'with visibility', damageView.visible)
+        if (!damageView.visible) {
+            document.getElementById(damageSummaryEl).innerHTML = '-'
+            continue
+        } else {
+            // something changed and it could take a while to update so blank it out
+            document.getElementById(damageSummaryEl).innerHTML = '&nbsp;'
+        }
 
-    query.spatialRelationship = 'within'
+        let query
+        if (damageView.filter) {
+            query = damageView.filter.createQuery()
+            query.extent = extent
+        } else {
+            query = damageView.createQuery()
+            query.extent = extent
+        }
 
-    damageLayerView
-        .queryFeatures(query)
-        .then(function (results) {
-            //console.log("features = ", results.features.length)
+        query.spatialRelationship = 'within'
 
-            // TODO not sure this is needed anymore
-            document.getElementById('simple-summary-main-div').style.display = 'block'
+        damageView
+            .queryFeatures(query)
+            .then(function (results) {
+                //console.log("features = ", results.features.length)
 
-            let totalLen = 0
+                // TODO not sure this is needed anymore
+                document.getElementById('simple-summary-main-div').style.display = 'block'
 
-            var sumLengthByBin = {}
+                let totalLen = 0
 
-            results.features.forEach((result) => {
-                let bin = result.attributes['bin_dl']
-                let len = result.attributes['Shape__Length']
+                var sumLengthByBin = {}
 
-                totalLen += len
+                results.features.forEach((result) => {
+                    let bin = result.attributes['bin_dl']
+                    let len = result.attributes['Shape__Length']
 
-                if (sumLengthByBin[bin]) {
-                    sumLengthByBin[bin] += len
-                } else {
-                    sumLengthByBin[bin] = len
+                    totalLen += len
+
+                    if (sumLengthByBin[bin]) {
+                        sumLengthByBin[bin] += len
+                    } else {
+                        sumLengthByBin[bin] = len
+                    }
+
+                    //console.log(bin, len)
+                })
+
+                let avgDamage = 0.0
+
+                for (const [bin, sumlen] of Object.entries(sumLengthByBin)) {
+                    let contrib = bin * (sumlen / totalLen)
+                    avgDamage += contrib
+                    //console.log(bin,  sumlen, contrib);
                 }
 
-                //console.log(bin, len)
+                document.getElementById(damageSummaryEl).innerHTML = avgDamage.toFixed(1)
             })
-
-            let avgDamage = 0.0
-
-            for (const [bin, sumlen] of Object.entries(sumLengthByBin)) {
-                let contrib = bin * (sumlen / totalLen)
-                avgDamage += contrib
-                //console.log(bin,  sumlen, contrib);
-            }
-
-            document.getElementById('simple-summary-damage').innerHTML = avgDamage.toFixed(1)
-        })
-        .catch(function (error) {
-            console.log('query failed: ', error)
-        })
+            .catch(function (error) {
+                console.log('query failed: ', error)
+            })
+        
+        }
 }
 
 function onSimpleChartBtnClick(view) {
