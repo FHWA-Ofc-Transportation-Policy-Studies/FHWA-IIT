@@ -25,7 +25,9 @@ import {
     acsLayer,
     statesLayer,
     urbanLayer,
-    landcoverLayer,
+    landcoverLayer
+} from './layers'
+import {
     simpleLineSymbol,
     acsRendererNonWhite,
     acsRendererWhite,
@@ -45,7 +47,7 @@ import {
     equityRendererOther,
     equityRendererNonPoverty,
     equityRendererPoverty
-} from './layers'
+} from './renderers.js'
 
 //#endregion
 
@@ -110,7 +112,7 @@ function setUpMap() {
             noiseEquityLayer,
             noiseDamageLayer,
             airEquityLayer,
-            airDamageLayer,   
+            airDamageLayer,
             statesLayer,
             farsLayer
         ]
@@ -193,7 +195,14 @@ function onViewReady(view) {
     layerViewsDoneUpdatingPromise.then(() => {
         // these are layers that have a filter set to start
         // TODO, I think this may need to just be run for all the layers
-        let layersToUpdateOnStartUp = ['fars', 'noiseDamage', 'noiseEquity', 'airDamage', 'airEquity', 'acs']
+        let layersToUpdateOnStartUp = [
+            'fars',
+            'noiseDamage',
+            'noiseEquity',
+            'airDamage',
+            'airEquity',
+            'acs'
+        ]
         layersToUpdateOnStartUp.forEach((layerToUpdateOnStartUp) => {
             updateFilterForStandardLayer(layerToUpdateOnStartUp)
         })
@@ -277,8 +286,28 @@ function onViewReady(view) {
                 acsLayerView.updating,
                 urbanLayerView.updating
             ],
-            ([stationary, statesU, farsU, noiseDamageU, noiseEquityU, airDamageU, airEquityU, acsU, urbanU]) => {
-                if (stationary && !statesU && !farsU && !noiseDamageU && !noiseEquityU && !airDamageU && !airEquityU && !acsU && !urbanU) {
+            ([
+                stationary,
+                statesU,
+                farsU,
+                noiseDamageU,
+                noiseEquityU,
+                airDamageU,
+                airEquityU,
+                acsU,
+                urbanU
+            ]) => {
+                if (
+                    stationary &&
+                    !statesU &&
+                    !farsU &&
+                    !noiseDamageU &&
+                    !noiseEquityU &&
+                    !airDamageU &&
+                    !airEquityU &&
+                    !acsU &&
+                    !urbanU
+                ) {
                     // no longer updating
 
                     if (!updatesRelatedToUpdatedViewComplete) {
@@ -657,48 +686,48 @@ function initWidgets(view) {
                     acsLayer.renderer = acsRendererNonWhite
             }
         })
-    
+
     let equityLayers = [noiseEquityLayer, airEquityLayer]
     let equitySymbologyElements = ['noiseEquity-symbology-select', 'airEquity-symbology-select']
     // WIRE UP EQUITY SYMBOLOGY EVENT
-    for (let i=0; i<equityLayers.length; i++){
+    for (let i = 0; i < equityLayers.length; i++) {
         let equityLayer = equityLayers[i]
         let equitySymbologyEl = equitySymbologyElements[i]
         document
-        .getElementById(equitySymbologyEl)
-        .addEventListener('calciteSelectChange', function (event) {
-            switch (event.target.value) {
-                case 'equityRendererNonWhite':
-                    equityLayer.renderer = equityRendererNonWhite
-                    break
-                case 'equityRendererWhite':
-                    equityLayer.renderer = equityRendererWhite
-                    break
-                case 'equityRendererBlack':
-                    equityLayer.renderer = equityRendererBlack
-                    break
-                case 'equityRendererAsian':
-                    equityLayer.renderer = equityRendererAsian
-                    break
-                case 'equityRendererNative':
-                    equityLayer.renderer = equityRendererNative
-                    break
-                case 'equityRendererPacific':
-                    equityLayer.renderer = equityRendererPacific
-                    break
-                case 'equityRendererOther':
-                    equityLayer.renderer = equityRendererOther
-                    break
-                case 'equityRendererNonPoverty':
-                    equityLayer.renderer = equityRendererNonPoverty
-                    break
-                case 'equityRendererPoverty':
-                    equityLayer.renderer = equityRendererPoverty
-                    break
-                default:
-                    equityLayer.renderer = equityRendererNonWhite
-            }
-        })
+            .getElementById(equitySymbologyEl)
+            .addEventListener('calciteSelectChange', function (event) {
+                switch (event.target.value) {
+                    case 'equityRendererNonWhite':
+                        equityLayer.renderer = equityRendererNonWhite
+                        break
+                    case 'equityRendererWhite':
+                        equityLayer.renderer = equityRendererWhite
+                        break
+                    case 'equityRendererBlack':
+                        equityLayer.renderer = equityRendererBlack
+                        break
+                    case 'equityRendererAsian':
+                        equityLayer.renderer = equityRendererAsian
+                        break
+                    case 'equityRendererNative':
+                        equityLayer.renderer = equityRendererNative
+                        break
+                    case 'equityRendererPacific':
+                        equityLayer.renderer = equityRendererPacific
+                        break
+                    case 'equityRendererOther':
+                        equityLayer.renderer = equityRendererOther
+                        break
+                    case 'equityRendererNonPoverty':
+                        equityLayer.renderer = equityRendererNonPoverty
+                        break
+                    case 'equityRendererPoverty':
+                        equityLayer.renderer = equityRendererPoverty
+                        break
+                    default:
+                        equityLayer.renderer = equityRendererNonWhite
+                }
+            })
     }
 
     document.querySelectorAll('[id$=-fltr-panel]').forEach((node) => {
@@ -711,7 +740,6 @@ function initWidgets(view) {
 }
 
 function onLayerListItemCreated(event) {
-    
     // can access layer and layerview via event.layer and event.layerview
 
     // Fatality Analysis Reporting System (FARS)
@@ -1039,7 +1067,6 @@ function initLeftActionBarEvents(view) {
 
 //#endregion
 
-
 // ========================================================
 //                 Region: OTHER FUNCTIONS
 // ========================================================
@@ -1159,7 +1186,6 @@ function getFieldNameAndTypeForSelectId(shortName, selectorName) {
 }
 
 //#endregion
-
 
 // ========================================================
 //                   Region: FILTERS
@@ -1440,7 +1466,15 @@ function decisionChange(shortLayerName) {
             statesLayerView.filter = null
         }
 
-        let layersToUpdateWhenStateChanges = ['fars', 'urban', 'noiseDamage', 'noiseEquity', 'airDamage', 'airEquity', 'acs']
+        let layersToUpdateWhenStateChanges = [
+            'fars',
+            'urban',
+            'noiseDamage',
+            'noiseEquity',
+            'airDamage',
+            'airEquity',
+            'acs'
+        ]
 
         layersToUpdateWhenStateChanges.forEach((layerToUpdateWhenStateChanges) => {
             updateFilterForStandardLayer(layerToUpdateWhenStateChanges)
@@ -1515,7 +1549,6 @@ function filterStatesSetup() {
 }
 
 //#endregion
-
 
 // ========================================================
 //              Region: Simple Summary Chart
@@ -1621,12 +1654,14 @@ async function simpleSummaryUpdateAcsStat(extent) {
 }
 
 async function simpleSummaryUpdateEquityStat(extent) {
-
     let equityViews = [noiseEquityLayerView, airEquityLayerView]
     let equitySummaryElements = ['simple-summary-noiseEquity', 'simple-summary-airEquity']
-    let equitySummaryTextElements = ['simple-summary-noise-equity-text', 'simple-summary-air-equity-text']
+    let equitySummaryTextElements = [
+        'simple-summary-noise-equity-text',
+        'simple-summary-air-equity-text'
+    ]
 
-    for (let i=0; i<equityViews.length; i++){
+    for (let i = 0; i < equityViews.length; i++) {
         let equityView = equityViews[i]
         let equitySummaryEl = equitySummaryElements[i]
         let equitySummaryTextEl = equitySummaryTextElements[i]
@@ -1705,7 +1740,7 @@ async function simpleSummaryUpdateDamageStat(extent) {
     let damageViews = [noiseDamageLayerView, airDamageLayerView]
     let damageSummaryElements = ['simple-summary-noiseDamage', 'simple-summary-airDamage']
 
-    for (let i = 0; i < damageViews.length; i++){
+    for (let i = 0; i < damageViews.length; i++) {
         let damageView = damageViews[i]
         let damageSummaryEl = damageSummaryElements[i]
         // console.log("updating damageview", damageView.layer.title, 'with visibility', damageView.visible)
@@ -1768,8 +1803,7 @@ async function simpleSummaryUpdateDamageStat(extent) {
             .catch(function (error) {
                 console.log('query failed: ', error)
             })
-        
-        }
+    }
 }
 
 function onSimpleChartBtnClick(view) {
@@ -1784,7 +1818,6 @@ function onSimpleChartBtnClick(view) {
 }
 
 //#endregion
-
 
 // ========================================================
 //                      Region: MAIN
