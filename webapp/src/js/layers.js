@@ -11,6 +11,7 @@ import {
 import {
     farsRender,
     noiseRenderer,
+    airRenderer,
     equityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender
@@ -97,7 +98,7 @@ export const airDamageLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: noiseRenderer,
+    renderer: airRenderer,
     popupTemplate: airPopupTemplate
     //definitionExpression: "fclass = 1"
 })

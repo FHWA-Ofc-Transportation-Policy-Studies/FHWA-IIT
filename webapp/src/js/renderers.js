@@ -65,6 +65,47 @@ export let noiseRenderer = {
     ]
 }
 
+export let airRenderer = {
+    type: 'unique-value',
+    field: 'bin_dl',
+    defaultSymbol: {
+        type: 'simple-line',
+        color: '#00CCFF',
+        width: 1,
+        style: 'solid'
+    },
+    uniqueValueInfos: [
+        {
+            value: '1',
+            symbol: { type: 'simple-line', color: '#95CCEB', width: 0.5, style: 'solid' }
+        },
+        {
+            value: '2',
+            symbol: { type: 'simple-line', color: '#6395B2', width: 1, style: 'solid' }
+        },
+        {
+            value: '3',
+            symbol: { type: 'simple-line', color: '#497995', width: 2, style: 'solid' }
+        },
+        {
+            value: '4',
+            symbol: { type: 'simple-line', color: '#43697F', width: 4, style: 'solid' }
+        },
+        {
+            value: '5',
+            symbol: { type: 'simple-line', color: '#3B5573', width: 7, style: 'solid' }
+        },
+        {
+            value: '6',
+            symbol: { type: 'simple-line', color: '#2E3B57', width: 11, style: 'solid' }
+        },
+        {
+            value: '7',
+            symbol: { type: 'simple-line', color: '#2B3146', width: 15, style: 'solid' }
+        }
+    ]
+}
+
 // ACS Renderers
 
 export let acsRendererNonWhite = {
