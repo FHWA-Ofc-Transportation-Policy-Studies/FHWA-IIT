@@ -7,22 +7,7 @@
   <title>
     Externality Cost Assessment Tool (beta)
   </title>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script> -->
-
-  <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.23/"></script>
-
-  <script type="module" src="https://js.arcgis.com/calcite-components/1.0.0-beta.80/calcite.esm.js"></script>
-  <script nomodule="" src="https://js.arcgis.com/calcite-components/1.0.0-beta.80/calcite.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/1.0.0-beta.80/calcite.css">
-
   <link rel="stylesheet" href="src/css/main.css" type="text/css">
-  <script type="module" src="src/js/main.js"></script>
-
 </head>
 
 <body>
@@ -185,7 +170,7 @@
 
       <!-- ====================  LEFT SIDE SHELL PRIMARY PANEL ====================  -->
 
-      <calcite-shell-panel slot="primary-panel" position="start" id="left-shell-panel" detached>
+      <calcite-shell-panel slot="panel-start" position="start" id="left-shell-panel" display-mode="float">
 
         <!-- app actions -->
         <calcite-action-bar slot="action-bar">
@@ -211,22 +196,22 @@
 
         <!--panels which provide a div for JS API widgets -->
 
-        <calcite-panel heading="Layers" height-scale="l" width-scale="s" data-panel-id="layers" hidden dismissible>
+        <calcite-panel heading="Layers" height-scale="l" width-scale="s" data-panel-id="layers" hidden closable>
           <div id="layers-container"></div>
         </calcite-panel>
 
-        <calcite-panel heading="Legend" data-panel-id="legend" height-scale="l" width-scale="l" hidden dismissible>
+        <calcite-panel heading="Legend" data-panel-id="legend" height-scale="l" width-scale="l" hidden closable>
           <div id="legend-container"></div>
         </calcite-panel>
 
-        <calcite-panel heading="Basemaps" height-scale="l" width-scale="s" data-panel-id="basemaps" hidden dismissible>
+        <calcite-panel heading="Basemaps" height-scale="l" width-scale="s" data-panel-id="basemaps" hidden closable>
           <div id="basemaps-container"></div>
         </calcite-panel>
 
         <!--Simple Summary Chart -->
         <!-- ---------------------->
 
-        <calcite-panel heading="Simple Summary" height-scale="l" width-scale="l" data-panel-id="simpleChart" hidden dismissible>
+        <calcite-panel heading="Simple Summary" height-scale="l" width-scale="l" data-panel-id="simpleChart" hidden closable>
 
           <calcite-action icon="information" text-enabled text="Additional Information" slot="header-menu-actions" id="simple-summary-info"></calcite-action>
 
@@ -282,12 +267,12 @@
       <!-- note that the ids for these panels has to be the lower case of the layer name 
         with spaces replaced by -, and "-fltr" at the end -->
 
-      <calcite-shell-panel slot="contextual-panel" position="end" id="right-shell-panel" height-scale="l" detached>
+      <calcite-shell-panel slot="panel-end" position="end" id="right-shell-panel" height-scale="l" display-mode="float">
 
     
         <!-- ============================= FARS ============================== -->
 
-        <calcite-panel heading="FARS (number of crashes) Filter" id="fars-fltr-panel" hidden dismissible>
+        <calcite-panel heading="FARS (number of crashes) Filter" id="fars-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="fars-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="fars-show-fltr"></calcite-action>
@@ -330,7 +315,7 @@
  
         <!-- =============================== Damage =============================== -->
 
-        <calcite-panel heading="Noise Damage Filter" id="noiseDamage-fltr-panel" hidden dismissible>
+        <calcite-panel heading="Noise Damage Filter" id="noiseDamage-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseDamage-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseDamage-show-fltr"></calcite-action>
@@ -357,7 +342,7 @@
         
         </calcite-panel>
 
-        <calcite-panel heading="Air Damage Filter" id="airDamage-fltr-panel" hidden dismissible>
+        <calcite-panel heading="Air Damage Filter" id="airDamage-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airDamage-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airDamage-show-fltr"></calcite-action>
@@ -386,7 +371,7 @@
 
         <!-- =============================== Equity Ratio =============================== -->
 
-        <calcite-panel heading="Noise Equity Filter" id="noiseEquity-fltr-panel" hidden dismissible>
+        <calcite-panel heading="Noise Equity Filter" id="noiseEquity-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseEquity-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseEquity-show-fltr"></calcite-action>
@@ -484,7 +469,7 @@
 
         </calcite-panel>
       
-        <calcite-panel heading="Air Equity Filter" id="airEquity-fltr-panel" hidden dismissible>
+        <calcite-panel heading="Air Equity Filter" id="airEquity-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airEquity-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airEquity-show-fltr"></calcite-action>
@@ -581,7 +566,7 @@
 
         </calcite-panel>
 
-        <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" hidden dismissible>
+        <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" hidden closable>
           <calcite-block heading="Select Noise Equity Ratio Demographic" open>
             <calcite-select id="noiseEquity-symbology-select">
               <calcite-option label="Non White"   value="equityRendererNonWhite"></calcite-option>
@@ -597,7 +582,7 @@
           </calcite-block>
         </calcite-panel>
 
-        <calcite-panel heading="Air Equity Symbology" width-scale="l" id="airEquity-symbology-panel" hidden dismissible>
+        <calcite-panel heading="Air Equity Symbology" width-scale="l" id="airEquity-symbology-panel" hidden closable>
           <calcite-block heading="Select Air Equity Ratio Demographic" open>
             <calcite-select id="airEquity-symbology-select">
               <calcite-option label="Non White"   value="equityRendererNonWhite"></calcite-option>
@@ -615,7 +600,7 @@
 
        <!-- =============================== ACS population =============================== -->
 
-       <calcite-panel heading="ACS Population Filter" id="acs-fltr-panel" hidden dismissible>
+       <calcite-panel heading="ACS Population Filter" id="acs-fltr-panel" hidden closable>
 
          <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="acs-fltr-reset"></calcite-action>
          <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="acs-show-fltr"></calcite-action>
@@ -677,7 +662,7 @@
        </calcite-panel>
 
 
-      <calcite-panel heading="ACS Population Symbology" width-scale="l" id="acs-symbology-panel" hidden dismissible>
+      <calcite-panel heading="ACS Population Symbology" width-scale="l" id="acs-symbology-panel" hidden closable>
         <calcite-block heading="Select % Population Attribute" open>
             <calcite-select id="acs-symbology-select">
               <calcite-option label="Non White" value="acsRendererNonWhite"></calcite-option>
@@ -696,7 +681,7 @@
 
         <!-- =============================== STATES =============================== -->
 
-        <calcite-panel heading="States Filter" id="states-fltr-panel" hidden dismissible>
+        <calcite-panel heading="States Filter" id="states-fltr-panel" hidden closable>
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="states-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="states-show-fltr"></calcite-action>
@@ -766,7 +751,7 @@
 
         <!-- =========================== Disadvantaged =========================== -->
 
-        <calcite-panel heading="Disadvantaged Filter" id="disadvantaged-fltr-panel" hidden dismissible class="calcite-theme-auto">
+        <calcite-panel heading="Disadvantaged Filter" id="disadvantaged-fltr-panel" hidden closable class="calcite-theme-auto">
 
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="disadvantaged-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="disadvantaged-show-fltr"></calcite-action>
@@ -796,6 +781,8 @@
     </calcite-shell>
 
   </div> <!-- end app panel-->
+
+  <script type="module" src="src/js/main.ts"></script>
 
 </body>
 

@@ -1,12 +1,12 @@
-function noisePopupTemplateTitleFunction(feature) {
+function noisePopupTemplateTitleFunction(feature: any) {
     return 'Noise Damage'
 }
 
-function airPopupTemplateTitleFunction(feature) {
+function airPopupTemplateTitleFunction(feature: any) {
     return 'Air Damage'
 }
 
-function damagePopupTemplateContentFunction(feature) {
+function damagePopupTemplateContentFunction(feature: any) {
     let dmgDescrip
 
     switch (feature.graphic.attributes.F_SYSTEM) {

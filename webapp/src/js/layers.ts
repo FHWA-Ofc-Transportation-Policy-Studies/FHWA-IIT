@@ -1,12 +1,12 @@
-import FeatureLayer from '../../node_modules/@arcgis/core/layers/FeatureLayer'
-import ImageryLayer from '../../node_modules/@arcgis/core/layers/ImageryLayer'
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
 import {
     noisePopupTemplate,
     airPopupTemplate,
     noiseEquityPopupTemplate,
     airEquityPopupTemplate,
     acsPopupTemplate
-} from './popups.js'
+} from './popups'
 
 import {
     farsRender,
@@ -15,7 +15,7 @@ import {
     equityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender
-} from './renderers.js'
+} from './renderers'
 
 // ################################################################
 // #REGION: LAYER CREATION
@@ -65,9 +65,9 @@ export const farsLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/TTET_FARS_vb1p1/FeatureServer',
     visible: false,
     outFields: ['*'],
-    renderer: farsRender,
+    renderer: farsRender as __esri.RendererProperties,
     //definitionExpression: "fatals = 2",
-    featureReduction: farsClusterConfig,
+    featureReduction: farsClusterConfig as __esri.FeatureReductionBinningProperties & { type: "binning"; },
     popupTemplate: {
         title: 'Fatal Crash ',
         content: [
@@ -88,7 +88,7 @@ export const noiseDamageLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_bin_reduced_simplified_00005/FeatureServer/0',
     visible: true,
     outFields: ['*'],
-    renderer: noiseRenderer,
+    renderer: noiseRenderer as __esri.RendererProperties,
     popupTemplate: noisePopupTemplate
     //definitionExpression: "fclass = 1"
 })
@@ -98,7 +98,7 @@ export const airDamageLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: airRenderer,
+    renderer: airRenderer as __esri.RendererProperties,
     popupTemplate: airPopupTemplate
     //definitionExpression: "fclass = 1"
 })
@@ -108,7 +108,7 @@ export const noiseEquityLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: equityRendererNonWhite,
+    renderer: equityRendererNonWhite as __esri.RendererProperties,
     popupTemplate: noiseEquityPopupTemplate
     //definitionExpression: "fclass = 1"
 })
@@ -118,7 +118,7 @@ export const airEquityLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: equityRendererNonWhite,
+    renderer: equityRendererNonWhite as __esri.RendererProperties,
     popupTemplate: airEquityPopupTemplate
     //definitionExpression: "fclass = 1"
 })
@@ -128,7 +128,7 @@ export const acsLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_ACS_pop_2019/FeatureServer',
     visible: false,
     outFields: ['*'],
-    renderer: acsRendererNonWhite,
+    renderer: acsRendererNonWhite as __esri.RendererProperties,
     popupTemplate: acsPopupTemplate,
     definitionExpression: 'population > 0'
 })
@@ -138,7 +138,7 @@ export const urbanLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/TTET_Adj_Urban_Bndry_vb1p1/FeatureServer/0',
     visible: false,
     outFields: ['GEOID', 'SQ_MILES', 'REGION_ID'],
-    renderer: urbanRender
+    renderer: urbanRender as __esri.RendererProperties
 })
 urbanLayer.opacity = 0.75
 
