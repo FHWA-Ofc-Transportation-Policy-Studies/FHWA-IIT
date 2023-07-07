@@ -7,6 +7,7 @@ import BasemapGallery from '@arcgis/core/widgets/BasemapGallery'
 import Map from '@arcgis/core/Map'
 import MapView from '@arcgis/core/views/MapView'
 import LayerList from '@arcgis/core/widgets/LayerList'
+import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter'
 import FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView'
 import Search from '@arcgis/core/widgets/Search'
 import Legend from '@arcgis/core/widgets/Legend'
@@ -1476,9 +1477,13 @@ function getStatesFilter(shortLayerName: string) {
         stateAbbrevField = 'st_abbr'
     }
     // 2ALL1901
-    else if (shortLayerName === 'damage') {
+    else if (shortLayerName === 'noiseDamage') {
+        stateAbbrevField = 'STATE_ABB' 
+    } else if (shortLayerName === 'airDamage') {
         stateAbbrevField = 'STATE_ABB'
-    } else if (shortLayerName === 'equity') {
+    } else if (shortLayerName === 'noiseEquity') {
+        stateAbbrevField = 'STATE_ABB'
+    } else if (shortLayerName === 'airEquity') {
         stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'acs') {
         stateAbbrevField = 'STATE_ABB'
@@ -1507,7 +1512,7 @@ function getStatesFilter(shortLayerName: string) {
         statesQuery = stateAbbrevField + ' in (' + selectedStatesString + ')'
     }
 
-    // console.log(statesQuery);
+    // console.log("statesQuery", statesQuery);
     return statesQuery
 }
 
@@ -1524,13 +1529,13 @@ function decisionChange(shortLayerName: string) {
     // This method is what's called whenver any selection change happens (or selection changes at startup).
     // It is sometimes called directly, and other times called from decisionChangeFromEvent
 
-    //console.log('decision change for ', shortLayerName)
+    // console.log('decision change for ', shortLayerName)
 
     if (shortLayerName == 'states') {
         let statesFilter = getStatesFilter(shortLayerName)
 
         if (statesFilter) {
-            statesLayerView.filter = { where: statesFilter } as __esri.FeatureFilter
+            statesLayerView.filter = new FeatureFilter({ where: statesFilter })
         } else {
             statesLayerView.filter = null
         }
@@ -1673,7 +1678,7 @@ async function simpleSummaryUpdateStat(aLayerView: FeatureLayerView, view: MapVi
         })
 }
 
-async function simpleSummaryUpdateAcsStat(extent: Geometry) {
+async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
     // get from current ND field being used to symbolize this layer
     let demographicToUse = acsLayerView.layer.renderer.visualVariables[0].field.split('_')[0]
 
@@ -1687,13 +1692,14 @@ async function simpleSummaryUpdateAcsStat(extent: Geometry) {
         document.getElementById('simple-summary-acs')!.innerHTML = '&nbsp;'
     }
 
-    let query
+    // TODO: typescript is upset about query.extent but any other property breaks functionality
+    let query: Query
     if (acsLayerView.filter) {
         query = acsLayerView.filter.createQuery()
-        query.geometry = extent
+        query.extent = extent
     } else {
         query = acsLayerView.createQuery()
-        query.geometry = extent
+        query.extent = extent
     }
 
     query.spatialRelationship = 'within'
@@ -1723,7 +1729,7 @@ async function simpleSummaryUpdateAcsStat(extent: Geometry) {
         })
 }
 
-async function simpleSummaryUpdateEquityStat(extent: Geometry) {
+async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
     let equityViews = [noiseEquityLayerView, airEquityLayerView]
     let equitySummaryElements = ['simple-summary-noiseEquity', 'simple-summary-airEquity']
     let equitySummaryTextElements = [
@@ -1769,13 +1775,14 @@ async function simpleSummaryUpdateEquityStat(extent: Geometry) {
             document.getElementById(equitySummaryEl)!.innerHTML = '&nbsp;'
         }
 
-        let query
+        // TODO: typescript is upset about query.extent but any other property breaks functionality
+        let query: Query
         if (equityView.filter) {
             query = equityView.filter.createQuery()
-            query.geometry = extent
+            query.extent = extent
         } else {
             query = equityView.createQuery()
-            query.geometry = extent
+            query.extent = extent
         }
 
         query.spatialRelationship = 'within'
@@ -1806,7 +1813,7 @@ async function simpleSummaryUpdateEquityStat(extent: Geometry) {
     }
 }
 
-async function simpleSummaryUpdateDamageStat(extent: Geometry) {
+async function simpleSummaryUpdateDamageStat(extent: __esri.Extent) {
     let damageViews = [noiseDamageLayerView, airDamageLayerView]
     let damageSummaryElements = ['simple-summary-noiseDamage', 'simple-summary-airDamage']
 
@@ -1822,13 +1829,14 @@ async function simpleSummaryUpdateDamageStat(extent: Geometry) {
             document.getElementById(damageSummaryEl)!.innerHTML = '&nbsp;'
         }
 
-        let query
+        // TODO: typescript is upset about query.extent but any other property breaks functionality
+        let query: Query
         if (damageView.filter) {
             query = damageView.filter.createQuery()
-            query.geometry = extent
+            query.extent = extent
         } else {
             query = damageView.createQuery()
-            query.geometry = extent
+            query.extent = extent
         }
 
         query.spatialRelationship = 'within'
