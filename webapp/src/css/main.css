@@ -207,28 +207,28 @@ calcite-panel[id="disadvantaged-fltr-panel"]
 == simple summary charts
 ==========================================================================  */
 
-
-calcite-panel[data-panel-id="simple-summary-panel"] {
-  --calcite-panel-width: 40vw;
-  --calcite-panel-min-width: 40vw;
-  --calcite-panel-max-width: 40vw;
-}
-
 #simple-summary-main-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 5px;
   /* border: 2px solid greenyellow; */
   padding: 7px;
-  height: 360px;
-  width: 330px;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
+  /* width: 90%; */
+  /* justify-content: center;
+  align-items: center; */
+}
+
+#simple-summary-btn {
+  padding-top: 20px;
 }
 
 .simple-summary-stat-box {
   border: 1px solid lightgray;
   margin: 5px;
   padding: 5px;
-  width: 90%;
+  width: 100%;
   /*height: 30px; */
   padding: 5px;
 }

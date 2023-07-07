@@ -1658,7 +1658,7 @@ async function simpleSummaryUpdateStat(aLayerView: FeatureLayerView, view: MapVi
         .then(function (results) {
             //console.log("features = ", results.features.length)
 
-            document.getElementById('simple-summary-main-div')!.style.display = 'block'
+            document.getElementById('simple-summary-main-div')!.style.display = 'flex'
 
             let sum = 0
 
@@ -1710,7 +1710,7 @@ async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
             //console.log("features = ", results.features.length)
 
             // TODO not sure this is needed anymore
-            document.getElementById('simple-summary-main-div')!.style.display = 'block'
+            document.getElementById('simple-summary-main-div')!.style.display = 'flex'
 
             let sum = 0
 
@@ -1793,7 +1793,7 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
                 //console.log("features = ", results.features.length)
 
                 // TODO not sure this is needed anymore
-                document.getElementById('simple-summary-main-div')!.style.display = 'block'
+                document.getElementById('simple-summary-main-div')!.style.display = 'flex'
 
                 let sum = 0
 
@@ -1847,7 +1847,7 @@ async function simpleSummaryUpdateDamageStat(extent: __esri.Extent) {
                 //console.log("features = ", results.features.length)
 
                 // TODO not sure this is needed anymore
-                document.getElementById('simple-summary-main-div')!.style.display = 'block'
+                document.getElementById('simple-summary-main-div')!.style.display = 'flex'
 
                 let totalLen = 0
 
