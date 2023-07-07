@@ -162,7 +162,12 @@ function setUpMap() {
         container: 'viewDiv',
         map: map,
         center: defaultCenterPoint,
-        zoom: defaultZoomLevel
+        zoom: defaultZoomLevel,
+        constraints: {
+            rotationEnabled: false, // Disables map rotation
+            minZoom: 3,
+            maxZoom: 23
+        }
     })
 
     view.ui.move('zoom', 'bottom-right')
