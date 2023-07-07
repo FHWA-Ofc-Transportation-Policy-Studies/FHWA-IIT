@@ -403,17 +403,13 @@ function onViewReady(view: MapView) {
         document
             .querySelector("[data-panel-id='layers']")!
             .addEventListener('CalcitePanelClose', function (event) {
-                console.log('called calcitepaneldismissedchange')
                 let panel = event.target as HTMLCalcitePanelElement
-                console.log("is the panel closed?", panel.closed)
                 if (panel.closed == false) {
-                    console.log("layerlist in calcitepaneldismissedchange", layerList.operationalItems)
                     layerList.operationalItems.forEach((item) => {
                         item.actionsOpen = false
                         item.panel.open = false
                     })
                     // close the panel
-                    console.log("closing the panel")
                     panel.closed = true
                 } 
             })
@@ -446,20 +442,16 @@ function initWidgets(view: MapView) {
 
         // DEFINE WHAT HAPPENS FOR A LAYERLIST ITEM WHEN FILTER OR TABLE IS CLICKED
         layerList.on('trigger-action', function (event) {
-            console.log("trigger-action")
             event.item.actionsOpen = false
 
             if (event.action.id === 'filter') {
-                console.log("action id is filter")
                 // iterate through all filter panels and hide all others and show the one of interest
                 document.querySelectorAll('[id$=fltr-panel]').forEach((node) => {
                     let filterPanel = node as HTMLCalcitePanelElement
-                    console.log('looking at filter panel. is closed?', filterPanel.closed)
 
                     // if any symbology panel is open close it
                     document.querySelectorAll('[id$=symbology-panel]').forEach((node) => {
                         let symbologyPanel = node as HTMLCalcitePanelElement
-                        console.log('looking at symbology panel. is closed?', symbologyPanel.closed)
                         symbologyPanel.hidden = true
                         symbologyPanel.closed = true
                     })
@@ -469,12 +461,10 @@ function initWidgets(view: MapView) {
                         getShortNameForLayerFromFullName(event.item.layer.title) + '-fltr-panel'
                     ) { 
                         if (filterPanel.closed == true || filterPanel.hidden == true) {
-                            console.log("filter panel is closed. opening")
                             // open the filter panel
                             filterPanel.hidden = false
                             filterPanel.closed = false
                         } else {
-                            console.log("filter panel is open. closing")
                             // close the filter panel
                             filterPanel.hidden = true
                             filterPanel.closed = true
@@ -802,7 +792,7 @@ function initWidgets(view: MapView) {
         node.addEventListener('calcitePanelClose', function (event) {
             let shortLayerName = (event.target as Element).id.split('-')[0]
 
-            console.log("calcite panel close on ", shortLayerName)
+            // console.log("calcite panel close on ", shortLayerName)
         })
     })
 }
@@ -1089,17 +1079,14 @@ function initLeftActionBarEvents(view: MapView) {
             streetViewCursorDiv.style.display = 'block'
         } else {
             // complex actions
-            console.log('looking at complex action')
+            // console.log('looking at complex action')
 
             for (let i = 0; i < complexActions.length; ++i) {
                 let action = document.querySelector(`[data-action-id=${complexActions[i]}]`) as HTMLCalciteActionElement
                 let dataPanel = document.querySelector(`[data-panel-id=${complexActions[i]}]`) as HTMLCalcitePanelElement
-                console.log('datapanel', dataPanel)
                 if (complexActions[i] == activeActionId) {
-                    console.log('changing visibility of', activeActionId)
                     // if the data panel is hidden then show it
                     if (dataPanel.hidden == true) {
-                        console.log(activeActionId, 'is hidden, opening...', )
                         action.active = true
                         dataPanel.hidden = false
                         dataPanel.closed = false
@@ -1118,8 +1105,6 @@ function initLeftActionBarEvents(view: MapView) {
                         }
                     } else {
                         // otherwise the datapanel is already open so close it
-                        console.log(activeActionId, 'is open, closing...', )
-
                         action.active = false
                         dataPanel.hidden = true
                         dataPanel.closed = true
@@ -1128,7 +1113,7 @@ function initLeftActionBarEvents(view: MapView) {
                     // this is not the action and data panel we are interested in.
                     // all other actions were already set to inactive above, just make sure it's hidden
                     if (dataPanel.hidden !== true || dataPanel.closed !== true) {
-                        console.log("data panel", complexActions[i], " is being set to hidden and dismissed");
+                        // console.log("data panel", complexActions[i], " is being set to hidden and dismissed");
                         dataPanel.hidden = true
                         dataPanel.closed = true
                     }
@@ -1872,7 +1857,7 @@ async function simpleSummaryUpdateDamageStat(extent: Geometry) {
                         sumLengthByBin[bin] = len
                     }
 
-                    console.log(bin, len)
+                    // console.log(bin, len)
                 })
 
                 let avgDamage = 0.0
