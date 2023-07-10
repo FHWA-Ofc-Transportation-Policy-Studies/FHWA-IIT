@@ -79,31 +79,31 @@ export let airRenderer = {
     uniqueValueInfos: [
         {
             value: '1',
-            symbol: { type: 'simple-line', color: '#95CCEB', width: 0.5, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#bfdfff', width: 0.5, style: 'solid' }
         },
         {
             value: '2',
-            symbol: { type: 'simple-line', color: '#6395B2', width: 1, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#a0c2e2', width: 1, style: 'solid' }
         },
         {
             value: '3',
-            symbol: { type: 'simple-line', color: '#497995', width: 2, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#83a6c6', width: 2, style: 'solid' }
         },
         {
             value: '4',
-            symbol: { type: 'simple-line', color: '#43697F', width: 4, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#658baa', width: 4, style: 'solid' }
         },
         {
             value: '5',
-            symbol: { type: 'simple-line', color: '#3B5573', width: 7, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#48708f', width: 7, style: 'solid' }
         },
         {
             value: '6',
-            symbol: { type: 'simple-line', color: '#2E3B57', width: 11, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#2a5775', width: 11, style: 'solid' }
         },
         {
             value: '7',
-            symbol: { type: 'simple-line', color: '#2B3146', width: 15, style: 'solid' }
+            symbol: { type: 'simple-line', color: '#003f5c', width: 15, style: 'solid' }
         }
     ]
 }
