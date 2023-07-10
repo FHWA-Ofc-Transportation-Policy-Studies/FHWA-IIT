@@ -109,6 +109,7 @@ let defaultSliderState: { [key: string]: [number | undefined, number | undefined
 let defaultLayerVisibility: { [key: string]: boolean } = {}
 
 let layerList: LayerList
+let layersWithSymbology: string[] = ['acs', 'noiseEquity', 'airEquity'] // use shortnames here
 // layerviews (in most cases)
 let farsLayerView: FeatureLayerView
 let noiseDamageLayerView: FeatureLayerView
@@ -513,6 +514,8 @@ function initWidgets(view: MapView) {
                 })
             }
         })
+
+        wireUpPresetButtonViews(view)
     })
 
     // BASEMAPS
@@ -651,49 +654,18 @@ function initWidgets(view: MapView) {
         view.center = defaultCenterPoint
         view.zoom = defaultZoomLevel
 
-        // reset layer visibility
+        // reset layer visibility and opacity
         // ----------------------------
         view.map.allLayers.forEach((l) => {
             l.visible = defaultLayerVisibility[l.title]
+            l.opacity = 1
         })
 
-        // reset filters
-        // -------------
-        settings['layers']
-            .map((a) => a.shortName)
-            .forEach(function (shortLayerName) {
-                // console.log("resetting filters for", shortLayerName)
-
-                let elements
-
-                /// return check boxes to default state
-                elements = document.getElementsByTagName('calcite-checkbox')
-                for (let i = 0; i < elements.length; i++) {
-                    if (elements[i].id.startsWith(shortLayerName)) {
-                        // console.log("setting back to default", elements[i].id)
-                        elements[i].checked = defaultCheckBoxState[elements[i].id]
-                    }
-                }
-
-                // return sliders to default state
-                elements = document.getElementsByTagName('calcite-slider')
-                // console.log("opacity slider elements to reset", elements)
-                for (let i = 0; i < elements.length; i++) {
-                    elements[i].minValue = defaultSliderState[elements[i].id][0] as number
-                    elements[i].maxValue = defaultSliderState[elements[i].id][1] as number
-                }
-
-                decisionChange(shortLayerName)
-            })
-
-        // if a filter is open then close it too
-        document.querySelectorAll('[id$=fltr-panel]').forEach((node) => {
-            let filterPanel = node as HTMLCalcitePanelElement
-            filterPanel.hidden = true
-            filterPanel.closed = true
-        })
+        resetFilters()
+        resetSymbology()
 
         // reset layer opacity
+        // TODO: also reset opacity sliders on layer list
         urbanLayer.opacity = 0.75
 
         // reset the initial basemap
@@ -1248,6 +1220,95 @@ function getFieldNameAndTypeForSelectId(shortName: string, selectorName: string)
     //console.log("return from getShortNameForLayerFromFullName: ", fieldName, fieldType)
 
     return [fieldName, fieldType]
+}
+
+function resetFilters(){
+    // reset filters
+    // -------------
+    settings['layers']
+        .map((a) => a.shortName)
+        .forEach(function (shortLayerName) {
+            // console.log("resetting filters for", shortLayerName)
+
+            let elements
+
+            /// return check boxes to default state
+            elements = document.getElementsByTagName('calcite-checkbox')
+            for (let i = 0; i < elements.length; i++) {
+                if (elements[i].id.startsWith(shortLayerName)) {
+                    // console.log("setting back to default", elements[i].id)
+                    elements[i].checked = defaultCheckBoxState[elements[i].id]
+                }
+            }
+
+            // return sliders to default state
+            elements = document.getElementsByTagName('calcite-slider')
+            // console.log("opacity slider elements to reset", elements)
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].minValue = defaultSliderState[elements[i].id][0] as number
+                elements[i].maxValue = defaultSliderState[elements[i].id][1] as number
+            }
+
+            decisionChange(shortLayerName)
+        })
+
+    // if a filter is open then close it too
+    document.querySelectorAll('[id$=fltr-panel]').forEach((node) => {
+        let filterPanel = node as HTMLCalcitePanelElement
+        filterPanel.hidden = true
+        filterPanel.closed = true
+    })
+}
+
+function resetSymbology(){
+    // reset layer symbologies
+    airEquityLayer.renderer = equityRendererNonWhite
+    noiseEquityLayer.renderer = equityRendererNonWhite
+    acsLayer.renderer = acsRendererNonWhite
+
+    // reset symbology dropdowns
+    for (let i = 0; i < layersWithSymbology.length; i++) {
+        let selectElement = document.getElementById(layersWithSymbology[i] + '-symbology-select') as HTMLCalciteSelectElement
+        selectElement.value = layersWithSymbology[i] + "RendererNonWhite"
+    }
+
+    // if any symbology panel is open close it
+    document.querySelectorAll('[id$=symbology-panel]').forEach((e) => {
+        let symbologyPanel = e as HTMLCalcitePanelElement
+        symbologyPanel.closed = true
+        symbologyPanel.hidden = true
+    })
+
+}
+
+function wireUpPresetButtonViews(view: MapView) {
+    let presetButtons = document.getElementsByClassName('presetViewButton')
+    for(let i = 0; i < presetButtons.length; i++) {
+        let button = presetButtons[i]
+        button.addEventListener('click', () => {
+            // set layer visibility for this preset view
+            // NOTE: If a layer is not given a defined preset value, it will be kept the same as before clicking a preset view
+            // This is to keep the basemap, which can change, always visible
+            console.log("the button", button.id.split('-')[0])
+            let presetName: string = button.id.split('-')[0]
+            let presetLayerVisibility = settings.presetViews[presetName]
+            console.log(presetLayerVisibility)
+             // set layer visibility
+            view.map.allLayers.forEach((l) => {
+                console.log('layer', l.title)
+                l.visible = presetLayerVisibility[l.title]
+                l.opacity = 1
+            })
+            urbanLayer.opacity = 1
+
+            // TODO: Reset opacity sliders on layers after a reset like this
+
+            resetFilters()
+            resetSymbology()
+            
+        })
+    }
+
 }
 
 //#endregion

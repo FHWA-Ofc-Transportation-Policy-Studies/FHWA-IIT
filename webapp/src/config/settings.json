@@ -114,5 +114,30 @@
                 {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text"}
             ]
         }
-    ]
+    ],
+    "presetViews": {
+        "_comment": "Set layer visibility for preset views, using layer titles as keys. Use the first element of the presetViewButton id for the key of each preset view",
+        "air": {
+            "Land Cover": false,
+            "Adjusted Urban Area Boundaries": false,
+            "ACS Population": false,
+            "Noise Equity": false,
+            "Noise Damage": false,
+            "Air Equity": true,
+            "Air Damage": true,
+            "States": true,
+            "FARS (number of crashes)": false
+        },
+        "noise": {
+            "Land Cover": false,
+            "Adjusted Urban Area Boundaries": false,
+            "ACS Population": false,
+            "Noise Equity": true,
+            "Noise Damage": true,
+            "Air Equity": false,
+            "Air Damage": false,
+            "States": true,
+            "FARS (number of crashes)": false
+        }
+    }
 }
