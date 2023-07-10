@@ -18,6 +18,7 @@ import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtil
 
 import apiKey from '../config/apiKey.json'
 import settings from '../config/settings.json'
+import start_locations from '../config/start_locations.json'
 import {
     farsLayer,
     noiseDamageLayer,
@@ -119,16 +120,9 @@ let statesLayerView: FeatureLayerView
 let urbanLayerView: FeatureLayerView
 
 // for dc
-const defaultZoomLevel: number = 10
-const defaultCenterPoint = new Point({ x: -76.84, y: 39.121 })
-
-// for testing
-// const defaultZoomLevel = 13
-// const defaultCenterPoint = [-100.518, 33.835]
-
-// for 48 states
-//const defaultZoomLevel = 5
-//const defaultCenterPoint = [-96.5, 38]
+const start_location = start_locations[settings["start_location"]]
+export const defaultZoomLevel: number = start_location.zoom
+export const defaultCenterPoint = new Point({ x: start_location.longitude, y: start_location.latitude })
 
 // view related events are verbose
 let updatesRelatedToUpdatedViewComplete = false

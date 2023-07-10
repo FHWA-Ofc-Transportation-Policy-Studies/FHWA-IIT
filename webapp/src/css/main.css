@@ -47,7 +47,10 @@ calcite-loader {
 }
 
 .appHeader {
-  /* display: flex; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 50px; 
   background-image: linear-gradient(#1c6da6 , #1c6da6);
@@ -67,15 +70,31 @@ calcite-loader {
 } 
 
 .headerDivLeft {
-  float: left;
-  width: 66%;
   border: 0px solid #000;
   text-align: left;
 }
 
+.headerDivPresetViews {
+  display: flex;
+  align-items: center;
+
+  #presetButtonsLabel {
+    margin: 10px;
+    color: white;
+  }
+
+  .divPresetButtons {
+    display: flex;
+  
+    .presetViewButton {
+      margin: 5px;
+    }
+  }
+}
+
+
+
 .headerDivRight {
-  float: left;
-  width: 33%;
   text-align: right;
 }
 
