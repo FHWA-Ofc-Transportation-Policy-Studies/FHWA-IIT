@@ -1289,13 +1289,10 @@ function wireUpPresetButtonViews(view: MapView) {
             // set layer visibility for this preset view
             // NOTE: If a layer is not given a defined preset value, it will be kept the same as before clicking a preset view
             // This is to keep the basemap, which can change, always visible
-            console.log("the button", button.id.split('-')[0])
             let presetName: string = button.id.split('-')[0]
             let presetLayerVisibility = settings.presetViews[presetName]
-            console.log(presetLayerVisibility)
              // set layer visibility
             view.map.allLayers.forEach((l) => {
-                console.log('layer', l.title)
                 l.visible = presetLayerVisibility[l.title]
                 l.opacity = 1
             })
