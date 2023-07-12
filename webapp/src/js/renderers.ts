@@ -298,7 +298,10 @@ export let equityRendererNonWhite = new SimpleRenderer({
 
 export let equityRendererWhite = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -317,7 +320,10 @@ export let equityRendererWhite = new SimpleRenderer({
 
 export let equityRendererBlack = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -336,7 +342,10 @@ export let equityRendererBlack = new SimpleRenderer({
 
 export let equityRendererAsian = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -355,7 +364,10 @@ export let equityRendererAsian = new SimpleRenderer({
 
 export let equityRendererNative = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -374,7 +386,10 @@ export let equityRendererNative = new SimpleRenderer({
 
 export let equityRendererPacific = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -393,7 +408,10 @@ export let equityRendererPacific = new SimpleRenderer({
 
 export let equityRendererOther = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -412,7 +430,10 @@ export let equityRendererOther = new SimpleRenderer({
 
 export let equityRendererNonPoverty = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
@@ -431,7 +452,10 @@ export let equityRendererNonPoverty = new SimpleRenderer({
 
 export let equityRendererPoverty = new SimpleRenderer({
     // type: 'simple',
-    symbol: { type: 'simple-fill', outline: simpleLineSymbol } as __esri.SymbolProperties,
+    symbol: {
+        type: 'simple-fill',
+        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+    } as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
