@@ -12,7 +12,8 @@ import {
     farsRender,
     noiseRenderer,
     airRenderer,
-    equityRendererNonWhite,
+    noiseEquityRendererNonWhite,
+    airEquityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender
 } from './renderers'
@@ -108,7 +109,7 @@ export const noiseEquityLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: equityRendererNonWhite as __esri.RendererProperties,
+    renderer: noiseEquityRendererNonWhite as __esri.RendererProperties,
     popupTemplate: noiseEquityPopupTemplate
     //definitionExpression: "fclass = 1"
 })
@@ -118,7 +119,7 @@ export const airEquityLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
-    renderer: equityRendererNonWhite as __esri.RendererProperties,
+    renderer: airEquityRendererNonWhite as __esri.RendererProperties,
     popupTemplate: airEquityPopupTemplate
     //definitionExpression: "fclass = 1"
 })

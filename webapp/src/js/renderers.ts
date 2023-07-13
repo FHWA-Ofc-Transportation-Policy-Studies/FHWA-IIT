@@ -1,10 +1,43 @@
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer'
 
+// Use this site to choose colors, making value 1.0 the neutral color
+// https://www.learnui.design/tools/data-color-picker.html#divergent
+let noiseEquityStops = [
+    { value: 0.8, color: '#4d4d4d' }, // grey
+    { value: 0.9, color: '#989898' },
+    { value: 1.0, color: '#ebebeb' },
+    { value: 1.1, color: '#eac4a7' },
+    { value: 1.2, color: '#e19f65' },
+    { value: 1.4, color: '#d17a1d' } // orange
+]
+
+let airEquityStops = [
+    { value: 0.8, color: '#4d4d4d' }, // grey
+    { value: 0.9, color: '#989898' },
+    { value: 1.0, color: '#ebebeb' },
+    { value: 1.1, color: '#b9c5e0' },
+    { value: 1.2, color: '#83a0d5' },
+    { value: 1.4, color: '#3e7dc9' } // blue
+]
+
+let acsStops = [
+    { value: 0.2, color: '#f2f0f7' }, // pale purple
+    { value: 0.4, color: '#cbc9e2' },
+    { value: 0.6, color: '#9e9ac8' },
+    { value: 0.8, color: '#756bb1' },
+    { value: 1.0, color: '#54278f' } // dark purple
+]
+
 let simpleLineSymbol = {
     type: 'simple-line',
     color: [80, 80, 80, 0.3],
     width: 0.1,
     style: 'solid'
+}
+
+let dottedLineSymbol = {
+    type: 'simple-fill',
+    outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
 }
 
 export let farsRender = {
@@ -117,13 +150,7 @@ export let acsRendererNonWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonwhite',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         } as __esri.VisualVariableProperties
     ] 
 } as __esri.SimpleRendererProperties)
@@ -135,13 +162,7 @@ export let acsRendererWhite =  new SimpleRenderer({
         {
             type: 'color',
             field: 'white',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -153,13 +174,7 @@ export let acsRendererBlack = new SimpleRenderer({
         {
             type: 'color',
             field: 'black',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -171,13 +186,7 @@ export let acsRendererAsian = new SimpleRenderer({
         {
             type: 'color',
             field: 'asian',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         } as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -189,13 +198,7 @@ export let acsRendererNative = new SimpleRenderer({
         {
             type: 'color',
             field: 'native',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -207,13 +210,7 @@ export let acsRendererPacific = new SimpleRenderer({
         {
             type: 'color',
             field: 'pacific',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -225,13 +222,7 @@ export let acsRendererOther = new SimpleRenderer({
         {
             type: 'color',
             field: 'other',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -243,13 +234,7 @@ export let acsRendererNonPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonpoverty',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -261,213 +246,206 @@ export let acsRendererPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'poverty',
-            stops: [
-                { value: 0.2, color: '#f2f0f7' },
-                { value: 0.4, color: '#cbc9e2' },
-                { value: 0.6, color: '#9e9ac8' },
-                { value: 0.8, color: '#756bb1' },
-                { value: 1.0, color: '#54278f' }
-            ]
+            stops: acsStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
 // Equity Renderers
-
-export let equityRendererNonWhite = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let noiseEquityRendererNonWhite = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'nonwhite_n',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererWhite = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererNonWhite = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'nonwhite_n',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererWhite = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'white_ndp',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererBlack = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererWhite = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'white_ndp',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererBlack = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'black_ndp',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererAsian = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererBlack = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'black_ndp',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererAsian = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'asian_ndp',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererNative = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererAsian = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'asian_ndp',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererNative = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'native_ndp',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererPacific = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererNative = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'native_ndp',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererPacific = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'pacific_nd',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererOther = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererPacific = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'pacific_nd',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererOther = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'other_ndp',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererNonPoverty = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererOther = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'other_ndp',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererNonPoverty = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'nonpoverty',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
 
-export let equityRendererPoverty = new SimpleRenderer({
-    // type: 'simple',
-    symbol: {
-        type: 'simple-fill',
-        outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
-    } as __esri.SymbolProperties,
+export let airEquityRendererNonPoverty = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'nonpoverty',
+            stops: airEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let noiseEquityRendererPoverty = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
     visualVariables: [
         {
             type: 'color',
             field: 'poverty_nd',
-            stops: [
-                { value: 0.8, color: '#546b85' },
-                { value: 0.9, color: '#bbc3bf' },
-                { value: 1.0, color: '#fffee6' },
-                { value: 1.1, color: '#e5c4ab' },
-                { value: 1.2, color: '#bf6c52' },
-                { value: 1.4, color: '#a53217' }
-            ]
+            stops: noiseEquityStops
+        }  as __esri.VisualVariableProperties
+    ]
+} as __esri.SimpleRendererProperties)
+
+export let airEquityRendererPoverty = new SimpleRenderer({
+    symbol: dottedLineSymbol as __esri.SymbolProperties,
+    visualVariables: [
+        {
+            type: 'color',
+            field: 'poverty_nd',
+            stops: airEquityStops
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)

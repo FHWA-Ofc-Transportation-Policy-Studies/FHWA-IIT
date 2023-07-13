@@ -40,15 +40,24 @@ import {
     acsRendererOther,
     acsRendererNonPoverty,
     acsRendererPoverty,
-    equityRendererNonWhite,
-    equityRendererWhite,
-    equityRendererBlack,
-    equityRendererAsian,
-    equityRendererNative,
-    equityRendererPacific,
-    equityRendererOther,
-    equityRendererNonPoverty,
-    equityRendererPoverty
+    noiseEquityRendererNonWhite,
+    noiseEquityRendererWhite,
+    noiseEquityRendererBlack,
+    noiseEquityRendererAsian,
+    noiseEquityRendererNative,
+    noiseEquityRendererPacific,
+    noiseEquityRendererOther,
+    noiseEquityRendererNonPoverty,
+    noiseEquityRendererPoverty,
+    airEquityRendererNonWhite,
+    airEquityRendererWhite,
+    airEquityRendererBlack,
+    airEquityRendererAsian,
+    airEquityRendererNative,
+    airEquityRendererPacific,
+    airEquityRendererOther,
+    airEquityRendererNonPoverty,
+    airEquityRendererPoverty
 } from './renderers'
 
 import { setAssetPath } from '@esri/calcite-components/dist/components'
@@ -727,35 +736,62 @@ function initWidgets(view: MapView) {
             .addEventListener('calciteSelectChange', function (event) {
                 let equitySymbologySelect = event.target as HTMLCalciteSelectElement
                 switch (equitySymbologySelect.value) {
-                    case 'equityRendererNonWhite':
-                        equityLayer.renderer = equityRendererNonWhite
+                    case 'noiseEquityRendererNonWhite':
+                        equityLayer.renderer = noiseEquityRendererNonWhite
                         break
-                    case 'equityRendererWhite':
-                        equityLayer.renderer = equityRendererWhite
+                    case 'noiseEquityRendererWhite':
+                        equityLayer.renderer = noiseEquityRendererWhite
                         break
-                    case 'equityRendererBlack':
-                        equityLayer.renderer = equityRendererBlack
+                    case 'noiseEquityRendererBlack':
+                        equityLayer.renderer = noiseEquityRendererBlack
                         break
-                    case 'equityRendererAsian':
-                        equityLayer.renderer = equityRendererAsian
+                    case 'noiseEquityRendererAsian':
+                        equityLayer.renderer = noiseEquityRendererAsian
                         break
-                    case 'equityRendererNative':
-                        equityLayer.renderer = equityRendererNative
+                    case 'noiseEquityRendererNative':
+                        equityLayer.renderer = noiseEquityRendererNative
                         break
-                    case 'equityRendererPacific':
-                        equityLayer.renderer = equityRendererPacific
+                    case 'noiseEquityRendererPacific':
+                        equityLayer.renderer = noiseEquityRendererPacific
                         break
-                    case 'equityRendererOther':
-                        equityLayer.renderer = equityRendererOther
+                    case 'noiseEquityRendererOther':
+                        equityLayer.renderer = noiseEquityRendererOther
                         break
-                    case 'equityRendererNonPoverty':
-                        equityLayer.renderer = equityRendererNonPoverty
+                    case 'noiseEquityRendererNonPoverty':
+                        equityLayer.renderer = noiseEquityRendererNonPoverty
                         break
-                    case 'equityRendererPoverty':
-                        equityLayer.renderer = equityRendererPoverty
+                    case 'noiseEquityRendererPoverty':
+                        equityLayer.renderer = noiseEquityRendererPoverty
+                        break
+                    case 'airEquityRendererNonWhite':
+                        equityLayer.renderer = airEquityRendererNonWhite
+                        break
+                    case 'airEquityRendererWhite':
+                        equityLayer.renderer = airEquityRendererWhite
+                        break
+                    case 'airEquityRendererBlack':
+                        equityLayer.renderer = airEquityRendererBlack
+                        break
+                    case 'airEquityRendererAsian':
+                        equityLayer.renderer = airEquityRendererAsian
+                        break
+                    case 'airEquityRendererNative':
+                        equityLayer.renderer = airEquityRendererNative
+                        break
+                    case 'airEquityRendererPacific':
+                        equityLayer.renderer = airEquityRendererPacific
+                        break
+                    case 'airEquityRendererOther':
+                        equityLayer.renderer = airEquityRendererOther
+                        break
+                    case 'airEquityRendererNonPoverty':
+                        equityLayer.renderer = airEquityRendererNonPoverty
+                        break
+                    case 'airEquityRendererPoverty':
+                        equityLayer.renderer = airEquityRendererPoverty
                         break
                     default:
-                        equityLayer.renderer = equityRendererNonWhite
+                        equityLayer.renderer = airEquityRendererNonWhite
                 }
             })
     }
@@ -1262,8 +1298,8 @@ function resetFilters(){
 
 function resetSymbology(){
     // reset layer symbologies
-    airEquityLayer.renderer = equityRendererNonWhite
-    noiseEquityLayer.renderer = equityRendererNonWhite
+    airEquityLayer.renderer = airEquityRendererNonWhite
+    noiseEquityLayer.renderer = noiseEquityRendererNonWhite
     acsLayer.renderer = acsRendererNonWhite
 
     // reset symbology dropdowns
