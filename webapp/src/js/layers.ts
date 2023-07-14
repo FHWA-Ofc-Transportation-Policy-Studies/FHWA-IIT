@@ -97,7 +97,7 @@ export const noiseDamageLayer = new FeatureLayer({
 export const airDamageLayer = new FeatureLayer({
     title: 'Air Damage',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
-    visible: true,
+    visible: false,
     outFields: ['*'],
     renderer: airRenderer as __esri.RendererProperties,
     popupTemplate: airPopupTemplate
@@ -117,7 +117,7 @@ export const noiseEquityLayer = new FeatureLayer({
 export const airEquityLayer = new FeatureLayer({
     title: 'Air Equity',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
-    visible: true,
+    visible: false,
     outFields: ['*'],
     renderer: airEquityRendererNonWhite as __esri.RendererProperties,
     popupTemplate: airEquityPopupTemplate
