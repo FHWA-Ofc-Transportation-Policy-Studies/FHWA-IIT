@@ -1,5 +1,9 @@
 # FHWA-ECAT WEBAPP
 
+# Requirements
+
+Make sure your computer has Node.js installed. Free download is available at https://nodejs.org
+
 # Running the Application
 
 ## Step 1
