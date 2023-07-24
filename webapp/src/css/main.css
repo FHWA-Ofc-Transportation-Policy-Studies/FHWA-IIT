@@ -77,32 +77,30 @@ calcite-loader {
 .headerDivPresetViews {
   display: flex;
   align-items: center;
-
-  #presetButtonsLabel {
-    margin: 10px;
-    color: white;
-  }
-
-  .divPresetButtons {
-    display: flex;
-  
-    .presetViewButton {
-      margin: 5px;
-    }
-
-    #noise-preset-view {
-      --calcite-ui-brand: #d17a1d; /* same color as the last orange in the noise equity renderer*/
-      --calcite-ui-brand-hover: #bc6e1a; /* slightly darker */
-    }
-
-    #air-preset-view {
-      --calcite-ui-brand: #3e7dc9; /* same color as the last blue in the air equity renderer*/
-      --calcite-ui-brand-hover: #3871b7; /* slightly darker */
-    }
-  }
 }
 
+.headerDivPresetViews #presetButtonsLabel {
+  margin: 10px;
+  color: white;
+}
 
+.headerDivPresetViews .divPresetButtons {
+  display: flex;
+}
+
+.headerDivPresetViews .divPresetButtons .presetViewButton {
+  margin: 5px;
+}
+
+.headerDivPresetViews .divPresetButtons #noise-preset-view {
+  --calcite-ui-brand: #d17a1d; /* same color as the last orange in the noise equity renderer*/
+  --calcite-ui-brand-hover: #bc6e1a; /* slightly darker */
+}
+
+.headerDivPresetViews .divPresetButtons #air-preset-view {
+  --calcite-ui-brand: #3e7dc9; /* same color as the last blue in the air equity renderer*/
+  --calcite-ui-brand-hover: #3871b7; /* slightly darker */
+}
 
 .headerDivRight {
   text-align: right;
