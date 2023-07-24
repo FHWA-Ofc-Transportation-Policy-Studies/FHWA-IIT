@@ -8,7 +8,8 @@ const config = {
     port: 3000,
     host: true,
     open: true
-  }
+  },
+  base: 'https://maps.dot.gov/fhwa/niit-dev/'
 };
 
 export default defineConfig(config);
