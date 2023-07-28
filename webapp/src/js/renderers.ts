@@ -150,7 +150,8 @@ export let acsRendererNonWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonwhite',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Nonwhite" }
         } as __esri.VisualVariableProperties
     ] 
 } as __esri.SimpleRendererProperties)
@@ -162,7 +163,8 @@ export let acsRendererWhite =  new SimpleRenderer({
         {
             type: 'color',
             field: 'white',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population White" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -174,7 +176,8 @@ export let acsRendererBlack = new SimpleRenderer({
         {
             type: 'color',
             field: 'black',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Black" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -186,7 +189,8 @@ export let acsRendererAsian = new SimpleRenderer({
         {
             type: 'color',
             field: 'asian',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Asian" }
         } as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -198,7 +202,8 @@ export let acsRendererNative = new SimpleRenderer({
         {
             type: 'color',
             field: 'native',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Native" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -210,7 +215,8 @@ export let acsRendererPacific = new SimpleRenderer({
         {
             type: 'color',
             field: 'pacific',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Pacific" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -222,7 +228,8 @@ export let acsRendererOther = new SimpleRenderer({
         {
             type: 'color',
             field: 'other',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Other" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -234,7 +241,8 @@ export let acsRendererNonPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonpoverty',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Nonpoverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -246,7 +254,8 @@ export let acsRendererPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'poverty',
-            stops: acsStops
+            stops: acsStops,
+            legendOptions: { title: "% Population Poverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -258,7 +267,8 @@ export let noiseEquityRendererNonWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonwhite_n',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Nonwhite" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -269,7 +279,8 @@ export let airEquityRendererNonWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonwhite_n',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Nonwhite" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -280,7 +291,8 @@ export let noiseEquityRendererWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'white_ndp',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - White" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -291,7 +303,8 @@ export let airEquityRendererWhite = new SimpleRenderer({
         {
             type: 'color',
             field: 'white_ndp',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - White" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -302,7 +315,8 @@ export let noiseEquityRendererBlack = new SimpleRenderer({
         {
             type: 'color',
             field: 'black_ndp',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Black" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -313,7 +327,8 @@ export let airEquityRendererBlack = new SimpleRenderer({
         {
             type: 'color',
             field: 'black_ndp',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Black" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -324,7 +339,8 @@ export let noiseEquityRendererAsian = new SimpleRenderer({
         {
             type: 'color',
             field: 'asian_ndp',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Asian" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -335,7 +351,8 @@ export let airEquityRendererAsian = new SimpleRenderer({
         {
             type: 'color',
             field: 'asian_ndp',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Asian" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -346,7 +363,8 @@ export let noiseEquityRendererNative = new SimpleRenderer({
         {
             type: 'color',
             field: 'native_ndp',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Native" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -357,7 +375,8 @@ export let airEquityRendererNative = new SimpleRenderer({
         {
             type: 'color',
             field: 'native_ndp',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Native" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -368,7 +387,8 @@ export let noiseEquityRendererPacific = new SimpleRenderer({
         {
             type: 'color',
             field: 'pacific_nd',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Pacific" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -379,7 +399,8 @@ export let airEquityRendererPacific = new SimpleRenderer({
         {
             type: 'color',
             field: 'pacific_nd',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Pacific" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -390,7 +411,8 @@ export let noiseEquityRendererOther = new SimpleRenderer({
         {
             type: 'color',
             field: 'other_ndp',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Other" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -401,7 +423,8 @@ export let airEquityRendererOther = new SimpleRenderer({
         {
             type: 'color',
             field: 'other_ndp',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Other" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -412,7 +435,8 @@ export let noiseEquityRendererNonPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonpoverty',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Nonpoverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -423,7 +447,8 @@ export let airEquityRendererNonPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'nonpoverty',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Nonpoverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -434,7 +459,8 @@ export let noiseEquityRendererPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'poverty_nd',
-            stops: noiseEquityStops
+            stops: noiseEquityStops,
+            legendOptions: { title: "Noise Equity Ratio - Poverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
@@ -445,7 +471,8 @@ export let airEquityRendererPoverty = new SimpleRenderer({
         {
             type: 'color',
             field: 'poverty_nd',
-            stops: airEquityStops
+            stops: airEquityStops,
+            legendOptions: { title: "Air Equity Ratio - Poverty" }
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
