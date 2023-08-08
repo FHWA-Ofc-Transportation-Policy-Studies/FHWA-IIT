@@ -183,8 +183,8 @@ function setUpMap() {
             airDamageLayer,
             noiseDamageLayer,
             statesLayer,
-            universitiesLayer,
             publicSchoolsLayer,
+            universitiesLayer,
             farsLayer
         ]
     })

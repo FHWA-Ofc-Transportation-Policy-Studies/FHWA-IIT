@@ -158,7 +158,6 @@ export const publicSchoolsLayer = new FeatureLayer({
     url: 'https://services1.arcgis.com/Ua5sjt3LWTPigjyD/arcgis/rest/services/Public_School_Location_201819/FeatureServer',
     visible: false,
     outFields: ['*'],
-    renderer: schoolsRenderer as __esri.RendererProperties,
     popupTemplate: {
         title: 'Public School',
         content: [
@@ -197,7 +196,6 @@ export const redliningLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/ak2bo87wLfUpMrt1/arcgis/rest/services/HOLC_Redlining_Polygons_v1/FeatureServer',
     visible: false,
     outFields: ['*'],
-    renderer: redliningRenderer as __esri.RendererProperties,
     popupTemplate: {
         title: 'Redlined Neighborhood',
         content: [
