@@ -113,6 +113,28 @@
             "selectors": [
                 {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text"}
             ]
+        },
+        {
+            "fullName": "Public Schools",
+            "shortName": "publicSchools",
+            "selectors": [
+                {"name": "name", "fieldName": "NAME", "fieldType": "text"}
+            ]
+        },
+        {
+            "fullName": "Universities",
+            "shortName": "universities",
+            "selectors": [
+                {"name": "name", "fieldName": "NAME", "fieldType": "text"},
+                {"name": "enrollment", "fieldName": "TOT_ENROLL", "fieldType": "text"}
+            ]
+        },
+        {
+            "fullName": "Redlined Neighborhoods",
+            "shortName": "redlined",
+            "selectors": [
+                {"name": "grade", "fieldName": "holc_grade", "fieldType": "text"}
+            ]
         }
     ],
     "presetViews": {
@@ -126,7 +148,10 @@
             "Air Equity": true,
             "Air Damage": true,
             "States": true,
-            "FARS (number of crashes)": false
+            "FARS (number of crashes)": false,
+            "Public Schools": false,
+            "Universities": false,
+            "Redlined Neighborhoods": false
         },
         "noise": {
             "Land Cover": false,
@@ -137,7 +162,10 @@
             "Air Equity": false,
             "Air Damage": false,
             "States": true,
-            "FARS (number of crashes)": false
+            "FARS (number of crashes)": false,
+            "Public Schools": false,
+            "Universities": false,
+            "Redlined Neighborhoods": false
         }
     }
 }

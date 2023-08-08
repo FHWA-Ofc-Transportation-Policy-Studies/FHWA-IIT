@@ -15,7 +15,10 @@ import {
     noiseEquityRendererNonWhite,
     airEquityRendererNonWhite,
     acsRendererNonWhite,
-    urbanRender
+    urbanRender,
+    schoolsRenderer,
+    universityRenderer,
+    redliningRenderer
 } from './renderers'
 
 // ################################################################
@@ -150,4 +153,61 @@ export const landcoverLayer = new ImageryLayer({
     visible: false
 })
 
+export const publicSchoolsLayer = new FeatureLayer({
+    title: 'Public Schools',
+    url: 'https://services1.arcgis.com/Ua5sjt3LWTPigjyD/arcgis/rest/services/Public_School_Location_201819/FeatureServer',
+    visible: false,
+    outFields: ['*'],
+    renderer: schoolsRenderer as __esri.RendererProperties,
+    popupTemplate: {
+        title: 'Public School',
+        content: [
+            {
+                type: 'fields',
+                fieldInfos: [
+                    { fieldName: 'NAME', label: 'Name of Public School' },
+                ]
+            }
+        ]
+    }
+})
+
+export const universitiesLayer = new FeatureLayer({
+    title: 'Universities',
+    url: 'https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer',
+    visible: false,
+    outFields: ['*'],
+    renderer: universityRenderer as __esri.RendererProperties,
+    popupTemplate: {
+        title: 'University',
+        content: [
+            {
+                type: 'fields',
+                fieldInfos: [
+                    { fieldName: 'NAME', label: 'Name of University' },
+                    { fieldName: 'TOT_ENROLL', label: 'Total Enrollment' },
+                ]
+            }
+        ]
+    }
+})
+
+export const redliningLayer = new FeatureLayer({
+    title: 'Redlined Neighborhoods',
+    url: 'https://services.arcgis.com/ak2bo87wLfUpMrt1/arcgis/rest/services/HOLC_Redlining_Polygons_v1/FeatureServer',
+    visible: false,
+    outFields: ['*'],
+    renderer: redliningRenderer as __esri.RendererProperties,
+    popupTemplate: {
+        title: 'Redlined Neighborhood',
+        content: [
+            {
+                type: 'fields',
+                fieldInfos: [
+                    { fieldName: 'holc_grade', label: 'HOLC Grade' },
+                ]
+            }
+        ]
+    }
+})
 // # ENDREGION

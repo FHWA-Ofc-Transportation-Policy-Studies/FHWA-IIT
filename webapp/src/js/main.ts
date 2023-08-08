@@ -28,7 +28,10 @@ import {
     acsLayer,
     statesLayer,
     urbanLayer,
-    landcoverLayer
+    landcoverLayer,
+    publicSchoolsLayer,
+    universitiesLayer,
+    redliningLayer
 } from './layers'
 import {
     acsRendererNonWhite,
@@ -100,7 +103,6 @@ import Point from '@arcgis/core/geometry/Point'
 import Layer from '@arcgis/core/layers/Layer'
 import ListItem from '@arcgis/core/widgets/LayerList/ListItem'
 import Query from '@arcgis/core/rest/support/Query'
-import Geometry from '@arcgis/core/geometry/Geometry'
 
 //#endregion
 
@@ -128,6 +130,9 @@ let airEquityLayerView: FeatureLayerView
 let acsLayerView: FeatureLayerView
 let statesLayerView: FeatureLayerView
 let urbanLayerView: FeatureLayerView
+let publicSchoolsLayerView: FeatureLayerView
+let universitiesLayerView: FeatureLayerView
+let redliningLayerView: FeatureLayerView
 
 // for dc
 const start_location = start_locations[settings["start_location"]]
@@ -155,9 +160,12 @@ function setUpMap() {
             acsLayer,
             noiseEquityLayer,
             airEquityLayer,
+            redliningLayer,
             airDamageLayer,
             noiseDamageLayer,
             statesLayer,
+            universitiesLayer,
+            publicSchoolsLayer,
             farsLayer
         ]
     })
@@ -204,7 +212,10 @@ function onViewReady(view: MapView) {
         view.whenLayerView(airEquityLayer),
         view.whenLayerView(acsLayer),
         view.whenLayerView(statesLayer),
-        view.whenLayerView(urbanLayer)
+        view.whenLayerView(urbanLayer),
+        view.whenLayerView(publicSchoolsLayer),
+        view.whenLayerView(universitiesLayer),
+        view.whenLayerView(redliningLayer)
     ])
 
     let layerViewsDoneUpdatingPromise = whenLayerViewsCreatedPromises.then(
@@ -216,7 +227,10 @@ function onViewReady(view: MapView) {
             tmpAirEquityLayerView,
             tmpAcsLayerView,
             tmpStatesLayerView,
-            tmpUrbanLayerView
+            tmpUrbanLayerView,
+            tmpPublicSchoolsLayerView,
+            tmpUniversitiesLayerView,
+            tmpRedliningLayerView
         ]) => {
             farsLayerView = tmpFarsLayerView
             noiseDamageLayerView = tmpNoiseDamageLayerView
@@ -226,6 +240,9 @@ function onViewReady(view: MapView) {
             acsLayerView = tmpAcsLayerView
             statesLayerView = tmpStatesLayerView
             urbanLayerView = tmpUrbanLayerView
+            publicSchoolsLayerView = tmpPublicSchoolsLayerView
+            universitiesLayerView = tmpUniversitiesLayerView
+            redliningLayerView = tmpRedliningLayerView
 
             return Promise.all([
                 reactiveUtils.whenOnce(() => !tmpFarsLayerView.updating),
@@ -235,7 +252,10 @@ function onViewReady(view: MapView) {
                 reactiveUtils.whenOnce(() => !tmpAirEquityLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpAcsLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpStatesLayerView.updating),
-                reactiveUtils.whenOnce(() => !tmpUrbanLayerView.updating)
+                reactiveUtils.whenOnce(() => !tmpUrbanLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpPublicSchoolsLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpUniversitiesLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpRedliningLayerView.updating)
             ])
         }
     )
@@ -245,6 +265,9 @@ function onViewReady(view: MapView) {
         // these are layers that have a filter set to start
         // TODO, I think this may need to just be run for all the layers
         let layersToUpdateOnStartUp = [
+            'publicSchools',
+            'universities',
+            'redlining',
             'fars',
             'noiseDamage',
             'noiseEquity',
@@ -335,7 +358,10 @@ function onViewReady(view: MapView) {
                 airDamageLayerView.updating,
                 airEquityLayerView.updating,
                 acsLayerView.updating,
-                urbanLayerView.updating
+                urbanLayerView.updating,
+                publicSchoolsLayerView.updating,
+                universitiesLayerView.updating,
+                redliningLayerView.updating
             ],
             ([
                 stationary,
@@ -346,7 +372,10 @@ function onViewReady(view: MapView) {
                 airDamageU,
                 airEquityU,
                 acsU,
-                urbanU
+                urbanU,
+                schoolsU,
+                universitiesU,
+                redliningU
             ]) => {
                 if (
                     stationary &&
@@ -357,7 +386,10 @@ function onViewReady(view: MapView) {
                     !airDamageU &&
                     !airEquityU &&
                     !acsU &&
-                    !urbanU
+                    !urbanU &&
+                    !schoolsU &&
+                    !universitiesU &&
+                    !redliningU
                 ) {
                     // no longer updating
 
@@ -554,7 +586,10 @@ function initWidgets(view: MapView) {
             { layer: airDamageLayer },
             { layer: airEquityLayer },
             { layer: acsLayer },
-            { layer: urbanLayer }
+            { layer: urbanLayer },
+            { layer: publicSchoolsLayer },
+            { layer: universitiesLayer },
+            { layer: redliningLayer }
         ]
     })
 
@@ -1012,6 +1047,66 @@ function onLayerListItemCreated(event: any) {
 
         item.actionsSections = [[{ title: '', className: 'nonexistantclass', id: '' }]]
     }
+    // Public Schools
+    // -----------------------------------------------------------------
+    else if (event.item.title === 'Public Schools') {
+        const item = event.item
+
+        const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
+
+        transparencySlider.on('thumb-drag', (event) => {
+            const { value } = event
+            item.layer.opacity = value
+        })
+
+        item.panel = {
+            content: transparencySlider,
+            className: 'esri-icon-sliders-horizontal',
+            title: 'Change layer transparency'
+        }
+
+        item.actionsSections = [[{ title: '', className: 'nonexistantclass', id: '' }]]
+    }
+    // Universities
+    // -----------------------------------------------------------------
+    else if (event.item.title === 'Universities') {
+        const item = event.item
+
+        const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
+
+        transparencySlider.on('thumb-drag', (event) => {
+            const { value } = event
+            item.layer.opacity = value
+        })
+
+        item.panel = {
+            content: transparencySlider,
+            className: 'esri-icon-sliders-horizontal',
+            title: 'Change layer transparency'
+        }
+
+        item.actionsSections = [[{ title: '', className: 'nonexistantclass', id: '' }]]
+    }
+    // Redlining Layer
+    // -----------------------------------------------------------------
+    else if (event.item.title === 'Redlined Neighborhoods') {
+        const item = event.item
+
+        const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
+
+        transparencySlider.on('thumb-drag', (event) => {
+            const { value } = event
+            item.layer.opacity = value
+        })
+
+        item.panel = {
+            content: transparencySlider,
+            className: 'esri-icon-sliders-horizontal',
+            title: 'Change layer transparency'
+        }
+
+        item.actionsSections = [[{ title: '', className: 'nonexistantclass', id: '' }]]
+    }
 }
 
 function initLeftActionBarEvents(view: MapView) {
@@ -1206,7 +1301,10 @@ function wireUpOnLayerVisibilityChanges() {
         acsLayer,
         farsLayer,
         urbanLayer,
-        landcoverLayer
+        landcoverLayer,
+        publicSchoolsLayer,
+        universitiesLayer,
+        redliningLayer
     ]
 
     // set up to react to changes in the visibility

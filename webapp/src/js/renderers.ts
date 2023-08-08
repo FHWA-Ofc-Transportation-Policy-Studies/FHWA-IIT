@@ -22,10 +22,10 @@ let airEquityStops = [
 
 let acsStops = [
     { value: 0.2, color: '#f2f0f7' }, // pale purple
-    { value: 0.4, color: '#cbc9e2' },
-    { value: 0.6, color: '#9e9ac8' },
-    { value: 0.8, color: '#756bb1' },
-    { value: 1.0, color: '#54278f' } // dark purple
+    { value: 0.35, color: '#cbc9e2' },
+    { value: 0.5, color: '#9e9ac8' },
+    { value: 0.65, color: '#756bb1' },
+    { value: 0.8, color: '#54278f' } // dark purple
 ]
 
 let simpleLineSymbol = {
@@ -38,6 +38,18 @@ let simpleLineSymbol = {
 let dottedLineSymbol = {
     type: 'simple-fill',
     outline: { color: [0, 0, 0, 1], width: 0.5, style: 'dash' }
+}
+
+let schoolMarkerSymbol = {
+    type: 'simple-marker',
+    color: 'silver',
+    size: 6,
+}
+
+let universityMarkerSymbol = {
+    type: 'simple-marker',
+    color: 'grey',
+    size: 8,
 }
 
 export let farsRender = {
@@ -476,3 +488,38 @@ export let airEquityRendererPoverty = new SimpleRenderer({
         }  as __esri.VisualVariableProperties
     ]
 } as __esri.SimpleRendererProperties)
+
+export let schoolsRenderer = new SimpleRenderer({
+    symbol: schoolMarkerSymbol  as __esri.SymbolProperties,
+} as __esri.SimpleRendererProperties)
+
+export let universityRenderer = new SimpleRenderer({
+    symbol: universityMarkerSymbol  as __esri.SymbolProperties,
+} as __esri.SimpleRendererProperties)
+
+export let redliningRenderer = {
+    type: 'unique-value',
+    field: 'holc_grade',
+    uniqueValueInfos: [
+        {
+            value: 'C',
+            symbol: { type: 'simple-fill', color: '#CBC264', style: 'solid' } // yellow
+        },
+        {
+            value: 'B',
+            symbol: { type: 'simple-fill', color: '#87AFBC', style: 'solid' } // blue
+        },
+        {
+            value: 'D',
+            symbol: { type: 'simple-fill', color: '#D77186', style: 'solid' } // red
+        },
+        {
+            value: 'A',
+            symbol: { type: 'simple-fill', color: '#82A26C', style: 'solid' } // green
+        },
+        {
+            value: 'E',
+            symbol: { type: 'simple-fill', color: '#ADADAD', style: 'solid' } // grey
+        }
+    ]
+}
