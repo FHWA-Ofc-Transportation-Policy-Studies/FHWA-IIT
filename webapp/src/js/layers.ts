@@ -27,7 +27,7 @@ import {
 export const statesLayer = new FeatureLayer({
     title: 'States',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/TTET_States_vb1p1/FeatureServer/0',
-    outFields: ['stusps', 'statefp', 'sq_miles_land', 'sq_miles_water'],
+    outFields: ['STUSPS', 'statefp', 'sq_miles_land', 'sq_miles_water'],
     visible: true
 })
 

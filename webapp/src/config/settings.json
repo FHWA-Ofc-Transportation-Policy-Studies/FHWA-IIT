@@ -3,6 +3,7 @@
     "version" : "beta 1.0", 
     "date": "July 24, 2023",
     "start_location": "DC",
+    "_COMMENT": "The order of layers matters, since they dictate in which order field names are replaced when displaying filters",
     "layers": [
         {
             "fullName": "FARS (number of crashes)",
@@ -18,6 +19,22 @@
             "charts": [
                 {"type": "simpleSum", "chartName": "Total Fatalities", "sumField": "FATALS"},
                 {"type": "simpleSum", "chartName": "African American Fatalities", "sumField": "FTL_BLACK"}
+            ]
+        },
+        {
+            "fullName": "ACS Population",
+            "shortName": "acs",
+            "selectors": [
+                {"name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people"},
+                {"name": "pctwhite", "fieldName": "pctwhite", "fieldType": "float", "fieldLabel": "% white", "units": "* 100"},
+                {"name": "pctnonwhite", "fieldName": "pctnonwhite", "fieldType": "float", "fieldLabel": "% non-white", "units": "* 100"},
+                {"name": "pctblack", "fieldName": "pctblack", "fieldType": "float", "fieldLabel": "% black", "units": "* 100"},
+                {"name": "pctnative", "fieldName": "pctnative", "fieldType": "float", "fieldLabel": "% native", "units": "* 100"},
+                {"name": "pctasian", "fieldName": "pctasian", "fieldType": "float", "fieldLabel": "% asian", "units": "* 100"},
+                {"name": "pctpacific", "fieldName": "pctpacific", "fieldType": "float", "fieldLabel": "% pacific", "units": "* 100"},
+                {"name": "pctother", "fieldName": "pctother", "fieldType": "float", "fieldLabel": "% other", "units": "* 100"},
+                {"name": "pctpoverty", "fieldName": "pctpoverty", "fieldType": "float", "fieldLabel": "% poverty", "units": "* 100"},
+                {"name": "pctnonpoverty", "fieldName": "pctnonpoverty", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "* 100"}
             ]
         },
         {
@@ -92,48 +109,32 @@
             ]
         },
         {
-            "fullName": "ACS Population",
-            "shortName": "acs",
-            "selectors": [
-                {"name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people"},
-                {"name": "pctwhite", "fieldName": "white", "fieldType": "float", "fieldLabel": "% white", "units": "* 100"},
-                {"name": "pctnonwhite", "fieldName": "nonwhite", "fieldType": "float", "fieldLabel": "% non-white", "units": "* 100"},
-                {"name": "pctblack", "fieldName": "black", "fieldType": "float", "fieldLabel": "% black", "units": "* 100"},
-                {"name": "pctnative", "fieldName": "native", "fieldType": "float", "fieldLabel": "% native", "units": "* 100"},
-                {"name": "pctasian", "fieldName": "asian", "fieldType": "float", "fieldLabel": "% asian", "units": "* 100"},
-                {"name": "pctpacific", "fieldName": "pacific", "fieldType": "float", "fieldLabel": "% pacific", "units": "* 100"},
-                {"name": "pctother", "fieldName": "other", "fieldType": "float", "fieldLabel": "% other", "units": "* 100"},
-                {"name": "pctpoverty", "fieldName": "poverty", "fieldType": "float", "fieldLabel": "% poverty", "units": "* 100"},
-                {"name": "pctnonpoverty", "fieldName": "nonpoverty", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "* 100"}
-            ]
-        },
-        {
             "fullName": "States",
             "shortName": "states",
             "selectors": [
-                {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text"}
+                {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text", "fieldLabel": "State"}
             ]
         },
         {
             "fullName": "Public Schools",
             "shortName": "publicSchools",
             "selectors": [
-                {"name": "name", "fieldName": "NAME", "fieldType": "text"}
+                {"name": "schoolname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "School Name"}
             ]
         },
         {
             "fullName": "Universities",
             "shortName": "universities",
             "selectors": [
-                {"name": "name", "fieldName": "NAME", "fieldType": "text"},
-                {"name": "enrollment", "fieldName": "TOT_ENROLL", "fieldType": "text"}
+                {"name": "universityname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "University Name"},
+                {"name": "enrollment", "fieldName": "TOT_ENROLL", "fieldType": "integer", "fieldLabel": "Total Enrollment"}
             ]
         },
         {
             "fullName": "Redlined Neighborhoods",
             "shortName": "redlined",
             "selectors": [
-                {"name": "grade", "fieldName": "holc_grade", "fieldType": "text"}
+                {"name": "grade", "fieldName": "holc_grade", "fieldType": "text", "fieldLabel": "HOLC Grade"}
             ]
         }
     ],

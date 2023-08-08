@@ -119,6 +119,25 @@ let defaultCheckBoxState: { [key: string]: boolean }  = {}
 let defaultSliderState: { [key: string]: [number | undefined, number | undefined] } = {}
 let defaultLayerVisibility: { [key: string]: boolean } = {}
 
+type selectorType = {
+    "name": string,
+    "fieldName": string,
+    "fieldType": string,
+    "fieldLabel": string
+}
+
+// used to rename field names when showing the filter present on a layer
+// order matters, as later these will replace filter.where's sequentially
+let all_selectors: selectorType[] = []
+settings.layers.forEach((layer) => {
+    if (Object.hasOwn(layer, 'selectors')) {
+        layer.selectors?.forEach((sel) => {
+            all_selectors.push(sel)
+        })
+    }
+})
+// console.log(all_selectors)
+
 let layerList: LayerList
 let layersWithSymbology: string[] = ['acs', 'noiseEquity', 'airEquity'] // use shortnames here
 // layerviews (in most cases)
@@ -670,14 +689,20 @@ function initWidgets(view: MapView) {
 
             let shortLayerName = (event.target as Element).id.split('-')[0]
 
-            filterModalTitle!.innerHTML = shortLayerName + ' filter'
+            filterModalTitle!.innerHTML = getFullNameForLayerFromShortName(shortLayerName) + ' filter'
 
             let theLayerView = eval(shortLayerName + 'LayerView')
 
             if (!theLayerView.filter.where) {
-                filterModalContent!.innerHTML = 'no filter defined, showing all features'
+                filterModalContent!.innerHTML = 'No filter defined, showing all features'
             } else {
-                filterModalContent!.innerHTML = theLayerView.filter.where
+                console.log(theLayerView.filter)
+                let filterDescription: string = theLayerView.filter.where
+                all_selectors.forEach((sel) => {
+                    // console.log("trying to replace", sel.fieldName, "with", sel.fieldLabel)
+                    filterDescription = filterDescription.replaceAll(sel.fieldName, sel.fieldLabel)
+                })
+                filterModalContent!.innerHTML = filterDescription
             }
 
             filterModal!.open = true
@@ -1320,13 +1345,24 @@ function wireUpOnLayerVisibilityChanges() {
 
 function getShortNameForLayerFromFullName(fullName: string) {
     // short names are simple, lower case, and not have spaces or hypens
-    // read the ayerSelectConfig json file and get the short name from the long name,
+    // read the settings json file and get the short name from the long name,
     // for example, pass in 'Fatality Analysis Reporting System (FARS)' get back 'fars'
     let selectedLayer = settings.layers.filter((l) => {
         return l.fullName === fullName
     })[0]
 
     return selectedLayer ? selectedLayer.shortName : null
+}
+
+function getFullNameForLayerFromShortName(shortName: string) {
+    // short names are simple, lower case, and not have spaces or hypens
+    // read the settings json file and get the long name from the short name,
+    // for example, pass in 'fars' and get back 'Fatality Analysis Reporting System (FARS)'
+    let selectedLayer = settings.layers.filter((l) => {
+        return l.shortName === shortName
+    })[0]
+
+    return selectedLayer ? selectedLayer.fullName : null
 }
 
 function getFieldNameAndTypeForSelectId(shortName: string, selectorName: string) {
@@ -1662,7 +1698,7 @@ function getLayerFilter(shortLayerName: string) {
 function getStatesFilter(shortLayerName: string) {
     // this is the case for all layers setup in prep layers.  but for external layers (e.g. disadvantaged)
     // it has to be handle separately
-    let stateAbbrevField = 'stusps'
+    let stateAbbrevField = 'STUSPS'
 
     if (shortLayerName === 'disadvantaged') {
         stateAbbrevField = 'st_abbr'
