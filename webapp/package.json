@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build_dev": "vite build --outDir dist_dev",
+    "build_prod": "vite build --outDir dist_prod",
     "preview": "vite preview"
   },
   "dependencies": {

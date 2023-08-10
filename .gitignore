@@ -7,7 +7,7 @@
 
 # webapp section
 /webapp/node_modules
-/webapp/dist
+/webapp/dist*
 /public/.vscode
 /webapp/prep_layers/
 /webapp/prep_layers/prep_layers_map/*
