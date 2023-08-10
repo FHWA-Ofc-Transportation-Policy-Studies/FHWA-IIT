@@ -19,15 +19,11 @@ requesting one from your organization leaders
 
 ## Step 3
 
-create a new file in `webapp/src/config`(the same location as `settings.json`) called `apiKey.json` and give it the following contents (note the double quotes and the capitalization):
+create a new file in `webapp/` called `.env.local` and give it the following contents (note the double quotes and the capitalization):
 
 ```
-{
-    "esriApiKey": "<your key goes here>"
-}
+VITE_API_KEY="<app_api_key_here>"
 ```
-
-
 
 ## Step 4
 

@@ -16,7 +16,6 @@ import * as promiseUtils from '@arcgis/core/core/promiseUtils'
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils'
 import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils'
 
-import apiKey from '../config/apiKey.json'
 import settings from '../config/settings.json'
 import start_locations from '../config/start_locations.json'
 import {
@@ -110,7 +109,7 @@ import Query from '@arcgis/core/rest/support/Query'
 //                Region: Global Variables
 // ========================================================
 
-esriConfig.apiKey = apiKey.esriApiKey
+esriConfig.apiKey = import.meta.env.VITE_API_KEY
 
 export let activeActionId: string | null = null
 
