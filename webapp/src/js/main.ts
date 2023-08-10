@@ -1967,7 +1967,8 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
         let equityView = equityViews[i]
         let equitySummaryEl = equitySummaryElements[i]
         let equitySummaryTextEl = equitySummaryTextElements[i]
-        let damageType = equitySummaryTextElements[i].split('-')[2].charAt(0).toUpperCase() // Noise or Air
+        let damageType = equitySummaryTextElements[i].split('-')[2] // Noise or Air
+        damageType = damageType.charAt(0).toUpperCase() + damageType.slice(1) // make title case
 
         // get from current ND field being used to symbolize this layer
         let demographicToUse = equityView.layer.renderer.visualVariables[0].field.split('_')[0]
@@ -2028,7 +2029,7 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
                 })
 
                 document.getElementById(equitySummaryTextEl)!.innerHTML =
-                    'Total' + damageType + 'Damage (' + demographicToUse + ')'
+                    'Total ' + damageType + ' Damage (' + demographicToUse + ')'
 
                 document.getElementById(equitySummaryEl)!.innerHTML =
                     ' $ ' + Math.round(sum).toLocaleString('en-US')

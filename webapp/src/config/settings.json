@@ -132,7 +132,7 @@
         },
         {
             "fullName": "Redlined Neighborhoods",
-            "shortName": "redlined",
+            "shortName": "redlining",
             "selectors": [
                 {"name": "grade", "fieldName": "holc_grade", "fieldType": "text", "fieldLabel": "HOLC Grade"}
             ]
