@@ -8,13 +8,14 @@ function airPopupTemplateTitleFunction(feature: any) {
 
 function damagePopupTemplateContentFunction(feature: any) {
     let dmgDescrip
+    let dmgBin
 
     switch (feature.graphic.attributes.F_SYSTEM) {
         case 1:
             dmgDescrip = '1 (Interstate)'
             break
         case 2:
-            dmgDescrip = '2 (Principal Arterial, Other Freewys and Expressways)'
+            dmgDescrip = '2 (Principal Arterial, Other Freeways and Expressways)'
             break
         case 3:
             dmgDescrip = '3 (Principal Arterial, Other)'
@@ -35,6 +36,32 @@ function damagePopupTemplateContentFunction(feature: any) {
             dmgDescrip = 'unknown fuction class'
     }
 
+    switch (feature.graphic.attributes.bin_dl) {
+        case 1:
+            dmgBin = '1 (<= $100)'
+            break
+        case 2:
+            dmgBin = '2 ($100 < Damage <= $1,000)'
+            break
+        case 3:
+            dmgBin = '3 ($1,000 < Damage <= $10,000)'
+            break
+        case 4:
+            dmgBin = '4 ($10,000 < Damage <= $100,000)'
+            break
+        case 5:
+            dmgBin = '5 ($100,000 < Damage <= $500,000)'
+            break
+        case 6:
+            dmgBin = '6 ($500,000 < Damage <= $1,000,000)'
+            break
+        case 7:
+            dmgBin = '7 (>= $1,000,000)'
+            break
+        default:
+            dmgBin = 'unknown damage bin'
+    }
+
     const div = document.createElement('div')
 
     div.innerHTML =
@@ -49,7 +76,7 @@ function damagePopupTemplateContentFunction(feature: any) {
         dmgDescrip +
         '</b></li>' +
         '<li>Dmg Bin <b>' +
-        feature.graphic.attributes.bin_dl +
+        dmgBin +
         '</b></li>' +
         '</ul>'
 
