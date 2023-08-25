@@ -16,9 +16,7 @@ import {
     airEquityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender,
-    schoolsRenderer,
     universityRenderer,
-    redliningRenderer
 } from './renderers'
 
 // ################################################################
