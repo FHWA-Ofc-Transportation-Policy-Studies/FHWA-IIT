@@ -11,9 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@arcgis/core": "^4.27.6",
-    "@esri/calcite-components": "^1.4.3",
-    "@types/arcgis-js-api": "^4.27.0"
+    "@arcgis/core": "~4.27",
+    "@types/arcgis-js-api": "~4.27",
+    "@esri/calcite-components": "~1.4"
   },
   "devDependencies": {
     "prettier": "^2.8.8",
