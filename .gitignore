@@ -1,12 +1,21 @@
 *.swp
 /.vscode
 
-# model section
-/model/input_data
+# MODEL SECTION
+# -------------
+
+# the small lookup tables will be checked in
+/model/input_data/ACS_2019
+/model/input_data/state_shp_2016_simplified
+
+/model/input_data_test
+
+/model/MapProj
 /model/output_data
 /model/_misc_and_old
 
-# webapp section
+# WEBAPP SECTION
+# --------------
 /webapp/node_modules
 /webapp/dist*
 /public/.vscode
