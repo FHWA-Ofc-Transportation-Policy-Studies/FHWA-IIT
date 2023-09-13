@@ -1,0 +1,16 @@
+name: ecat_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11.*
+  - geopandas=0.13.*
+  - pandas=2.0.*
+  - geopy=2.3.*
+  - utm =0.7.*
+  - rtree=1.0.*
+  - pygeos=0.14
+  - numpy=1.25.*
+  - shapely=2.0.*
+  - pyproj=3.6.*
+  - fiona=1.9.*

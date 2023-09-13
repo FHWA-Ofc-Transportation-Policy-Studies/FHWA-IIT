@@ -2,8 +2,9 @@
 /.vscode
 
 # model section
-/model/input
-/model/output
+/model/input_data
+/model/output_data
+/model/_misc_and_old
 
 # webapp section
 /webapp/node_modules
