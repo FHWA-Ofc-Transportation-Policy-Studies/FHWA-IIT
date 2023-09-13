@@ -1,5 +1,5 @@
 
-# This must be set to where you save the root file directory (see folder structure in the readme file)
+# The root directory must be set.  Everything is relative (below) this path.
 
 # TODO ideally root would be in a separate config file so that the code doesn't need to be modified
 
@@ -23,13 +23,13 @@ import os
 import gc
 from math import log10
 import pandas
-from time import time  
+from time import time
 
-# note the following environment variable address the following geopandas DeprecationWarning: 
+# note the following environment variable address the following geopandas DeprecationWarning:
 # Shapely 2.0 is # installed, but because PyGEOS is also installed, GeoPandas still uses PyGEOS
 # by default.   However, starting with version 0.14, the default will switch to Shapely. To force to
 # use Shapely # 2.0 now, you can either uninstall PyGEOS or set the environment variable USE_PYGEOS=0.
-os.environ['USE_PYGEOS'] = '0'  
+os.environ['USE_PYGEOS'] = '0'
 import geopandas as gpd
 
 # --------------------------------------------------------------------------------------------------
@@ -44,15 +44,20 @@ root_acs = os.path.join(root_input, "ACS_2019")
 root_road = os.path.join(root_input, "state_shp_2016_simplified")
 
 root_output = os.path.join(root, "Output_Data")
-root_cost = os.path.join(root_output, "state_shp_air_cost")  # TODO reinit (and create if this doesn't exist)
 
+root_cost = os.path.join(root_output, "state_shp_air_cost")
 
-### Read inputs for housing_value, county_names, and concentration_gradient ###
+if not os.path.exists(root_cost):
+    os.mkdir(root_cost)
+
+# Read inputs for housing_value, county_names, and concentration_gradient ###
 files = os.listdir(root_acs)
 
 house_value = pandas.read_csv(os.path.join(root_input, "State_median_housing_values.csv"))
 county_names = pandas.read_csv(os.path.join(root_input, "FIPS_names.csv"))
+
 county_names['county_FIPS'] = county_names.apply(lambda row: str(row['county_FIPS']), axis=1)
+
 county_names['county_FIPS'] = county_names.apply(lambda row: '0'+row['county_FIPS']
                                                  if len(row['county_FIPS']) < 5
                                                  else row['county_FIPS'], axis=1)
@@ -76,18 +81,19 @@ STATES_DATA = pandas.read_csv(os.path.join(root_input, "States_Data.txt"), heade
 
 # Make an ACS key so easier to refer to
 # TODO what is the purpose of the last two keys as they are not valid acs keys
-# TODO this does't seem to be a full list and is used in some places and not others 
+# TODO this does't seem to be a full list and is used in some places and not others
 
 ACS = {
-	'white': 'B02001e2',
-	'black': 'B02001e3',
-	'native': 'B02001e4',
-	'asian': 'B02001e5',
-	'pacific': 'B02001e6',
-	'other': 'B02001e7',
-    'poverty': 'B17021e2', 
-	'nonwhite': 'nonwhite',
-	 'nonpoverty': 'nonpoverty'}
+    'white': 'B02001e2',
+    'black': 'B02001e3',
+    'native': 'B02001e4',
+    'asian': 'B02001e5',
+    'pacific': 'B02001e6',
+    'other': 'B02001e7',
+    'poverty': 'B17021e2',
+    'nonwhite': 'nonwhite',
+    'nonpoverty': 'nonpoverty'}
+
 demos = list(ACS.keys())
 
 # COBRA Health Impact Parameters
@@ -112,16 +118,19 @@ imort = .003922
 # non fatal heart attack
 nfha_data = pandas.DataFrame([[.024121, .009285], [.00481, .001992], [.00198, .002241],
                              [.0053, .002213], [.00225, .000592]], columns=cols)
+
 nfha = pool(nfha_data['Beta'], nfha_data['Std'])
 
 # hospital admission, all respiratory
 haar_data = pandas.DataFrame([[.00207, .00045], [.0007, .00096], [.002, .00434],
                              [.00332, .00104], [.0022, .00073]], columns=cols)
+
 haar = pool(haar_data['Beta'], haar_data['Std'])
 
 # hospital admission, cardiovascular (except heart attacks)
 hac_data = pandas.DataFrame([[.00189, .00028], [.00071, .00013], [.00068, .00021],
                             [.0008, .00011], [.0014, .00034]], columns=cols)
+
 hac = pool(hac_data['Beta'], hac_data['Std'])
 
 # emergency room visits, asthma
@@ -146,6 +155,7 @@ urs = .0036
 # asthma exacerbation
 ae_data = pandas.DataFrame([[.000985, .000747], [.002565, .001335],
                            [.001942, .000803], [.01222, .013849]], columns=cols)
+
 ae = pool(ae_data['Beta'], ae_data['Std'])
 
 categories = ['mort', 'nfha', 'haar', 'hac', 'erva', 'mrad', 'ab', 'wld', 'lrs', 'urs', 'ae']
@@ -305,6 +315,7 @@ emissions['passenger'] = {'restricted': {25: .004672,
                                            65: .004912,
                                            70: .005311,
                                            75: .006259}}
+
 emissions['single'] = {'restricted': {25: .316352,
                                       30: .292323,
                                       35: .250339,
@@ -327,6 +338,7 @@ emissions['single'] = {'restricted': {25: .316352,
                                         65: .150904,
                                         70: .146095,
                                         75: .143557}}
+
 emissions['combination'] = {'restricted': {25: .453907,
                                            30: .426852,
                                            35: .340413,
@@ -366,20 +378,31 @@ def write_shapefile(geodataframe, output_dir, output_name):
     geodataframe.to_file(out_shp_file)
     warnings.resetwarnings()
 
-# aggregation functions for pandas groupby
-# div is used to divide the noise damage cost between multiple CBG intersecting a roadway
-# gath is used to store all of the CBG that intersect a roadway for when aggregating results to a higher regional level
+# --------------------------------------------------------------------------------------------------
+
 def div(x):
+    """
+    aggregation function for pandas groupby
+    div is used to divide the noise damage cost between multiple CBG intersecting a roadway
+    """
     return (sum(x)/len(x))
 
+# --------------------------------------------------------------------------------------------------
 
 def gath(x):
+    """
+    aggregation function for pandas groupby
+    gath is used to store all of the CBG that intersect a roadway for when aggregating results to a higher regional level
+    """
     return [i for i in set(x)]
 
-# Match the speeds in HPMS to the closets speeds in the emissions dictionary
-
+# --------------------------------------------------------------------------------------------------
 
 def adj_speed(speed):
+
+    """
+    Match the speeds in HPMS to the closets speeds in the emissions dictionary
+    """
     speeds = list(emissions['passenger']['restricted'].keys())
     if speed in speeds:
         return speed
@@ -387,10 +410,14 @@ def adj_speed(speed):
         dif = [abs(i-speed) for i in speeds]
         return speeds[dif.index(min(dif))]
 
+# --------------------------------------------------------------------------------------------------
 
-# Estimate the population of each age group in a 1000ft buffer near the road
-# It is for the entire HPMS dataset at once to reduce calculation time from the buffer generation
 def est_population(road, x, age_shp):
+
+    """
+    Estimate the population of each age group in a 1000ft buffer near the road
+    It is for the entire HPMS dataset at once to reduce calculation time from the buffer generation
+    """
 
     global c
 
@@ -413,16 +440,24 @@ def est_population(road, x, age_shp):
     # Age groupings in ACS are not even, so must manually match to the COBRA health impact age groups
     c_[ages[0]] = c_['area']/c_['Area']*(c_['B01001e3']+c_['B01001e4']+c_['B01001e5'] +
                                          c_['B01001e6']+c_['B01001e27']+c_['B01001e28']+c_['B01001e29']+c_['B01001e30'])
+
     c_[ages[1]] = c_['area']/c_['Area']*(c_['B01001e7']+c_['B01001e8']+c_['B01001e9'] +
                                          c_['B01001e10']+c_['B01001e31']+c_['B01001e32']+c_['B01001e33']+c_['B01001e34'])
+
     c_[ages[2]] = c_['area']/c_['Area']*(c_['B01001e11']+c_['B01001e12']+c_['B01001e35']+c_['B01001e36'])
+
     c_[ages[3]] = c_['area']/c_['Area']*(c_['B01001e13']+c_['B01001e14']+c_['B01001e37']+c_['B01001e38'])
+
     c_[ages[4]] = c_['area']/c_['Area']*(c_['B01001e15']+c_['B01001e16']+c_['B01001e39']+c_['B01001e40'])
+
     c_[ages[5]] = c_['area']/c_['Area']*(c_['B01001e17']+c_['B01001e18'] +
                                          c_['B01001e19']+c_['B01001e41']+c_['B01001e42']+c_['B01001e43'])
+
     c_[ages[6]] = c_['area']/c_['Area']*(c_['B01001e20']+c_['B01001e21'] +
                                          c_['B01001e22']+c_['B01001e44']+c_['B01001e45']+c_['B01001e46'])
+
     c_[ages[7]] = c_['area']/c_['Area']*(c_['B01001e23']+c_['B01001e24']+c_['B01001e47']+c_['B01001e48'])
+
     c_[ages[8]] = c_['area']/c_['Area']*(c_['B01001e25']+c_['B01001e49'])
 
     # c_ has more observations than road as some road segments intersect multiple census block groups
@@ -430,6 +465,7 @@ def est_population(road, x, age_shp):
     agg = {}
     for i in range(9):
         agg[ages[i]] = 'sum'
+
     # c = c_.groupby(c_['id']).aggregate({('age'+dist):'sum',('rb'+dist+'_area_m'):'first'})#,('ratio'+dist):'first'})
     c = c_.groupby(c_['id']).aggregate(agg)  # ,('ratio'+dist):'first'})
 
@@ -441,15 +477,20 @@ def est_population(road, x, age_shp):
 
     # merge with road so that road only gets the population dictionary
     road = pandas.merge(road, c, how='left', on=['id'])
+
     return (road)
 
+# --------------------------------------------------------------------------------------------------
 
 def calc_emissions(AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width, restricted):
-    # Calculate emissions for road segment
-    # based on traffic counts, speed, road length and width
-    # TODO clear up comments on next two lines
-    # g/mile • miles_road • AADT • day/sec • 1/area_road  =  g/(s-m2)
-    # sum_vehtype(g/mile•AADT) * (miles_road•day/sec•1/area_road)
+
+    """
+    Calculate emissions for road segment
+    based on traffic counts, speed, road length and width
+    TODO clear up comments on next two lines
+    g/mile • miles_road • AADT • day/sec • 1/area_road  =  g/(s-m2)
+    sum_vehtype(g/mile•AADT) * (miles_road•day/sec•1/area_road)
+    """
 
     road_size_adjustment = length/1609.34/86400/(length*width)
     emissions_passenger = AADT_PASSENGER*emissions['passenger'][restricted][speed]
@@ -457,26 +498,38 @@ def calc_emissions(AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width,
     emissions_combination = AADT_COMBI*emissions['combination'][restricted][speed]
 
     emis = road_size_adjustment*(emissions_passenger+emissions_single+emissions_combination)
+
     return emis
 
+# --------------------------------------------------------------------------------------------------
 
 def calc_concentrations(emis):
-    # Set of gradient curves stored in a dictionary
-    # Multiply appropriate gradient curve (based on previously assigned index) by road emissions
-    # return emission concentration at distances as a dictionary
-    # original concentration curve emission: 0.000001
-    # scaling factor: emis/.000001
+
+    """
+    Set of gradient curves stored in a dictionary
+    Multiply appropriate gradient curve (based on previously assigned index) by road emissions
+    return emission concentration at distances as a dictionary
+    original concentration curve emission: 0.000001
+    scaling factor: emis/.000001
+    """
+
     concentration_adj = concentration_gradient['Concentration'] * emis/.000001
     concentration = {}
     for i in range(len(concentration_gradient)):
         concentration[concentration_gradient['Distance'][i]] = concentration_adj[i]
+
     return concentration
 
+# --------------------------------------------------------------------------------------------------
 
 def health_dmg(concentration, population):
-    # Calculate health incidence based on concentration at distance
-    # Multiply by monetization factor
-    # return health dmg at distance
+
+    """
+    Calculate health incidence based on concentration at distance
+    Multiply by monetization factor
+    return health dmg at distance
+    """
+
     dmg = 0
 
     for d in dist:
@@ -489,15 +542,20 @@ def health_dmg(concentration, population):
     #    % incidence rate increase * incidence rate per population *  monetization
     return dmg
 
+# --------------------------------------------------------------------------------------------------
 
-# Main Function
-#  is applied to each state
-# c is an index for the State number in an alphabetical list
 def equity(c):
+
+    """
+    Main Functionapplied to each state
+    c is an index for the State number in an alphabetical list
+    """
+
     global inte, inte_road, county, census, inte_census, inte_county, race_shp, road, road_write  # global for testing purposes
     global acs, c_shp  # these are global because est_houses uses them, could pass them to the function instead
     gc.collect()  # resolves memory issue, failure to overwrite road file for each State
     t0 = time()
+
     # the ACS State nomenclature (space, no space, or _) is different than HPMS, so this method requires folders for all states be in ACS
     acs = files[c]
     state = house_value['State'][c]  # get the state name as it is refered to in various places
@@ -507,6 +565,7 @@ def equity(c):
 
     ################################
     # 1. Preparing ACS and HPMS Data
+
     print(state, "\nreading ACS files", end=', ')
     # read in polygons of census block groups (cbg)
     gdb = os.path.join(root_acs, acs)
@@ -557,6 +616,7 @@ def equity(c):
     # some cleanup on column types
     road['ROUTE_ID'] = road.apply(lambda row: str(row['ROUTE_ID']), axis=1)
     change = ['F_SYSTEM', 'AADT', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI']
+
     for i in change:
         road[i] = road[i].apply(int)
 
@@ -567,9 +627,11 @@ def equity(c):
     typ = list(set(road['F_SYSTEM']))
     typ.sort()
     road['SPEED_LIMI'] = road['SPEED_LIMI'].fillna(0)
+
     for i in typ:
         road['SPEED_LIMI'][(road['F_SYSTEM'] == i) &
                            ((road['SPEED_LIMI'] == 0) | (road['SPEED_LIMI'] > 90))] = typ_sp[i]
+
     # emission rates are only estimated for certain speeds, replace speed with closest match
     road['SPEED_LIMI'] = road.apply(lambda row: adj_speed(row['SPEED_LIMI']), axis=1)
 
@@ -590,6 +652,7 @@ def equity(c):
 
     #########################
     # 2. Estimate Population
+
     print("estimating population", end=', ')
 
     # Count the number of houses in each buffer strip from the road
@@ -605,6 +668,7 @@ def equity(c):
     road['population'] = road['population'].replace(np.nan, 0)
     indexes_replace = road[road['population'] == 0].index
     print("\n", indexes_replace)
+
     for i in indexes_replace:
         road['population'][i] = {'0-17': 0, '18-24': 0, '25-34': 0, '35-44': 0,
                                  '45-54': 0, '55-64': 0, '65-74': 0, '75-84': 0, '85+': 0}
@@ -612,6 +676,7 @@ def equity(c):
 
     #########################################
     # 3. Estimate Air Pollutant Concentration
+
     print("estimating air pollution", end=', ')
 
     # iterates over noise levels and calculates the max distance those levels affect given the traffic and speed
@@ -626,6 +691,7 @@ def equity(c):
 
     #########################
     # 4. Estimate Health Costs
+
     print("estimating health costs", end=', ')
 
     # for i in range(len(road)):
@@ -640,6 +706,7 @@ def equity(c):
 
     ##############################
     # 5. Attribute to Demographics
+
     print("attribute to demos", end=", ")
     # attribute dmg to each demographic for intersecting census block groups
     # keep track of sum of dmg to each demographic
@@ -654,6 +721,7 @@ def equity(c):
                      'URBAN_CODE': 'first'}
     for i in demos:
         agg_functions[ACS[i]] = 'sum'
+
     inte_road = inte.groupby(inte['index_right']).aggregate(agg_functions)
     # this method ensures each road is counted once, while summing up the populations of the intersecting CBGs
     # essentially forming 'super CBGs' of all the CBGs intersecting a road in order the calculate the share of each demographic population
@@ -671,10 +739,13 @@ def equity(c):
     ta = time()
 
     ################### For writing road.shp with noise dmg estimates ###################
+
     print("writing shp file", end=", ")
+
     keep = ['STATE_CODE', 'ROUTE_ID', 'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T', 'URBAN_CODE',
             'SPEED_LIMI', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI',
             'length', 'geometry']
+
     road_write = road[keep]
     road_write['index_right'] = road_write.index
     road_write = pandas.merge(inte_road, road_write, how='inner', on=['index_right'])
@@ -684,8 +755,10 @@ def equity(c):
     road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
     road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
     rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
+
     for i in demos:
         rname[ACS[i]] = i+'_pop'
+
     road_write = road_write.rename(columns=rname)
 
     road_write['dmg_length'] = road_write['dmg']/road_write['length']/10  # dmg per 1/10 mile
@@ -695,29 +768,35 @@ def equity(c):
             'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T',
             'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI',
             'dmg', 'dmg_length', 'length', 'total_pop', 'geometry']
+
     for i in demos:
         keep.append(i+"_pop")
         keep.append(i+"_dmg")
+
     road_write = road_write[keep]
     road_write = road_write.to_crs("epsg:4326")
+
+    # TODO will this overwrite if it already exists?
     road_write.to_file(os.path.join(root_cost, state+"_air_dmg.shp"))
 
     print(round((time()-ta)/60, 1), "min", end=" | ")
     ta = time()
+
     ###################                                               ###################
 
     result['state'].append(state)
     result['state_pop'].append(sum(race_shp['B02001e1']))
     result['state_dmg'].append(sum(inte_road['dmg']))
+
     for i in demos:
         result[i+"_pop"].append(sum(race_shp[ACS[i]]))
         result[i+'_dmg'].append(sum(inte_road[i+'_dmg']))
+
     result['rural_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] == 99999]['dmg']))
     result['urban_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] != 99999]['dmg']))
 
     # This section prints out the noise-equity ratios for the state
-    print("\nState: ", state,
-          " Time: ", round(time() - t0, 2), sep='')
+    print("\nState: ", state, " Time: ", round(time() - t0, 2), sep='')
     print("-------------------")
     print("White")
     print(round(sum(inte_road['white_dmg']) / sum(inte_road['dmg']), 4), 'dmg')
@@ -746,28 +825,35 @@ def equity(c):
     #############################
     # 5. Attribute to Demographics
     #    County and Census Tract
+
     print("aggregating to county", end=", ")
 
     # below avoids multi-counting for roads that intersect multiple counties/census tracts,
     # dmg needs to be divided since the summation is across counties/census tracts when reaggregated
     # assumes dmg is split between intersecting counties/census tracts [in revision will split based on proportion of road intersecting]
     inte_road['dmg'] = inte_road['dmg'] / inte_road.apply(lambda row: len(row['GEOID']), axis=1)
+
     for i in demos:
         inte_road[i+'_dmg'] = inte_road[i+'_dmg'] / inte_road.apply(lambda row: len(row['GEOID']), axis=1)
+
     inte_road['index_right'] = inte_road.index
     inte_road.index.name = 'id'
     inte_road = inte_road.rename(columns={'dmg': 'total_dmg'})  # to distinguish it for remerge
     keep = ['index_right', 'total_dmg']  # 'nonwhite_dmg'
+
     for i in demos:
         # don't need 'road_block' population counts, those were used only for proportion of dmg allocation
         keep.append(i+'_dmg')
+
     inte_road = inte_road[keep]
-    ######  ** ##
+
+    ######  ** ##  # TODO  is this supposed to be a comment?
     keep_inte = ['county_FIPS', 'tract_FIPS', 'GEOID', 'index_right']
     inte = inte[keep_inte]  # to simplify dataframe for later steps
     inte_ = pandas.merge(inte, inte_road, how='inner', on=['index_right'])
 
     agg_functions = {'total_dmg': 'sum'}  # , 'nonwhite_dmg':'sum'} #just to count the damage groups
+
     for i in demos:
         agg_functions[i+'_dmg'] = 'sum'
 
@@ -776,16 +862,20 @@ def equity(c):
     inte_county.index.names = ['id']
 
     agg_pop = {'B02001e1': 'sum'}  # just to count the population groups
+
     for i in demos:
         agg_pop[ACS[i]] = 'sum'
+
     county_shp = race_shp.groupby(race_shp['county_FIPS']).aggregate(agg_pop)
 
     # inte_county has the correct damage for each, county_shp has the correct population
     inte_county = pandas.merge(inte_county, county_shp, how='inner', on=['county_FIPS'])
 
     rname = {'B02001e1': 'total_pop'}
+
     for i in demos:
         rname[ACS[i]] = i+'_pop'
+
     inte_county = inte_county.rename(columns=rname)
     inte_county = inte_county.fillna(0)
 
@@ -793,12 +883,16 @@ def equity(c):
     for i in demos:
         inte_county[i+'_ndp'] = inte_county[i+'_dmg']/inte_county['total_dmg'] / \
             (inte_county[i+'_pop']/inte_county['total_pop'])
+
     inte_county = inte_county.fillna(0)
+
     keep = ['county_FIPS', 'name']  # ,'white_ndp','black_ndp','native_ndp','asian_ndp','pacific_ndp','other_ndp']
+
     for i in demos:
         keep.append(i+'_ndp')
         keep.append(i+'_dmg')
         keep.append(i+'_pop')
+
     # keep.append('nonwhite_ndp')
     inte_county = pandas.merge(inte_county, county_names, how='inner', on='county_FIPS')
 
@@ -809,8 +903,10 @@ def equity(c):
     inte_county2 = pandas.melt(inte_county_, id_vars=['county_FIPS', 'name'], var_name='metrics', value_name='values')
     inte_county2["Demographic"] = inte_county2.apply(lambda row: row['metrics'][:-4], axis=1)
     inte_county2['metrics'] = inte_county2.apply(lambda row: row['metrics'][-3:], axis=1)
+
     if c == 0:
         county = pandas.DataFrame(columns=list(inte_county2.columns))
+
     county = pandas.concat([county, inte_county2])
 
     print(round((time()-ta)/60, 1), "min", end=" | ")
@@ -818,6 +914,7 @@ def equity(c):
 
     ###################
     ##### Census  #####
+
     print("aggregating to census tract", end=", ")
     inte_census = inte_road.groupby(inte_['tract_FIPS']).aggregate(agg_functions)
     inte_census['tract_FIPS'] = inte_census.index
@@ -834,9 +931,11 @@ def equity(c):
     for i in demos:
         inte_census[i+'_ndp'] = inte_census[i+'_dmg']/inte_census['total_dmg'] / \
             (inte_census[i+'_pop']/inte_census['total_pop'])
+
     inte_census = inte_census.fillna(0)
 
     keep = ['tract_FIPS']  # ,'white_ndp','black_ndp','native_ndp','asian_ndp','pacific_ndp','other_ndp']
+
     for i in demos:
         keep.append(i+'_ndp')
         keep.append(i+'_dmg')
@@ -847,8 +946,10 @@ def equity(c):
     inte_census2 = pandas.melt(inte_census_, id_vars=['tract_FIPS'], var_name='metrics', value_name='values')
     inte_census2["Demographic"] = inte_census2.apply(lambda row: row['metrics'][:-4], axis=1)
     inte_census2['metrics'] = inte_census2.apply(lambda row: row['metrics'][-3:], axis=1)
+
     if c == 0:
         census = pandas.DataFrame(columns=list(inte_census2.columns))
+
     census = pandas.concat([census, inte_census2])
 
     print(round((time()-ta)/60, 1), "min")
@@ -862,58 +963,65 @@ def equity(c):
 
 if __name__ == "__main__":
 
-    #os.system('cls')
-	# Set up storage of results
-	# National/State results will be stored in result
-	# County and Census Tract are stored separately
-	result = {'state': [], 'state_pop': []}
-	for i in demos:
-	    result[i+'_pop'] = []
-	result['state_dmg'] = []
-	for i in demos:
-	    result[i+'_dmg'] = []
-	result['rural_dmg'] = []
-	result['urban_dmg'] = []
-	county = pandas.DataFrame()
-	census = pandas.DataFrame()
+    os.system('cls')
 
+    # Set up storage of results
+    # National/State results will be stored in result
+    # County and Census Tract are stored separately
+    result = {'state': [], 'state_pop': []}
 
-	equity(29)  # this will run the program for New Hampshire
+    for i in demos:
+        result[i+'_pop'] = []
 
+    result['state_dmg'] = []
 
-	# Writing of final results
-	# note this is meant to be run after all states have been done
+    for i in demos:
+        result[i+'_dmg'] = []
 
-	results = pandas.DataFrame(result)
+    result['rural_dmg'] = []
+    result['urban_dmg'] = []
+    county = pandas.DataFrame()
+    census = pandas.DataFrame()
 
-	######## ***##################
-	# add US row
-	# first sum each column, store in list
-	# add list as row to results
-	############### ***###########
+    # TODO make more flexible, also this should ideally take the fips code for the state
+    equity(29)  # this will run the program for New Hampshire
 
-	us = [i for i in results.loc[:, results.columns != 'state'].apply(lambda col: sum(col), axis=0)]
-	us.insert(0, 'US')
-	results.loc[len(results.index)] = us
-	results['urban_pct'] = results['urban_dmg'] / (results['urban_dmg'] + results['rural_dmg'])
-	results['rural_pct'] = results['rural_dmg'] / (results['urban_dmg'] + results['rural_dmg'])
+    # Writing of final results
+    # note this is meant to be run after all states have been done
 
-	for i in demos:
-	    results[i+'_ndp'] = results[i+'_dmg']/results['state_dmg'] / (results[i+'_pop']/results['state_pop'])
+    results = pandas.DataFrame(result)
 
-	# ,'white_ndp','black_ndp','native_ndp','asian_ndp','pacific_ndp','other_ndp']
-	keep = ['state', 'urban_pct', 'rural_pct']
-	for i in demos:
-	    keep.append(i+'_ndp')
-	results_ = results[keep]
-	results2 = pandas.melt(results_, id_vars=['state'], var_name='metrics', value_name='values')
-	results2["Demographic"] = results2.apply(lambda row: row['metrics'][:-4], axis=1)
-	results2['metrics'] = results2.apply(lambda row: row['metrics'][-3:], axis=1)
+    ######## ***##################
+    # add US row
+    # first sum each column, store in list
+    # add list as row to results
+    ############### ***###########
 
-	# may want to include date in results name
-	results2.to_csv(os.path.join(root_output, "Equity_long_air.csv"))
-	county.to_csv(os.path.join(root_output, "Equity_county_air.csv"))
-	census.to_csv(os.path.join(root_output, "Equity_census_air.csv"))
+    us = [i for i in results.loc[:, results.columns != 'state'].apply(lambda col: sum(col), axis=0)]
+    us.insert(0, 'US')
+    results.loc[len(results.index)] = us
+    results['urban_pct'] = results['urban_dmg'] / (results['urban_dmg'] + results['rural_dmg'])
+    results['rural_pct'] = results['rural_dmg'] / (results['urban_dmg'] + results['rural_dmg'])
 
-	print('Done')
-	#input("Press enter when finished")
+    for i in demos:
+        results[i+'_ndp'] = results[i+'_dmg']/results['state_dmg'] / (results[i+'_pop']/results['state_pop'])
+
+    # 'white_ndp','black_ndp','native_ndp','asian_ndp','pacific_ndp','other_ndp']
+    keep = ['state', 'urban_pct', 'rural_pct']
+
+    for i in demos:
+        keep.append(i+'_ndp')
+
+    results_ = results[keep]
+    results2 = pandas.melt(results_, id_vars=['state'], var_name='metrics', value_name='values')
+    results2["Demographic"] = results2.apply(lambda row: row['metrics'][:-4], axis=1)
+    results2['metrics'] = results2.apply(lambda row: row['metrics'][-3:], axis=1)
+
+    # may want to include date in results name
+    results2.to_csv(os.path.join(root_output, "Equity_long_air.csv"))
+    county.to_csv(os.path.join(root_output, "Equity_county_air.csv"))
+    census.to_csv(os.path.join(root_output, "Equity_census_air.csv"))
+
+    print('Done')
+    #input("Press enter when finished")
+
