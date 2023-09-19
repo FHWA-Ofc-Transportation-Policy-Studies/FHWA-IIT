@@ -1,6 +1,4 @@
 
-
-
 # TODO change change all occurence of DMG and DAMAGE to COST
 
 # --------------------------------------------------------------------------------------------------
@@ -49,12 +47,13 @@ import geopandas as gpd
 if TEST_MODE:
     import psutil
 
-
 # --------------------------------------------------------------------------------------------------
 # CONSTANTS
 # --------------------------------------------------------------------------------------------------
 
 METERS_PER_FOOT = .3048
+
+METERS_PER_MILE = 1609.34 
 
 # --------------------------------------------------------------------------------------------------
 # FUNCTIONS
@@ -63,25 +62,11 @@ METERS_PER_FOOT = .3048
 def pool(beta, std):
 
     """
-    used to TODO
+    TODO
     """
 
     return (sum(beta/std) / sum(1/std))
     
-# --------------------------------------------------------------------------------------------------
-
-def write_shapefile(geodataframe, output_dir, output_name):
-
-    out_shp_file = os.path.join(output_dir, output_name)
-
-    print(out_shp_file)
-
-    # ignore warnings only for the shapefile write because it always complains a lot about
-    # truncating field names at 10 characters
-    warnings.filterwarnings('ignore')
-    geodataframe.to_file(out_shp_file)
-    warnings.resetwarnings()
-
 # --------------------------------------------------------------------------------------------------
 
 def div(x):
@@ -120,7 +105,7 @@ def adj_speed( emissions_speeds, speed):
 
 # --------------------------------------------------------------------------------------------------
 
-def est_population(road, buffer_dist_meters, block_group_shapes):
+def est_population(road, buffer_dist_meters, block_groups):
 
     """
     Estimate the population of each age group in a 1000ft buffer near the road
@@ -140,7 +125,7 @@ def est_population(road, buffer_dist_meters, block_group_shapes):
     road_bufferX = road_bufferX.set_geometry('geometry')
 
     # TODO rename c_ to something meaningful
-    c_ = gpd.overlay(road_bufferX, block_group_shapes, how='intersection')
+    c_ = gpd.overlay(road_bufferX, block_groups, how='intersection')
     c_['area'] = c_['geometry'].area  # area is in sq_m
 
     # TODO the following isn't great, we should fix this
@@ -199,6 +184,7 @@ def est_population(road, buffer_dist_meters, block_group_shapes):
 def calc_emissions(AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width, restricted):
 
     """
+    # TODO fix comment below
     Calculate emissions for road segment
     based on traffic counts, speed, road length and width
     TODO clear up comments on next two lines
@@ -206,7 +192,7 @@ def calc_emissions(AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width,
     sum_vehtype(g/mile•AADT) * (miles_road•day/sec•1/area_road)
     """
 
-    road_size_adjustment = length/1609.34/86400/(length*width)
+    road_size_adjustment = length/ METERS_PER_MILE /86400/(length*width)
     emissions_passenger = AADT_PASSENGER*emissions['passenger'][restricted][speed]
     emissions_single = AADT_SINGL*emissions['single'][restricted][speed]
     emissions_combination = AADT_COMBI*emissions['combination'][restricted][speed]
@@ -227,11 +213,26 @@ def calc_concentrations(emis):
     scaling factor: emis/.000001
     """
 
-    concentration_adj = concentration_gradient['Concentration'] * emis/.000001
+    print('begin------------------------')
+    print('incoming = {}'.format(emis))
+
+    print('a')
+    print(concentration_gradient['Concentration'])
+
+    concentration_adj = concentration_gradient['Concentration'] * emis / .000001
+
+    print('b')
+    print(concentration_adj)
+    print('c')
+
     concentration = {}
 
     for i in range(len(concentration_gradient)):
         concentration[concentration_gradient['Distance'][i]] = concentration_adj[i]
+
+    print(concentration)
+
+    print('end------------------------')
 
     return concentration
 
@@ -296,7 +297,7 @@ def equity(state_fips, state_name):
     crs_utm = CRS.from_string('epsg:326' + str(state_utm_zone))
 
     #######################
-    # 1. Preparing ACS Data
+    # 1a. Preparing ACS Data
 
     print('\tstarting memory: {}'.format(
         psutil.virtual_memory().available >> 20 # * 100 / psutil.virtual_memory().total
@@ -309,17 +310,17 @@ def equity(state_fips, state_name):
     fp_to_fgdb = os.path.join(root_acs, acs_fgdb)
 
     # the layer name is same as gdb name minus the '.gdb'
-    block_group_shapes = gpd.read_file(fp_to_fgdb, layer=acs_fgdb[:-4])
+    block_groups = gpd.read_file(fp_to_fgdb, layer=acs_fgdb[:-4])
 
     # only keep the following columns
-    block_group_shapes = block_group_shapes[['GEOID', 'GEOID_Data', 'geometry']]
+    block_groups = block_groups[['GEOID', 'GEOID_Data', 'geometry']]
 
-    block_group_shapes = block_group_shapes.to_crs(crs_utm)
+    block_groups = block_groups.to_crs(crs_utm)
 
-    block_group_shapes['county_FIPS'] = block_group_shapes.apply(lambda row: row['GEOID'][0:5], axis=1)
-    block_group_shapes['tract_FIPS'] = block_group_shapes.apply(lambda row: row['GEOID'][2:-1], axis=1)
+    block_groups['county_FIPS'] = block_groups.apply(lambda row: row['GEOID'][0:5], axis=1)
+    block_groups['tract_FIPS'] = block_groups.apply(lambda row: row['GEOID'][2:-1], axis=1)
 
-    #print(block_group_shapes)
+    #print(block_groups)
 
     age = gpd.read_file(fp_to_fgdb, layer="X01_Age_and_Sex")
     age = age[['GEOID', 'B01001e3', 'B01001e4', 'B01001e5', 'B01001e6', 'B01001e7', 'B01001e8',
@@ -349,27 +350,33 @@ def equity(state_fips, state_name):
     hispanic.set_index("GEOID", inplace = True)
     #print(hispanic)
 
-    block_group_shapes = pandas.merge(block_group_shapes, age, how='inner', left_on="GEOID_Data", right_on='GEOID')
-    block_group_shapes = pandas.merge(block_group_shapes, race, how='inner', left_on="GEOID_Data", right_on='GEOID')
-    block_group_shapes = pandas.merge(block_group_shapes, poverty, how='inner', left_on="GEOID_Data", right_on='GEOID')
-    block_group_shapes = pandas.merge(block_group_shapes, hispanic, how='inner', left_on="GEOID_Data", right_on='GEOID')
+    block_groups = pandas.merge(block_groups, age, how='inner', left_on="GEOID_Data", right_on='GEOID')
+    block_groups = pandas.merge(block_groups, race, how='inner', left_on="GEOID_Data", right_on='GEOID')
+    block_groups = pandas.merge(block_groups, poverty, how='inner', left_on="GEOID_Data", right_on='GEOID')
+    block_groups = pandas.merge(block_groups, hispanic, how='inner', left_on="GEOID_Data", right_on='GEOID')
 
     #subtract hispanic/latino white from white alone
-    block_group_shapes[ACS['white']] = block_group_shapes[ACS['white']] - block_group_shapes['B03002e13']
+    block_groups[ACS['white']] = block_groups[ACS['white']] - block_groups['B03002e13']
 
     #total population minus white alone
-    block_group_shapes['nonwhite'] = block_group_shapes['B02001e1'] - block_group_shapes[ACS['white']]
+    block_groups['nonwhite'] = block_groups['B02001e1'] - block_groups[ACS['white']]
 
     #could automate these non_steps depending on how many  # TODO this comment needs to be revised
-    block_group_shapes['nonpoverty'] = block_group_shapes['B02001e1'] - block_group_shapes[ACS['poverty']]
+    block_groups['nonpoverty'] = block_groups['B02001e1'] - block_groups[ACS['poverty']]
 
-    block_group_shapes['Area'] = block_group_shapes['geometry'].area
+    block_groups['Area'] = block_groups['geometry'].area
 
-    #print(block_group_shapes)
+    #print(block_groups)
+
+    # TODO this shapefile should be checked against the raw inputs
+    block_groups.to_file(os.path.join(root_output, "s1a_block_groups_{}.shp".format(state_fips)))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
-    ################################
+
+    ########################
+    # 1b. Preparing HPMS Data
+
     print("\treading HPMS file ...")
     start = time()
 
@@ -399,10 +406,13 @@ def equity(state_fips, state_name):
     func_sys = list(set(road['F_SYSTEM']))
     func_sys.sort()
 
+    print('\n')
+    print(road.SPEED_LIMI.value_counts())
+
     road['SPEED_LIMI'] = road['SPEED_LIMI'].fillna(0)
 
     for i in func_sys:
-        road['SPEED_LIMI'][(road['F_SYSTEM'] == i) & ((road['SPEED_LIMI'] == 0) | (road['SPEED_LIMI'] > 90))] = func_sys_speed[i]
+        road.loc[(road['F_SYSTEM'] == i) & ((road['SPEED_LIMI'] == 0) | (road['SPEED_LIMI'] > 90)) , 'SPEED_LIMI'] = func_sys_speed[i]
 
     # emission rates are only estimated for certain speeds, replace speed with closest match
     # NOTE: moved next line out of adj_function so it didn't have to be evaluated for every road record
@@ -413,7 +423,9 @@ def equity(state_fips, state_name):
     # if no data then assume 2
     # assuming 12 foot lanes (10-12) and converting to meters
     road['THROUGH_LA'] = road['THROUGH_LA'].fillna(0)
-    road['THROUGH_LA'][road['THROUGH_LA'] == 0] = 2
+
+    road['THROUGH_LA'].replace(to_replace = 0, value = 2, inplace=True)
+
     road['width'] = road['THROUGH_LA'] * 12 * METERS_PER_FOOT
 
     road['restricted'] = road.apply(lambda row: 'restricted' if row['ACCESS_CON'] == 1 else 'unrestricted', axis=1)
@@ -422,6 +434,7 @@ def equity(state_fips, state_name):
     road['length'] = road.length
     #print(road)
 
+    road.to_file(os.path.join(root_output, "s1b_roads_{}.shp".format(state_fips)))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -440,13 +453,15 @@ def equity(state_fips, state_name):
     # The method used below to replace NaN due to non-intersections is clunky, but several other methods were causing errors, not sure why
     # unfortunately numpy does not allow replacing with a dictionary
     # this brute force method insured the values were set to zero and didn't cause an error
-    road = est_population(road, 1000 * METERS_PER_FOOT, block_group_shapes)
+    road = est_population(road, 1000 * METERS_PER_FOOT, block_groups)
     road['population'] = road['population'].replace(np.nan, 0)
     indexes_replace = road[road['population'] == 0].index
 
     for i in indexes_replace:
         road['population'][i] = {'0-17': 0, '18-24': 0, '25-34': 0, '35-44': 0,
                                  '45-54': 0, '55-64': 0, '65-74': 0, '75-84': 0, '85+': 0}
+
+    road.to_file(os.path.join(root_output, "s2_roads_w_pop_{}.shp".format(state_fips)))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -457,14 +472,25 @@ def equity(state_fips, state_name):
     print("\testimating air pollution ...")
     start = time()
 
+    # TODO update comment to change to emissions and not noise
     # iterates over noise levels and calculates the max distance those levels affect given the traffic and speed
     # iterates over distances and calculates the average noise level at each distance
     road['emissions'] = road.apply(lambda row: calc_emissions(row['AADT_PASSENGER'], row['AADT_SINGL'], row['AADT_COMBI'],
                                                               row['SPEED_LIMI'], row['length'], row['width'], row['restricted']), axis=1)
 
+
     road['concentration'] = road.apply(lambda row: calc_concentrations(row['emissions']), axis=1)
 
+    #print(road['concentration'])
+
+    # this will fail
+    #road.to_file(os.path.join(root_output, "s3_roads_w_apc_{}.shp".format(state_fips)))
+
+    road.to_csv(os.path.join(root_output, "s3_roads_w_apc_{}.csv".format(state_fips)), sep='\t', index=False)
+
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
+
+    return
 
     #########################
     # 4. Estimate Health Costs
@@ -477,7 +503,10 @@ def equity(state_fips, state_name):
     # health_dmg(road['concentration'][i],road['population'][i])
     # if i==8655:
     # input("Press Enter")
+
     road['dmg'] = road.apply(lambda row: health_dmg(row['concentration'], row['population']), axis=1)
+
+    road.to_file(os.path.join(root_output, "s4_roads_w_hc_{}.shp".format(state_fips)))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -494,7 +523,7 @@ def equity(state_fips, state_name):
     road = gpd.GeoDataFrame(road)
 
     # This method of intersection doesn't account for census block group intersecting the buffer but not the road
-    inte = gpd.sjoin(block_group_shapes, road, op='intersects')
+    inte = gpd.sjoin(block_groups, road, predicate='intersects')
 
     agg_functions = {'B02001e1': 'sum',
                      'dmg': 'first',
@@ -504,8 +533,8 @@ def equity(state_fips, state_name):
                      'URBAN_CODE': 'first'
                      }
 
-    for i in demos:
-        agg_functions[ACS[i]] = 'sum'
+    for demo in demos:
+        agg_functions[ACS[demo]] = 'sum'
 
     inte_road = inte.groupby(inte['index_right']).aggregate(agg_functions)
     # this method ensures each road is counted once, while summing up the populations of the intersecting CBGs
@@ -515,8 +544,8 @@ def equity(state_fips, state_name):
     inte_road = inte_road.fillna(0)
 
     # split the noise dmg for each road segment into demographics based on share of population
-    for i in demos:
-        inte_road[i+'_dmg'] = inte_road[ACS[i]] / inte_road['B02001e1'] * inte_road['dmg']
+    for demo in demos:
+        inte_road[demo +'_dmg'] = inte_road[ACS[demo]] / inte_road['B02001e1'] * inte_road['dmg']
 
     inte_road = inte_road.fillna(0)
 
@@ -532,84 +561,91 @@ def equity(state_fips, state_name):
             'length', 'geometry']
 
     road_write = road[keep]
+
+    # TODO this is giving a warning
     road_write['index_right'] = road_write.index
+    
     road_write = pandas.merge(inte_road, road_write, how='inner', on=['index_right'])
     road_write = gpd.GeoDataFrame(road_write)
-    road_write['length'] = road_write['length']/1609.34  # convert from meters to miles
+    road_write['length'] = road_write['length'] / METERS_PER_MILE  # convert from meters to miles
     road_write['county_FIPS'] = road_write.apply(lambda row: str(row['county_FIPS']), axis=1)
     road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
     road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
     rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
 
-    for i in demos:
-        rname[ACS[i]] = i+'_pop'
+    for demo in demos:
+        rname[ACS[demo]] = demo +'_pop'
 
     road_write = road_write.rename(columns=rname)
 
-    road_write['dmg_length'] = road_write['dmg']/road_write['length']/10  # dmg per 1/10 mile
+    road_write['dmg_length'] = road_write['dmg'] / road_write['length'] / 10  # dmg per 1/10 mile
     road_write['dmg_length'] = road_write.apply(lambda row: int(row['dmg_length']), axis=1)
 
-    keep = ['STATE_CODE', 'county_FIPS', 'tract_FIPS', 'GEOID', 'URBAN_CODE',
-            'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T',
-            'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI',
+    keep = ['STATE_CODE', 'county_FIPS', 'tract_FIPS', 'GEOID', 'URBAN_CODE', 'ROUTE_NUMB',
+            'F_SYSTEM', 'FACILITY_T', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI',
             'dmg', 'dmg_length', 'length', 'total_pop', 'geometry']
 
-    for i in demos:
-        keep.append(i+"_pop")
-        keep.append(i+"_dmg")
+    for demo in demos:
+        keep.append(demo +"_pop")
+        keep.append(demo +"_dmg")
 
     road_write = road_write[keep]
     road_write = road_write.to_crs("epsg:4326")
 
     # TODO will this overwrite if it already exists?
+
+    # TODO many field names are over 10 characters.  A wanring is generated but even worse,
+    # the fields are chopped at 10 leaving things like 'nonpoverty' where is should be appended with
+    # _dmg or _pop.  Recommend reworking some demos eg, nonpoverty = npvrty
     road_write.to_file(os.path.join(root_cost, state + "_air_dmg.shp"))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
-
 
 
     #############################
     # TODO this section should be given a title
 
     result['state'].append(state)
-    result['state_pop'].append(sum(block_group_shapes['B02001e1']))
+    result['state_pop'].append(sum(block_groups['B02001e1']))
     result['state_dmg'].append(sum(inte_road['dmg']))
 
     for demo in demos:
-        result[demo + "_pop"].append(sum(block_group_shapes[ACS[demo]]))
+        result[demo + "_pop"].append(sum(block_groups[ACS[demo]]))
         result[demo + '_dmg'].append(sum(inte_road[demo +'_dmg']))
 
     result['rural_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] == 99999]['dmg']))
     result['urban_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] != 99999]['dmg']))
 
-    # This section prints out the noise-equity ratios for the state
-    print("\nState: ", state, " Time: ", round(time() - t0, 2), sep='')
-    print("-------------------")
-    print("White")
-    print(round(sum(inte_road['white_dmg']) / sum(inte_road['dmg']), 4), 'dmg')
-    print(round(sum(block_group_shapes['B02001e2']) / sum(block_group_shapes['B02001e1']), 4), 'pop')
+#    # This section prints out the noise-equity ratios for the state
+#    print("\nState: ", state, " Time: ", round(time() - t0, 2), sep='')
+#    print("-------------------")
+#    print("White")
+#    print(round(sum(inte_road['white_dmg']) / sum(inte_road['dmg']), 4), 'dmg')
+#    print(round(sum(block_groups['B02001e2']) / sum(block_groups['B02001e1']), 4), 'pop')
+#
+#    print("Black")
+#    print(round(sum(inte_road['black_dmg']) / sum(inte_road['dmg']), 4))
+#    print(round(sum(block_groups['B02001e3']) / sum(block_groups['B02001e1']), 4))
+#
+#    print("Native")
+#    print(round(sum(inte_road['native_dmg']) / sum(inte_road['dmg']), 4))
+#    print(round(sum(block_groups['B02001e4']) / sum(block_groups['B02001e1']), 4))
+#
+#    print("Asian")
+#    print(round(sum(inte_road['asian_dmg']) / sum(inte_road['dmg']), 4))
+#    print(round(sum(block_groups['B02001e5']) / sum(block_groups['B02001e1']), 4))
+#
+#    print("Pacific")
+#    print(round(sum(inte_road['pacific_dmg']) / sum(inte_road['dmg']), 4))
+#    print(round(sum(block_groups['B02001e6']) / sum(block_groups['B02001e1']), 4))
+#
+#    print("Other")
+#    print(round(sum(inte_road['other_dmg']) / sum(inte_road['dmg']), 4))
+#    print(round(sum(block_groups['B02001e7']) / sum(block_groups['B02001e1']), 4))
+#
+#    print(result)
 
-    print("Black")
-    print(round(sum(inte_road['black_dmg']) / sum(inte_road['dmg']), 4))
-    print(round(sum(block_group_shapes['B02001e3']) / sum(block_group_shapes['B02001e1']), 4))
-
-    print("Native")
-    print(round(sum(inte_road['native_dmg']) / sum(inte_road['dmg']), 4))
-    print(round(sum(block_group_shapes['B02001e4']) / sum(block_group_shapes['B02001e1']), 4))
-
-    print("Asian")
-    print(round(sum(inte_road['asian_dmg']) / sum(inte_road['dmg']), 4))
-    print(round(sum(block_group_shapes['B02001e5']) / sum(block_group_shapes['B02001e1']), 4))
-
-    print("Pacific")
-    print(round(sum(inte_road['pacific_dmg']) / sum(inte_road['dmg']), 4))
-    print(round(sum(block_group_shapes['B02001e6']) / sum(block_group_shapes['B02001e1']), 4))
-
-    print("Other")
-    print(round(sum(inte_road['other_dmg']) / sum(inte_road['dmg']), 4))
-    print(round(sum(block_group_shapes['B02001e7']) / sum(block_group_shapes['B02001e1']), 4))
-
-    print(result)
+    return
 
     #############################
     # 5. Attribute to Demographics
@@ -655,7 +691,7 @@ def equity(state_fips, state_name):
     for demo in demos:
         agg_pop[ACS[demo]] = 'sum'
 
-    county_shp = block_group_shapes.groupby(block_group_shapes['county_FIPS']).aggregate(agg_pop)
+    county_shp = block_groups.groupby(block_groups['county_FIPS']).aggregate(agg_pop)
 
     # inte_county has the correct damage for each, county_shp has the correct population
     inte_county = pandas.merge(inte_county, county_shp, how='inner', on=['county_FIPS'])
@@ -693,7 +729,6 @@ def equity(state_fips, state_name):
     inte_county2["Demographic"] = inte_county2.apply(lambda row: row['metrics'][:-4], axis=1)
     inte_county2['metrics'] = inte_county2.apply(lambda row: row['metrics'][-3:], axis=1)
 
-    return
 
 
     # TODO - this is broken and I don't know what it's supposed to do
@@ -712,7 +747,7 @@ def equity(state_fips, state_name):
     inte_census['tract_FIPS'] = inte_census.index
     inte_census.index.names = ['id']
 
-    census_shp = block_group_shapes.groupby(block_group_shapes['tract_FIPS']).aggregate(agg_pop)
+    census_shp = block_groups.groupby(block_groups['tract_FIPS']).aggregate(agg_pop)
 
     # inte_census has the correct damage for each, census_shp has the correct population
     inte_census = pandas.merge(inte_census, census_shp, how='inner', on=['tract_FIPS'])
@@ -728,10 +763,10 @@ def equity(state_fips, state_name):
 
     keep = ['tract_FIPS']  # ,'white_ndp','black_ndp','native_ndp','asian_ndp','pacific_ndp','other_ndp']
 
-    for i in demos:
-        keep.append(i+'_ndp')
-        keep.append(i+'_dmg')
-        keep.append(i+'_pop')
+    for demo in demos:
+        keep.append(demo +'_ndp')
+        keep.append(demo +'_dmg')
+        keep.append(demo +'_pop')
 
     inte_census_ = inte_census[keep]
 
@@ -761,7 +796,7 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------------------------------
     
     # this is set to 'ignore' due to a section with frequent pandas merging that draws a warning
-    warnings.filterwarnings('ignore')
+    #warnings.filterwarnings('ignore')  # TODO remove
     
     root_input = os.path.join(ROOT, "Input_Data")
 
@@ -798,20 +833,21 @@ if __name__ == "__main__":
     # these were chosen based on the rate of change in concentration
     dist = [25, 50, 75, 100, 150, 200, 300]
     concentration_gradient = concentration_gradient[concentration_gradient['Distance'].isin(dist)]
-    concentration_gradient = concentration_gradient.reset_index()
-    
-    # For each distance the population density has to account for the width
-    # TODO explain where 1/12.192 comes from
+    concentration_gradient = concentration_gradient.reset_index(drop=True)
 
+    # TODO the following comment needs more explanation (e..g account for width of what?, how is it
+    # related to the conentration gradient, where will it be used, where 1/12.192 comes from?
+
+    # For each distance the population density has to account for the width
     dist_width_adj = {25: 1 / 12.192}
 
     for i in range(1, len(concentration_gradient)):
         dist_width_adj[concentration_gradient['Distance'][i]] = 1 / 12.192 * \
             (concentration_gradient['Distance'][i]-concentration_gradient['Distance'][i-1])/25
-    
+
     states_list = pandas.read_csv(
         os.path.join(root_input, "States_Data.txt"),
-        dtype={'FIPS':str}
+        dtype={'FIPS': str}
     )
 
 
@@ -894,14 +930,14 @@ if __name__ == "__main__":
     
     ages = ['0-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85+']
     
+    # TODO would highly recommend the health dictionary is set via a function which explains some of the numbers
     # Create dictionary for health impacts of air pollutant exposure
     # health dictionary will contain
     # impact: the % change in incidence rate per PM2.5 concentration increase (unit is ug/m^3)
     # baseline: the yearly incidence rate per 100 people    [*note require divide by 100 when applied to population]
     # value: $ value per incidence
     # dmg per road segment distance will be calculated by:
-    # concentration * population affected *
-    #    impact * baseline *  value
+    # concentration * population affected * impact * baseline *  value
     health = {}
     
     for age in ages:
@@ -951,27 +987,27 @@ if __name__ == "__main__":
         health['ae'+age]['value'] = 65
     
     
-    health['mort'+ages[0]]['baseline'] = .593 / 18 + .019 * 17 / 18
-    health['mort'+ages[1]]['baseline'] = .078
-    health['mort'+ages[2]]['baseline'] = .106
-    health['mort'+ages[3]]['baseline'] = .172
-    health['mort'+ages[4]]['baseline'] = .405
-    health['mort'+ages[5]]['baseline'] = .861
-    health['mort'+ages[6]]['baseline'] = 1.796
-    health['mort'+ages[7]]['baseline'] = 4.628
-    health['mort'+ages[8]]['baseline'] = 13.58
+    health['mort' +ages[0]]['baseline'] = .593 / 18 + .019 * 17 / 18
+    health['mort' +ages[1]]['baseline'] = .078
+    health['mort' +ages[2]]['baseline'] = .106
+    health['mort' +ages[3]]['baseline'] = .172
+    health['mort' +ages[4]]['baseline'] = .405
+    health['mort' +ages[5]]['baseline'] = .861
+    health['mort' +ages[6]]['baseline'] = 1.796
+    health['mort' +ages[7]]['baseline'] = 4.628
+    health['mort' +ages[8]]['baseline'] = 13.58
     
-    health['nfha'+ages[0]]['baseline'] = 0
-    health['nfha'+ages[1]]['baseline'] = 0
-    health['nfha'+ages[2]]['baseline'] = .002
-    health['nfha'+ages[3]]['baseline'] = .010
-    health['nfha'+ages[4]]['baseline'] = .068
-    health['nfha'+ages[5]]['baseline'] = .202
-    health['nfha'+ages[6]]['baseline'] = .380
-    health['nfha'+ages[7]]['baseline'] = .575
-    health['nfha'+ages[8]]['baseline'] = .921
+    health['nfha' +ages[0]]['baseline'] = 0
+    health['nfha' +ages[1]]['baseline'] = 0
+    health['nfha' +ages[2]]['baseline'] = .002
+    health['nfha' +ages[3]]['baseline'] = .010
+    health['nfha' +ages[4]]['baseline'] = .068
+    health['nfha' +ages[5]]['baseline'] = .202
+    health['nfha' +ages[6]]['baseline'] = .380
+    health['nfha' +ages[7]]['baseline'] = .575
+    health['nfha' +ages[8]]['baseline'] = .921
     
-    # TODO would highly recommnend parens and possibly that this is set via a funciton which explains some of the numbers
+    # TODO: parens never hurt :)
     health['haar' + ages[0]]['baseline'] = 2.387 * 2/18 + .363 * 16 / 18 + .217 * 2 / 18 + .147 * 16 / 18 + .226 * 2/18 +.151 * 16 / 18
     health['haar' + ages[1]]['baseline'] = .166 + .036 + .041
     health['haar' + ages[2]]['baseline'] = .212 + .048 + .056
@@ -1064,13 +1100,13 @@ if __name__ == "__main__":
     # County and Census Tract are stored separately
     result = {'state': [], 'state_pop': []}
 
-    for i in demos:
-        result[i+'_pop'] = []
+    for demo in demos:
+        result[demo + '_pop'] = []
 
     result['state_dmg'] = []
 
-    for i in demos:
-        result[i+'_dmg'] = []
+    for demo in demos:
+        result[demo +'_dmg'] = []
 
     result['rural_dmg'] = []
     result['urban_dmg'] = []
