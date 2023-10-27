@@ -1,4 +1,5 @@
 
+# TEST
 # TODO change change all occurence of DMG and DAMAGE to COST
 
 # --------------------------------------------------------------------------------------------------
