@@ -7,7 +7,7 @@
 
 # The root directory must be set.  Everything is relative (below) this path.
 
-# TODO ideally root would be in a separate config file so that the code doesn't need to be modified
+# TODO (GMB) ideally root would be in a separate config file so that the code doesn't need to be modified
 
 # Thors's environment
 # ROOT = r"C:\Users\thor.dodson\AppData\Local\anaconda3\envs\python_ECAT\Scripts\VOLPE_Review"
@@ -61,6 +61,8 @@ AGES = ('0-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '
 # the rate of change in concentration
 CONCENTRATION_DISTANCES = (25, 50, 75, 100, 150, 200, 300)
 
+WRITE_ROAD_RESULTS_SHAPEFILE = True
+
 # --------------------------------------------------------------------------------------------------
 # FUNCTIONS
 # --------------------------------------------------------------------------------------------------
@@ -82,7 +84,7 @@ def write_shapefile(dataframe, name):
 def pool(beta, std):
 
     """
-    TODO
+    pooled standard error weighting
     """
 
     return (sum(beta/std) / sum(1/std))
@@ -134,7 +136,7 @@ def make_health_dictionary():
     mort_data = pandas.DataFrame([[.005827, .000963], [.013103, .003347]], columns=cols)
     mort = pool(mort_data['Beta'], mort_data['Std'])
 
-    # infant mortality  # TODO this doesn't seem to be used
+    # infant mortality (not currently used)
     imort = .003922
 
     # non fatal heart attack
@@ -524,8 +526,9 @@ def health_dmg(health_dict, dist_width_adj, concentration, population):
 
 # --------------------------------------------------------------------------------------------------
 
-# TODO I might recommend changing the name of this function
-def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS, emissions_dict, concentration_gradient, health_dict, dist_width_adj, demos, county_names, result):
+def process_state(state_fips, state_name, state_abbrev, house_values, states_list, ACS, emissions_dict,
+                  concentration_gradient, health_dict, dist_width_adj, demos, county_names,
+                  state_results, county_results, census_results):
 
     """
     this is the main function applied to each state
@@ -535,11 +538,6 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     # 0 - Setup
 
     print('processing {}'.format(state_name))
-
-    # TODO get rid of this!
-    #global inte, inte_road, county, census, inte_census, inte_county, race_shp, road, road_write  # global for testing purposes
-    #global acs, c_shp  # these are global because est_houses uses them, could pass them to the function instead
-    #gc.collect()  # resolves memory issue, failure to overwrite road file for each State
 
     t0 = time()
 
@@ -551,7 +549,7 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     # the ACS State nomenclature (space, no space, or _) is different than HPMS, so this method requires folders for all states be in ACS
     acs_fgdb = acs_geodatabases[0]
 
-    # TODO it seems that housevalues is only being used to get a squashed statename (E.g. newhampshire)
+    # housevalues is being used here to get the squashed statename (e.g. newhampshire)
     # in order to get the hpms roads shapefile that does the same thing with names
     state = house_values.loc[states_list['FIPS'] == state_fips, 'State'].values[0]
 
@@ -604,7 +602,7 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     #print(age)
 
     race = gpd.read_file(fp_to_fgdb, layer="X02_Race")
-    race     = race[['GEOID', 'B02001e1', 'B02001e2', 'B02001e3', 'B02001e4', 'B02001e5', 'B02001e6', 'B02001e7']]
+    race = race[['GEOID', 'B02001e1', 'B02001e2', 'B02001e3', 'B02001e4', 'B02001e5', 'B02001e6', 'B02001e7']]
     race.set_index("GEOID", inplace = True)
     #print(race)
 
@@ -624,13 +622,12 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     block_groups = pandas.merge(block_groups, hispanic, how='inner', left_on="GEOID_Data", right_on='GEOID')
 
     #subtract hispanic/latino white from white alone
-    # TODO ACS lookup should have everything. this applies to the next few
     block_groups[ACS['white']] = block_groups[ACS['white']] - block_groups['B03002e13']
 
     #total population minus white alone
     block_groups['nonwhite'] = block_groups['B02001e1'] - block_groups[ACS['white']]
 
-    #could automate these non_steps depending on how many  # TODO this comment needs to be revised
+    # total pop minus poverty
     block_groups['nonpoverty'] = block_groups['B02001e1'] - block_groups[ACS['poverty']]
 
     block_groups['Area'] = block_groups['geometry'].area
@@ -659,7 +656,7 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     renames['geometry'] = 'geometry'
 
 
-    # TODO commented out next few lines becuase I belive they are not needed
+    # commented out next few lines becuase I belive they are not needed
     # route id is already a string field in the dataframe
     # and all the fields in the following for loop are already integer fields
 
@@ -682,7 +679,6 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
         road.loc[(road['F_SYSTEM'] == i) & ((road['SPEED_LIMI'] == 0) | (road['SPEED_LIMI'] > 90)) , 'SPEED_LIMI'] = func_sys_speed[i]
 
     # emission rates are only estimated for certain speeds, replace speed with closest match
-    # NOTE: moved next line out of adj_function so it didn't have to be evaluated for every road record
     emissions_speeds = list(emissions_dict['passenger']['restricted'].keys())
     road['SPEED_LIMI'] = road.apply(lambda row: adj_speed(emissions_speeds, row['SPEED_LIMI']), axis=1)
 
@@ -720,7 +716,6 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     # 1. estimate number of houses once for 1000ft buffer
     # 2. split houses into dist_buffer strips evenly proportional to width
 
-    # TODO/COMMENT - is this a sign that the age groups should just be exploded into separate fields from the start?
     # what if you have an area missing a particular age group?
     # The method used below to replace NaN due to non-intersections is clunky, but several other methods were causing errors, not sure why
     # unfortunately numpy does not allow replacing with a dictionary
@@ -747,21 +742,18 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     print("\testimating air pollution ...")
     start = time()
 
-    # TODO update comment to change to emissions and not noise
-    # iterates over noise levels and calculates the max distance those levels affect given the traffic and speed
-    # iterates over distances and calculates the average noise level at each distance
-
+    # iterates over road segments and calculate emissions for each segment
     road['emissions'] = road.apply(lambda row: calc_emissions(emissions_dict, row['AADT_PASSENGER'], row['AADT_SINGL'], row['AADT_COMBI'],
                                                               row['SPEED_LIMI'], row['length'], row['width'], row['restricted']), axis=1)
 
+    # iterates over road segments and calculate the average emissions level at each distance
     road['concentration'] = road.apply(lambda row: calc_concentrations(concentration_gradient, row['emissions']), axis=1)
 
-    #print(road)
 
     if TEST_MODE:
+        # note: can't write shapefile here due to dictionary in fields
+        print(road.iloc[0:50])
         pass
-        #TODO this will fail
-        #write_shapefile(road, "s3_roads_w_apc_{}.shp".format(state_fips))
 
     road.to_csv(os.path.join(root_output, "s4_roads_w_apc_{}.csv".format(state_abbrev)), sep='\t', index=False)
 
@@ -776,7 +768,7 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     road['dmg'] = road.apply(lambda row: health_dmg(health_dict, dist_width_adj, row['concentration'], row['population']), axis=1)
 
 
-    # TODO this will not work given dictionary as one of the fields
+    # NOTE: can't write this out either due to dictionaries being stored in fields
     #road.to_file(os.path.join(root_output, "s5_roads_w_hc_{}.shp".format(state_abbrev)))
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
@@ -793,7 +785,9 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
 
     road = gpd.GeoDataFrame(road)
 
-    # This method of intersection doesn't account for census block group intersecting the buffer but not the road
+    # NOTE This method of intersection doesn't account for census block group intersecting the buffer but not the road
+    # TODO - Thor to look into using buffer instead of road
+    # TODO - Thor to also add more comments to this section
     inte = gpd.sjoin(block_groups, road, predicate='intersects')
 
     # can't write the dictionary data in these columns to a shapefile
@@ -834,55 +828,61 @@ def equity(state_fips, state_name, state_abbrev, house_values, states_list, ACS,
     ######################################################################
     # 7 - Write road shapefile with noise damage estimates
 
-    print("\twriting road shapefile with noise damage estimates ...")
-    start = time()
+    if WRITE_ROAD_RESULTS_SHAPEFILE:
 
-    # subset to just key fields
-    road_write = road[['STATE_CODE', 'ROUTE_ID', 'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T', 'URBAN_CODE',
-        'SPEED_LIMI', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'length', 'geometry']]
-
-    # NOTE this was giving a warning, replaced with the two lines after it as this is one
-    # documented way to create a column from an index
-    #road_write['index_right'] = road_write.index
-    road_write = road_write.reset_index()
-    road_write.rename(columns = {'index':'index_right'}, inplace = True)
-
-    road_write = pandas.merge(inte_road, road_write, how='inner', on=['index_right'])
-    road_write = gpd.GeoDataFrame(road_write)
-    road_write['length'] = road_write['length'] / METERS_PER_MILE  # convert from meters to miles
-    road_write['county_FIPS'] = road_write.apply(lambda row: str(row['county_FIPS']), axis=1)
-    road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
-    road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
-
-    rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
-    for demo in demos:
-        rname[ACS[demo]] = demo + '_pop'
-
-    road_write = road_write.rename(columns=rname)
-
-    road_write['dmg_length'] = road_write['dmg'] / road_write['length'] / 10  # dmg per 1/10 mile
-    road_write['dmg_length'] = road_write.apply(lambda row: int(row['dmg_length']), axis=1)
-
-    keep = ['STATE_CODE', 'county_FIPS', 'tract_FIPS', 'GEOID', 'URBAN_CODE', 'ROUTE_NUMB',
-            'F_SYSTEM', 'FACILITY_T', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI',
-            'dmg', 'dmg_length', 'length', 'total_pop', 'geometry']
-
-    for demo in demos:
-        keep.append(demo + "_pop")
-        keep.append(demo + "_dmg")
-
-    road_write = road_write[keep]
-    road_write = road_write.to_crs("epsg:4326")
-
-    # TODO will this overwrite if it already exists?
-
-    # TODO many field names are over 10 characters.  A wanring is generated but even worse,
-    # the fields are chopped at 10 leaving things like 'nonpoverty' where is should be appended with
-    # _dmg or _pop.  Recommend reworking some demos eg, nonpoverty = npvrty
-
-    write_shapefile(road_write, state + "_air_dmg.shp")
-
-    print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
+        print("\twriting road shapefile with noise damage estimates ...")
+        start = time()
+    
+        # subset to just key fields
+        road_write = road[['STATE_CODE', 'ROUTE_ID', 'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T', 'URBAN_CODE',
+            'SPEED_LIMI', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'length', 'geometry', 'dmg']]
+    
+        # NOTE this was giving a warning, replaced with the two lines after it as this is one
+        # documented way to create a column from an index
+        #road_write['index_right'] = road_write.index
+        road_write = road_write.reset_index()
+        road_write.rename(columns = {'index':'index_right'}, inplace = True)
+    
+        road_write = pandas.merge(inte_road, road_write, how='inner', on=['index_right'])
+        road_write = gpd.GeoDataFrame(road_write)
+        road_write['length'] = road_write['length'] / METERS_PER_MILE  # convert from meters to miles
+    
+        # TODO are the following three lines still needed?  did they become integers at some point, and
+        # if so, track down where that is happening and try to prevent them from ever becoming numbers
+        
+        road_write['county_FIPS'] = road_write.apply(lambda row: str(row['county_FIPS']), axis=1)
+        road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
+        road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
+    
+        rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
+        for demo in demos:
+            rname[ACS[demo]] = demo + '_pop'
+    
+        road_write = road_write.rename(columns=rname)
+    
+        road_write['dmg_length'] = road_write['dmg'] / road_write['length'] / 10  # dmg per 1/10 mile
+        road_write['dmg_length'] = road_write.apply(lambda row: int(row['dmg_length']), axis=1)
+    
+        keep = ['STATE_CODE', 'county_FIPS', 'tract_FIPS', 'GEOID', 'URBAN_CODE', 'ROUTE_NUMB',
+                'F_SYSTEM', 'FACILITY_T', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'SPEED_LIMI',
+                'dmg', 'dmg_length', 'length', 'total_pop', 'geometry']
+    
+        for demo in demos:
+            keep.append(demo + "_pop")
+            keep.append(demo + "_dmg")
+    
+        road_write = road_write[keep]
+        road_write = road_write.to_crs("epsg:4326")
+    
+        # TODO will this overwrite if it already exists?
+    
+        # TODO many field names are over 10 characters.  A wanring is generated but even worse,
+        # the fields are chopped at 10 leaving things like 'nonpoverty' where is should be appended with
+        # _dmg or _pop.  Recommend reworking some demos eg, nonpoverty = npvrty
+    
+        write_shapefile(road_write, state + "_air_dmg.shp")
+    
+        print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
     ######################################################################
     # 8 - TODO this section should be given a title
@@ -1129,25 +1129,21 @@ def main():
     # SET UP STORAGE OF RESULTS
     # ----------------------------------------------------------------------------------------------
 
-    # National/State results will be stored in result
-    # County and Census Tract are stored separately
-    # TODO: might it be clearer to call result states_results
-    # call county county_result, and call census tract_results
-    result = {'state': [], 'state_pop': []}
+    state_results = {'state': [], 'state_pop': []}
 
     for demo in demos:
-        result[demo + '_pop'] = []
+        state_results[demo + '_pop'] = []
 
-    result['state_dmg'] = []
+    state_results['state_dmg'] = []
 
     for demo in demos:
-        result[demo +'_dmg'] = []
+        state_results[demo +'_dmg'] = []
 
-    result['rural_dmg'] = []
-    result['urban_dmg'] = []
+    state_results['rural_dmg'] = []
+    state_results['urban_dmg'] = []
 
-    county = pandas.DataFrame()
-    census = pandas.DataFrame()
+    county_results = pandas.DataFrame()
+    census_results = pandas.DataFrame()
 
     # ----------------------------------------------------------------------------------------------
     # RUN STATES
@@ -1158,7 +1154,10 @@ def main():
 
     for index, row in states_list.iterrows():
         if row['FIPS'] == '33':  # limit to only processing new hampshire for now
-            equity(row['FIPS'], row['NAME'], row['ABBREV'], house_values, states_list, ACS, emissions_dict, concentration_gradient, health_dict, dist_width_adj, demos, county_names, result)
+
+            process_state(row['FIPS'], row['NAME'], row['ABBREV'], house_values, states_list, ACS, emissions_dict,
+                    concentration_gradient, health_dict, dist_width_adj, demos, county_names,
+                    state_results, county_results, census_results)
 
     # ----------------------------------------------------------------------------------------------
     # SUMMARIZE RESULTS FROM ALL STATES
@@ -1203,7 +1202,6 @@ def main():
 
 
 # -------------------------------------------------------------------------------------------------
-
 
 # by doing things this way everthing isn't global which is good when a program gets this
 # large and complicated
