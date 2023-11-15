@@ -789,6 +789,16 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # NOTE This method of intersection doesn't account for census block group intersecting the buffer but not the road
     # TODO - Thor to look into using buffer instead of road
     # TODO - Thor to also add more comments to this section
+
+    ###    NEW COMMENT    ###
+    #This joins the block_groups and road by intersection in order to get the population count intersecting the road
+    #Because some roads intersects multiple block groups and vice versa, every intersection is a new observation
+    #Therefore to avoid double counting, the intersection is aggregated by road id to only count the total dmg once (which already takes into account the buffer population)
+    #Other variables, such as the population of the block groups, are added to get the correct total
+    #The number of intersecting block_groups is stored using the 'gath' function
+    #NOTE:
+        #This method is overly complicated, after the buffer intersection change this will no longer be needed
+    ###                    ###
     inte = gpd.sjoin(block_groups, road, predicate='intersects')
 
     # can't write the dictionary data in these columns to a shapefile
@@ -814,7 +824,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
     inte_road = inte_road.fillna(0)
 
-    # split the noise dmg for each road segment into demographics based on share of population
+    # allocate the noise dmg for each road segment between demographics based on share of population
     for demo in demos:
         inte_road[demo +'_dmg'] = inte_road[ACS[demo]] / inte_road['B02001e1'] * inte_road['dmg']
 
@@ -886,7 +896,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
         print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
     ######################################################################
-    # 8 - TODO this section should be given a title
+    # 8 - Aggregate Results at the State Level
 
     result['state'].append(state)
     result['state_pop'].append(sum(block_groups['B02001e1']))
@@ -934,6 +944,18 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     print("\taggregating to county ...")
     start = time()
 
+    ###    NEW COMMENT    ###
+    #inte_road has the correct total dmg and demo_dmg for the road segment BUT the population counts for all intersecting block_groups
+    #inte has the correct block_group population counts for each block_group and road intersection
+    #the goal is to get the correct total dmg and demo_dmg and correct block_group populations for each county/census tract
+    #so after dividing the total dmg and demo_dmg for each road segment in inte_road by the number of block_group intersections to avoid multi-counting
+            # (since we are going to merge using inte_road's id each road segment will be duplicated for each additional block_group it intersects)
+    #then inte_road and inte are merged to get all intersections again
+    #then the dmg is aggregated by summing up to the county/census tract level
+    #NOTE:
+        #This method is overly complicated, after the buffer intersection change this will no longer be needed
+    ###                 ###
+                      
     # below avoids multi-counting for roads that intersect multiple counties/census tracts,
     # dmg needs to be divided since the summation is across counties/census tracts when reaggregated
     # assumes dmg is split between intersecting counties/census tracts [in revision will split based on proportion of road intersecting]
