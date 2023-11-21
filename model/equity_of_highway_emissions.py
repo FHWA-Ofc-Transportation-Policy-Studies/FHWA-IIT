@@ -1,7 +1,7 @@
 
 # TODO change change all occurence of DMG and DAMAGE to COST
 
-# TODO ideally all fields would be limited to 10 in lenght so you can write shapefiles and
+# TODO ideally all fields would be limited to 10 in length so you can write shapefiles and
 #      not lose parts of the field name (sometime important parts)
 
 # TODO old commented out code that isn't going to be used
@@ -355,7 +355,7 @@ def make_emissions_dictionary():
 
 # --------------------------------------------------------------------------------------------------
 
-def adj_speed( emissions_speeds, speed):
+def adj_speed(emissions_speeds, speed):
 
     """
     Match the speeds in HPMS to the closets speeds in the emissions dictionary
@@ -365,7 +365,7 @@ def adj_speed( emissions_speeds, speed):
         return speed
     else:
         dif = [abs(i-speed) for i in emissions_speeds]
-        return speeds[dif.index(min(dif))]
+        return emissions_speeds[dif.index(min(dif))]
 
 # --------------------------------------------------------------------------------------------------
 
@@ -466,12 +466,11 @@ def est_population(road, buffer_dist_meters, block_groups, state_abbrev):
 def calc_emissions(emissions_dict, AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width, restricted):
 
     """
-    # THOR TODO fix comment below
     Calculate emissions for road segment
     based on traffic counts, speed, road length and width
     TODO clear up comments on next two lines
-    g/mile • miles_road • AADT • day/sec • 1/area_road  =  g/(s-m2)
-    sum_vehtype(g/mile•AADT) * (miles_road•day/sec•1/area_road)
+    g/mile * miles_road * AADT * day/sec * 1/area_road  =  g/(s-m2)
+    sum_vehtype(g/mile * AADT) * (miles_road * day/sec * 1/area_road)
     """
 
     road_size_adjustment  = length / METERS_PER_MILE / 86400 / (length * width)
@@ -516,19 +515,17 @@ def health_dmg(health_dict, dist_width_adj, concentration, population):
 
     dmg = 0
 
-    for d in CONCENTRATION_DISTANCES:
+    for dist in CONCENTRATION_DISTANCES:
 
         for category in ['mort', 'nfha', 'haar', 'hac', 'erva', 'mrad', 'ab', 'wld', 'lrs', 'urs', 'ae']:
             for age in AGES:
 
-                # THOR TODO would be good to break up parts and/or add parens reorder to match comment
+                population_affected = population[age] * dist_width_adj[dist]
+                incidence_rate_increase = health_dict[category + age]['impact']
+                incidence_rate_per_person = health_dict[category + age]['baseline'] / 100
+                monetization = health_dict[category + age]['value']
 
-                # concentration * population affected * % incidence rate increase *
-                # incidence rate per population *  monetization
-
-                dmg += concentration[d] * population[age] * dist_width_adj[d] * \
-                       health_dict[category + age]['impact'] * (health_dict[category+age]['baseline']/100) \
-                       * health_dict[category+age]['value']
+                dmg += concentration[dist] * population_affected * incidence_rate_increase * incidence_rate_per_person * monetization
 
     return dmg
 
@@ -782,9 +779,6 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # keep track of sum of dmg to each demographic
     # at end compare % of dmg received to population share
 
-    # TODO THOR - road is already a geodataframe, I think this can be deleted
-    road = gpd.GeoDataFrame(road)
-
     # NOTE This method of intersection doesn't account for census block group intersecting the buffer but not the road
     # TODO - Thor to look into using buffer instead of road
     # TODO - Thor to also add more comments to this section
@@ -847,9 +841,6 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
             'SPEED_LIMI', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'length', 'geometry', 'dmg']]
 
     
-        # NOTE this was giving a warning, replaced with the two lines after it as this is one
-        # documented way to create a column from an index
-        #road_write['index_right'] = road_write.index
         road_write = road_write.reset_index()
         road_write.rename(columns = {'index':'index_right'}, inplace = True)
     
@@ -866,14 +857,12 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
         road_write['length'] = road_write['length'] / METERS_PER_MILE  # convert from meters to miles
     
-        # TODO are the following three lines still needed?  did they become integers at some point, and
-        # if so, track down where that is happening and try to prevent them from ever becoming numbers
-        
+        # the following three lines turn lists of intersecting areas into a string of that list
+        # for output and viewing.
         road_write['county_FIPS'] = road_write.apply(lambda row: str(row['county_FIPS']), axis=1)
         road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
         road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
 
-    
         rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
         for demo in demos:
             rname[ACS[demo]] = demo + '_pop'
@@ -902,48 +891,49 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     
         print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
+
     ######################################################################
     # 8 - Aggregate Results at the State Level
 
-    result['state'].append(state)
-    result['state_pop'].append(sum(block_groups['B02001e1']))
-    result['state_dmg'].append(sum(inte_road['dmg']))
+    state_results['state'].append(state)
+    state_results['state_pop'].append(sum(block_groups['B02001e1']))
+    state_results['state_dmg'].append(sum(inte_road['dmg']))
 
     for demo in demos:
-        result[demo + "_pop"].append(sum(block_groups[ACS[demo]]))
-        result[demo + '_dmg'].append(sum(inte_road[demo +'_dmg']))
+        state_results[demo + "_pop"].append(sum(block_groups[ACS[demo]]))
+        state_results[demo + '_dmg'].append(sum(inte_road[demo +'_dmg']))
 
-    result['rural_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] == 99999]['dmg']))
-    result['urban_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] != 99999]['dmg']))
+    state_results['rural_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] == 99999]['dmg']))
+    state_results['urban_dmg'].append(sum(inte_road[inte_road['URBAN_CODE'] != 99999]['dmg']))
 
     # This section prints out the noise-equity ratios for the state
     # TODO this should go to a file if it's an important check, it's also a bit verbose for the screen
 
-#    print("\nState: ", state, " Time: ", round(time() - t0, 2), sep='')
-#    print("-------------------")
-#    print("White")
-#    print(round(sum(inte_road['white_dmg']) / sum(inte_road['dmg']), 4), 'dmg')
-#    print(round(sum(block_groups['B02001e2']) / sum(block_groups['B02001e1']), 4), 'pop')
-#
-#    print("Black")
-#    print(round(sum(inte_road['black_dmg']) / sum(inte_road['dmg']), 4))
-#    print(round(sum(block_groups['B02001e3']) / sum(block_groups['B02001e1']), 4))
-#
-#    print("Native")
-#    print(round(sum(inte_road['native_dmg']) / sum(inte_road['dmg']), 4))
-#    print(round(sum(block_groups['B02001e4']) / sum(block_groups['B02001e1']), 4))
-#
-#    print("Asian")
-#    print(round(sum(inte_road['asian_dmg']) / sum(inte_road['dmg']), 4))
-#    print(round(sum(block_groups['B02001e5']) / sum(block_groups['B02001e1']), 4))
-#
-#    print("Pacific")
-#    print(round(sum(inte_road['pacific_dmg']) / sum(inte_road['dmg']), 4))
-#    print(round(sum(block_groups['B02001e6']) / sum(block_groups['B02001e1']), 4))
-#
-#    print("Other")
-#    print(round(sum(inte_road['other_dmg']) / sum(inte_road['dmg']), 4))
-#    print(round(sum(block_groups['B02001e7']) / sum(block_groups['B02001e1']), 4))
+    print("\nState: ", state, " Time: ", round(time() - t0, 2), sep='')
+    print("-------------------")
+    print("White")
+    print(round(sum(inte_road['white_dmg']) / sum(inte_road['dmg']), 4), 'dmg')
+    print(round(sum(block_groups['B02001e2']) / sum(block_groups['B02001e1']), 4), 'pop')
+
+    print("Black")
+    print(round(sum(inte_road['black_dmg']) / sum(inte_road['dmg']), 4))
+    print(round(sum(block_groups['B02001e3']) / sum(block_groups['B02001e1']), 4))
+
+    print("Native")
+    print(round(sum(inte_road['native_dmg']) / sum(inte_road['dmg']), 4))
+    print(round(sum(block_groups['B02001e4']) / sum(block_groups['B02001e1']), 4))
+
+    print("Asian")
+    print(round(sum(inte_road['asian_dmg']) / sum(inte_road['dmg']), 4))
+    print(round(sum(block_groups['B02001e5']) / sum(block_groups['B02001e1']), 4))
+
+    print("Pacific")
+    print(round(sum(inte_road['pacific_dmg']) / sum(inte_road['dmg']), 4))
+    print(round(sum(block_groups['B02001e6']) / sum(block_groups['B02001e1']), 4))
+
+    print("Other")
+    print(round(sum(inte_road['other_dmg']) / sum(inte_road['dmg']), 4))
+    print(round(sum(block_groups['B02001e7']) / sum(block_groups['B02001e1']), 4))
 
     ######################################################################
     # 9 - Attribute to Demographics to County and Census Tract
@@ -1038,21 +1028,17 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     inte_county2["Demographic"] = inte_county2.apply(lambda row: row['metrics'][:-4], axis=1)
     inte_county2['metrics'] = inte_county2.apply(lambda row: row['metrics'][-3:], axis=1)
 
-    return
+    if len(county_results) == 0:
+        county_results = pandas.DataFrame(columns=list(inte_county2.columns))
 
-
-    # TODO - this is broken and I don't know what it's supposed to do
-    if c == 0:
-        county = pandas.DataFrame(columns=list(inte_county2.columns))
-
-    county = pandas.concat([county, inte_county2])
+    county_results = pandas.concat([county_results, inte_county2])
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
     ######################################################################
     # 10 - Aggregate to census tracts
 
-    print("aggregating to census tract ...")
+    print("\taggregating to census tract ...")
     inte_census = inte_road.groupby(inte_['tract_FIPS']).aggregate(agg_functions)
     inte_census['tract_FIPS'] = inte_census.index
     inte_census.index.names = ['id']
@@ -1084,10 +1070,10 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     inte_census_melt["Demographic"] = inte_census_melt.apply(lambda row: row['metrics'][:-4], axis=1)
     inte_census_melt['metrics'] = inte_census_melt.apply(lambda row: row['metrics'][-3:], axis=1)
 
-    if c == 0:
-        census = pandas.DataFrame(columns=list(inte_census_melt.columns))
+    if len(census_results) == 0:
+        census_results = pandas.DataFrame(columns=list(inte_census_melt.columns))
 
-    census = pandas.concat([census, inte_census_melt])
+    census_results = pandas.concat([census_results, inte_census_melt])
 
 
     ######################################################################
@@ -1124,7 +1110,7 @@ def main():
     concentration_gradient = concentration_gradient[concentration_gradient['Distance'].isin(CONCENTRATION_DISTANCES)]
     concentration_gradient = concentration_gradient.reset_index(drop=True)
 
-    # TODO the following comment could use more explaination.  In addition, please explain things like  1 / 12.192?)
+    # TODO THOR the following comment could use more explaination.  In addition, please explain things like  1 / 12.192?)
     # For each distance the population density has to account for the width
 
     dist_width_adj = {25: 1 / 12.192}
@@ -1183,7 +1169,7 @@ def main():
     # NOTE: fips  should always be string and not number, e.g. Alabama is 01 not 1
 
     for index, row in states_list.iterrows():
-        if row['FIPS'] == '33':  # limit to only processing new hampshire for now
+        if row['FIPS'] == '33':  # TODO limit to only processing new hampshire for now
 
             process_state(row['FIPS'], row['NAME'], row['ABBREV'], house_values, states_list, ACS, emissions_dict,
                     concentration_gradient, health_dict, dist_width_adj, demos, county_names,
@@ -1193,6 +1179,7 @@ def main():
     # SUMMARIZE RESULTS FROM ALL STATES
     # ----------------------------------------------------------------------------------------------
 
+    # TODO Thor, add comments and clarify variable names (e.g. results vs results_ vs results2)
     # Writing of final results
     # note this is meant to be run after all states have been done
 
