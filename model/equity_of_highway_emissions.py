@@ -1,6 +1,12 @@
 
-# TEST
 # TODO change change all occurence of DMG and DAMAGE to COST
+
+# TODO ideally all fields would be limited to 10 in lenght so you can write shapefiles and
+#      not lose parts of the field name (sometime important parts)
+
+# TODO old commented out code that isn't going to be used
+
+# TODO ideally root would be in a separate config file so that the code doesn't need to be modified
 
 # --------------------------------------------------------------------------------------------------
 # CONFIG
@@ -8,16 +14,14 @@
 
 # The root directory must be set.  Everything is relative (below) this path.
 
-# TODO (GMB) ideally root would be in a separate config file so that the code doesn't need to be modified
-
 # Thors's environment
 # ROOT = r"C:\Users\thor.dodson\AppData\Local\anaconda3\envs\python_ECAT\Scripts\VOLPE_Review"
 
 # Volpe's environment
 ROOT = r"D:\projects\FHWA_ECAT\repo\model"
 
+# TEST MODE IS MEANT TO BE USED ONLY ON VERY SMALL SUBSETS OF DATA 
 TEST_MODE = True
-
 
 # --------------------------------------------------------------------------------------------------
 # IMPORTS
@@ -365,7 +369,7 @@ def adj_speed( emissions_speeds, speed):
 
 # --------------------------------------------------------------------------------------------------
 
-def est_population(road, buffer_dist_meters, block_groups):
+def est_population(road, buffer_dist_meters, block_groups, state_abbrev):
 
     """
     Estimate the population of each age group in a 1000ft buffer near the road
@@ -383,18 +387,18 @@ def est_population(road, buffer_dist_meters, block_groups):
 
     road_buffer['id'] = road['id']
 
-    write_shapefile(road_buffer, "est_pop_1_road_buffer.shp")
+    if TEST_MODE:
+        write_shapefile(road_buffer, "est_pop_1_road_buffer_{}.shp".format(state_abbrev))
 
     ol = gpd.overlay(road_buffer, block_groups, how='intersection')
 
     ol['int_area'] = ol['geometry'].area  # area of intersection in sq_m
 
-    write_shapefile(ol, "est_pop_2_overlay.shp")
+    if TEST_MODE:
+        write_shapefile(ol, "est_pop_2_overlay_{}.shp".format(state_abbrev))
 
 
-    # NOTE: c and c_ were not clear at all, rename ol and ol group by for overlay and overlay group by respectively
-
-    # 'Area' is the area of the full CBG
+    # 'Area' is the area of the full census block group (CBG)
 
     # Estimates the population for each age group based on the proportionate area  (assumes uniform pop.density throughout CBG)
     # Age groupings in ACS are not even, so must manually match to the COBRA health impact age groups
@@ -438,21 +442,22 @@ def est_population(road, buffer_dist_meters, block_groups):
     for i in range(len(AGES)):
         agg[AGES[i]] = 'sum'
 
-    olgb = ol.groupby(ol['id']).aggregate(agg)
+    overlay_groupby = ol.groupby(ol['id']).aggregate(agg)
 
-    #print(olgb)
+    #print(overlay_groupby)
 
     # convert the 9 population fields into a dictionary  (this simplifies the function calls later)
-    olgb['population'] = olgb.apply(lambda row: {AGES[0]: row[AGES[0]], AGES[1]: row[AGES[1]], AGES[2]: row[AGES[2]],
+    overlay_groupby['population'] = overlay_groupby.apply(lambda row: {AGES[0]: row[AGES[0]], AGES[1]: row[AGES[1]], AGES[2]: row[AGES[2]],
                                            AGES[3]: row[AGES[3]], AGES[4]: row[AGES[4]], AGES[5]: row[AGES[5]],
                                            AGES[6]: row[AGES[6]], AGES[7]: row[AGES[7]], AGES[8]: row[AGES[8]]}, axis=1)
 
-    olgb = olgb[['population']]
+    overlay_groupby = overlay_groupby[['population']]
 
     # merge with road so that road only gets the population dictionary
-    road_with_pop = pandas.merge(road, olgb, how='left', on=['id'])
+    road_with_pop = pandas.merge(road, overlay_groupby, how='left', on=['id'])
 
-    write_shapefile(road_with_pop, "est_pop_3_road_pop.shp")
+    if TEST_MODE:
+        write_shapefile(road_with_pop, "est_pop_3_road_pop_{}.shp".format(state_abbrev))
 
     return road_with_pop
 
@@ -461,7 +466,7 @@ def est_population(road, buffer_dist_meters, block_groups):
 def calc_emissions(emissions_dict, AADT_PASSENGER, AADT_SINGL, AADT_COMBI, speed, length, width, restricted):
 
     """
-    # TODO fix comment below
+    # THOR TODO fix comment below
     Calculate emissions for road segment
     based on traffic counts, speed, road length and width
     TODO clear up comments on next two lines
@@ -516,13 +521,15 @@ def health_dmg(health_dict, dist_width_adj, concentration, population):
         for category in ['mort', 'nfha', 'haar', 'hac', 'erva', 'mrad', 'ab', 'wld', 'lrs', 'urs', 'ae']:
             for age in AGES:
 
-                # TODO would be good to break up parts and/or add parens
+                # THOR TODO would be good to break up parts and/or add parens reorder to match comment
+
+                # concentration * population affected * % incidence rate increase *
+                # incidence rate per population *  monetization
+
                 dmg += concentration[d] * population[age] * dist_width_adj[d] * \
                        health_dict[category + age]['impact'] * (health_dict[category+age]['baseline']/100) \
                        * health_dict[category+age]['value']
 
-    # concentration * population affected *
-    #    % incidence rate increase * incidence rate per population *  monetization
     return dmg
 
 # --------------------------------------------------------------------------------------------------
@@ -554,8 +561,6 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # in order to get the hpms roads shapefile that does the same thing with names
     state = house_values.loc[states_list['FIPS'] == state_fips, 'State'].values[0]
 
-    print('==={}'.format(state))
-
     state_utm_zone = states_list.loc[states_list['FIPS'] == state_fips, 'UTM_ZONE'].values[0]
     if not 4 <= state_utm_zone <= 19:
         raise Exception('utm zone for state does not appear to be valid')
@@ -568,7 +573,6 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
     if TEST_MODE:
         print('\tstarting memory: {}'.format(psutil.virtual_memory().available >> 20 ))
-
 
     print("\treading ACS files ...")
     start = time()
@@ -635,7 +639,6 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
     #print(block_groups)
 
-    # TODO this shapefile should be checked against the raw inputs
     if TEST_MODE:
         write_shapefile(block_groups, "s1_block_groups_{}.shp".format(state_abbrev))
 
@@ -722,7 +725,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # unfortunately numpy does not allow replacing with a dictionary
     # this brute force method insured the values were set to zero and didn't cause an error
 
-    road = est_population(road, 1000 * METERS_PER_FOOT, block_groups)
+    road = est_population(road, 1000 * METERS_PER_FOOT, block_groups, state_abbrev)
 
     road['population'] = road['population'].replace(np.nan, 0)
     indexes_replace = road[road['population'] == 0].index
@@ -738,7 +741,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
 
     ######################################################################
-    # 4 - Estimate Air Pollutant Concentration
+    # 4 - Estimate Air Pollutant Emissions and Concentrations
 
     print("\testimating air pollution ...")
     start = time()
@@ -746,17 +749,12 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # iterates over road segments and calculate emissions for each segment
     road['emissions'] = road.apply(lambda row: calc_emissions(emissions_dict, row['AADT_PASSENGER'], row['AADT_SINGL'], row['AADT_COMBI'],
                                                               row['SPEED_LIMI'], row['length'], row['width'], row['restricted']), axis=1)
-
     # iterates over road segments and calculate the average emissions level at each distance
     road['concentration'] = road.apply(lambda row: calc_concentrations(concentration_gradient, row['emissions']), axis=1)
 
-
     if TEST_MODE:
-        # note: can't write shapefile here due to dictionary in fields
-        print(road.iloc[0:50])
-        pass
-
-    road.to_csv(os.path.join(root_output, "s4_roads_w_apc_{}.csv".format(state_abbrev)), sep='\t', index=False)
+        # NOTE: can't write this out to shapefile due to dictionaries being stored in fields
+        road.to_csv(os.path.join(root_output, "s4_roads_w_emissions_and_concentrations_{}.txt".format(state_abbrev)), sep='\t', index=False)
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -768,9 +766,9 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
 
     road['dmg'] = road.apply(lambda row: health_dmg(health_dict, dist_width_adj, row['concentration'], row['population']), axis=1)
 
-
-    # NOTE: can't write this out either due to dictionaries being stored in fields
-    #road.to_file(os.path.join(root_output, "s5_roads_w_hc_{}.shp".format(state_abbrev)))
+    if TEST_MODE:
+        # NOTE: can't write this out to shapefile due to dictionaries being stored in fields
+        road.to_csv(os.path.join(root_output, "s5_roads_w_health_costs_{}.txt".format(state_abbrev)), sep='\t', index=False)
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -784,6 +782,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     # keep track of sum of dmg to each demographic
     # at end compare % of dmg received to population share
 
+    # TODO THOR - road is already a geodataframe, I think this can be deleted
     road = gpd.GeoDataFrame(road)
 
     # NOTE This method of intersection doesn't account for census block group intersecting the buffer but not the road
@@ -801,16 +800,16 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     ###                    ###
     inte = gpd.sjoin(block_groups, road, predicate='intersects')
 
-    # can't write the dictionary data in these columns to a shapefile
     if TEST_MODE:
+        # can't write the dictionary data in these columns to a shapefile
         inte_to_write_to_shapefile = inte.drop(['population', 'concentration'], axis=1)
-        write_shapefile(inte_to_write_to_shapefile, "inte.shp")
+        write_shapefile(inte_to_write_to_shapefile, "inte_{}.shp".format(state_abbrev))
 
     agg_functions = {'B02001e1': 'sum',
                      'dmg': 'first',
                      'county_FIPS': gath,
                      'tract_FIPS': gath,
-                      'GEOID': gath,
+                     'GEOID': gath,
                      'URBAN_CODE': 'first'
                      }
 
@@ -831,15 +830,14 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     inte_road = inte_road.fillna(0)
 
     if TEST_MODE:
-        pass
-        # TODO write this to a csv for checking?
+        inte_road.to_csv(os.path.join(root_output, "inte_road_{}.txt".format(state_abbrev)), sep='\t', index=False)
 
     print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
     ######################################################################
     # 7 - Write road shapefile with noise damage estimates
 
-    if WRITE_ROAD_RESULTS_SHAPEFILE:
+    if WRITE_ROAD_RESULTS_SHAPEFILE: 
 
         print("\twriting road shapefile with noise damage estimates ...")
         start = time()
@@ -847,6 +845,7 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
         # subset to just key fields
         road_write = road[['STATE_CODE', 'ROUTE_ID', 'ROUTE_NUMB', 'F_SYSTEM', 'FACILITY_T', 'URBAN_CODE',
             'SPEED_LIMI', 'AADT_PASSENGER', 'AADT_SINGL', 'AADT_COMBI', 'length', 'geometry', 'dmg']]
+
     
         # NOTE this was giving a warning, replaced with the two lines after it as this is one
         # documented way to create a column from an index
@@ -856,6 +855,15 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
     
         road_write = pandas.merge(inte_road, road_write, how='inner', on=['index_right'])
         road_write = gpd.GeoDataFrame(road_write)
+
+
+        # TODO THOR since both inte_road and road_write have a dmg field, the first becomes
+        # dmg_x and the second becomes dmg_y and this was crashing the program 20 lines below
+        # when it looked for dmg.  In my small subsample the two values were the same.  Use the
+        # following hack to make it work
+
+        road_write.rename(columns = {'dmg_x':'dmg'}, inplace = True)
+
         road_write['length'] = road_write['length'] / METERS_PER_MILE  # convert from meters to miles
     
         # TODO are the following three lines still needed?  did they become integers at some point, and
@@ -864,13 +872,14 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
         road_write['county_FIPS'] = road_write.apply(lambda row: str(row['county_FIPS']), axis=1)
         road_write['tract_FIPS'] = road_write.apply(lambda row: str(row['tract_FIPS']), axis=1)
         road_write['GEOID'] = road_write.apply(lambda row: str(row['GEOID']), axis=1)
+
     
         rname = {'B02001e1': 'total_pop', 'URBAN_CODE_y': 'URBAN_CODE'}
         for demo in demos:
             rname[ACS[demo]] = demo + '_pop'
     
         road_write = road_write.rename(columns=rname)
-    
+
         road_write['dmg_length'] = road_write['dmg'] / road_write['length'] / 10  # dmg per 1/10 mile
         road_write['dmg_length'] = road_write.apply(lambda row: int(row['dmg_length']), axis=1)
     
@@ -885,13 +894,11 @@ def process_state(state_fips, state_name, state_abbrev, house_values, states_lis
         road_write = road_write[keep]
         road_write = road_write.to_crs("epsg:4326")
     
-        # TODO will this overwrite if it already exists?
-    
-        # TODO many field names are over 10 characters.  A wanring is generated but even worse,
+        # TODO many field names are over 10 characters.  A warning is generated but even worse,
         # the fields are chopped at 10 leaving things like 'nonpoverty' where is should be appended with
         # _dmg or _pop.  Recommend reworking some demos eg, nonpoverty = npvrty
     
-        write_shapefile(road_write, state + "_air_dmg.shp")
+        write_shapefile(road_write, "air_dmg_{}.shp".format(state_abbrev))
     
         print('\t\tfinished in {:.1f} minutes'.format((time()-start)/60))
 
@@ -1239,7 +1246,7 @@ if __name__ == "__main__":
 
     if TEST_MODE:
         print('IN TEST MODE, USING TEST DATASET')
-        root_input = os.path.join(ROOT, "Input_Data_test_2_smaller")
+        root_input = os.path.join(ROOT, "Input_Data_test_2_smallest")
 
     root_acs = os.path.join(root_input, "ACS_2019")
 
