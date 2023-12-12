@@ -10,15 +10,14 @@
     "build_prod": "vite build --outDir dist_prod",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@arcgis/core": "~4.27",
-    "@types/arcgis-js-api": "~4.27",
-    "@esri/calcite-components": "~1.4"
-  },
   "devDependencies": {
+    "@types/node": "^20.4.4",
     "prettier": "^2.8.8",
     "typescript": "^4.8.4",
-    "vite": "^4.3.9",
-    "@types/node": "^20.4.4"
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "@arcgis/core": "~4.28",
+    "@esri/calcite-components": "~1.9.2"
   }
 }

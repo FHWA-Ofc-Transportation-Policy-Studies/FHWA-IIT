@@ -85,8 +85,8 @@ export const farsLayer = new FeatureLayer({
     }
 })
 
-export const noiseDamageLayer = new FeatureLayer({
-    title: 'Noise Damage',
+export const noiseCostLayer = new FeatureLayer({
+    title: 'Noise Cost',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_bin_reduced_simplified_00005/FeatureServer/0',
     visible: true,
     outFields: ['*'],
@@ -95,8 +95,8 @@ export const noiseDamageLayer = new FeatureLayer({
     //definitionExpression: "fclass = 1"
 })
 
-export const airDamageLayer = new FeatureLayer({
-    title: 'Air Damage',
+export const airCostLayer = new FeatureLayer({
+    title: 'Air Cost',
     url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
     visible: false,
     outFields: ['*'],

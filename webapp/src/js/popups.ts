@@ -1,65 +1,65 @@
 function noisePopupTemplateTitleFunction(feature: any) {
-    return 'Noise Damage'
+    return 'Noise Cost'
 }
 
 function airPopupTemplateTitleFunction(feature: any) {
-    return 'Air Damage'
+    return 'Air Cost'
 }
 
-function damagePopupTemplateContentFunction(feature: any) {
-    let dmgDescrip
-    let dmgBin
+function costPopupTemplateContentFunction(feature: any) {
+    let costDescrip
+    let costBin
 
     switch (feature.graphic.attributes.F_SYSTEM) {
         case 1:
-            dmgDescrip = '1 (Interstate)'
+            costDescrip = '1 (Interstate)'
             break
         case 2:
-            dmgDescrip = '2 (Principal Arterial, Other Freeways and Expressways)'
+            costDescrip = '2 (Principal Arterial, Other Freeways and Expressways)'
             break
         case 3:
-            dmgDescrip = '3 (Principal Arterial, Other)'
+            costDescrip = '3 (Principal Arterial, Other)'
             break
         case 4:
-            dmgDescrip = '4 (Minor Arterial)'
+            costDescrip = '4 (Minor Arterial)'
             break
         case 5:
-            dmgDescrip = '5 (Major Collector)'
+            costDescrip = '5 (Major Collector)'
             break
         case 6:
-            dmgDescrip = '6 (Minor Collector)'
+            costDescrip = '6 (Minor Collector)'
             break
         case 7:
-            dmgDescrip = '7 (Local)'
+            costDescrip = '7 (Local)'
             break
         default:
-            dmgDescrip = 'unknown fuction class'
+            costDescrip = 'unknown fuction class'
     }
 
     switch (feature.graphic.attributes.bin_dl) {
         case 1:
-            dmgBin = '1 (<= $100)'
+            costBin = '1 (<= $100)'
             break
         case 2:
-            dmgBin = '2 ($100 < Damage <= $1,000)'
+            costBin = '2 ($100 < Cost <= $1,000)'
             break
         case 3:
-            dmgBin = '3 ($1,000 < Damage <= $10,000)'
+            costBin = '3 ($1,000 < Cost <= $10,000)'
             break
         case 4:
-            dmgBin = '4 ($10,000 < Damage <= $100,000)'
+            costBin = '4 ($10,000 < Cost <= $100,000)'
             break
         case 5:
-            dmgBin = '5 ($100,000 < Damage <= $500,000)'
+            costBin = '5 ($100,000 < Cost <= $500,000)'
             break
         case 6:
-            dmgBin = '6 ($500,000 < Damage <= $1,000,000)'
+            costBin = '6 ($500,000 < Cost <= $1,000,000)'
             break
         case 7:
-            dmgBin = '7 (>= $1,000,000)'
+            costBin = '7 (>= $1,000,000)'
             break
         default:
-            dmgBin = 'unknown damage bin'
+            costBin = 'unknown cost bin'
     }
 
     const div = document.createElement('div')
@@ -73,10 +73,10 @@ function damagePopupTemplateContentFunction(feature: any) {
         feature.graphic.attributes.ROUTE_NUMB +
         '</b></li>' +
         '<li>Functional Class <b>' +
-        dmgDescrip +
+        costDescrip +
         '</b></li>' +
-        '<li>Dmg Bin <b>' +
-        dmgBin +
+        '<li>Cost Bin <b>' +
+        costBin +
         '</b></li>' +
         '</ul>'
 
@@ -85,7 +85,7 @@ function damagePopupTemplateContentFunction(feature: any) {
 
 export let noisePopupTemplate = {
     title: noisePopupTemplateTitleFunction,
-    content: damagePopupTemplateContentFunction,
+    content: costPopupTemplateContentFunction,
     fieldInfos: [
         { fieldName: 'STATE_CODE' },
         { fieldName: 'STATE_ABB' },
@@ -98,7 +98,7 @@ export let noisePopupTemplate = {
 
 export let airPopupTemplate = {
     title: airPopupTemplateTitleFunction,
-    content: damagePopupTemplateContentFunction,
+    content: costPopupTemplateContentFunction,
     fieldInfos: [
         { fieldName: 'STATE_CODE' },
         { fieldName: 'STATE_ABB' },
@@ -167,47 +167,47 @@ export let noiseEquityPopupTemplate = {
                 },
                 {
                     fieldName: 'nonwhite_d',
-                    label: 'Noise Damage Cost: Nonwhite',
+                    label: 'Noise Cost: Nonwhite',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'white_dmg',
-                    label: 'Noise Damage Cost: White',
+                    label: 'Noise Cost: White',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'black_dmg',
-                    label: 'Noise Damage Cost: Black',
+                    label: 'Noise Cost: Black',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'asian_dmg',
-                    label: 'Noise Damage Cost: Asian',
+                    label: 'Noise Cost: Asian',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'native_dmg',
-                    label: 'Noise Damage Cost: Native',
+                    label: 'Noise Cost: Native',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'pacific_dm',
-                    label: 'Noise Damage Cost: Pacific',
+                    label: 'Noise Cost: Pacific',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'other_dmg',
-                    label: 'Noise Damage Cost: Other',
+                    label: 'Noise Cost: Other',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'poverty_dm',
-                    label: 'Noise Damage Cost: Poverty',
+                    label: 'Noise Cost: Poverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'nonpover_1',
-                    label: 'Noise Damage Cost: Nonpoverty',
+                    label: 'Noise Cost: Nonpoverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
@@ -317,47 +317,47 @@ export let airEquityPopupTemplate = {
                 },
                 {
                     fieldName: 'nonwhite_d',
-                    label: 'Air Damage Cost: Nonwhite',
+                    label: 'Air Cost: Nonwhite',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'white_dmg',
-                    label: 'Air Damage Cost: White',
+                    label: 'Air Cost: White',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'black_dmg',
-                    label: 'Air Damage Cost: Black',
+                    label: 'Air Cost: Black',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'asian_dmg',
-                    label: 'Air Damage Cost: Asian',
+                    label: 'Air Cost: Asian',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'native_dmg',
-                    label: 'Air Damage Cost: Native',
+                    label: 'Air Cost: Native',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'pacific_dm',
-                    label: 'Air Damage Cost: Pacific',
+                    label: 'Air Cost: Pacific',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'other_dmg',
-                    label: 'Air Damage Cost: Other',
+                    label: 'Air Cost: Other',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'poverty_dm',
-                    label: 'Air Damage Cost: Poverty',
+                    label: 'Air Cost: Poverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
                     fieldName: 'nonpover_1',
-                    label: 'Air Damage Cost: Nonpoverty',
+                    label: 'Air Cost: Nonpoverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {

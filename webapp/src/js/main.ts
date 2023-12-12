@@ -20,9 +20,9 @@ import settings from '../config/settings.json'
 import start_locations from '../config/start_locations.json'
 import {
     farsLayer,
-    noiseDamageLayer,
+    noiseCostLayer,
     noiseEquityLayer,
-    airDamageLayer,
+    airCostLayer,
     airEquityLayer,
     acsLayer,
     statesLayer,
@@ -63,7 +63,7 @@ import {
 } from './renderers'
 
 import { setAssetPath } from '@esri/calcite-components/dist/components'
-setAssetPath("https://js.arcgis.com/calcite-components/1.4.3/assets")
+setAssetPath("https://js.arcgis.com/calcite-components/1.9.2/assets")
 
 import '@esri/calcite-components/dist/components/calcite-action'
 import '@esri/calcite-components/dist/components/calcite-action-bar'
@@ -141,9 +141,9 @@ let layerList: LayerList
 let layersWithSymbology: string[] = ['acs', 'noiseEquity', 'airEquity'] // use shortnames here
 // layerviews (in most cases)
 let farsLayerView: FeatureLayerView
-let noiseDamageLayerView: FeatureLayerView
+let noiseCostLayerView: FeatureLayerView
 let noiseEquityLayerView: FeatureLayerView
-let airDamageLayerView: FeatureLayerView
+let airCostLayerView: FeatureLayerView
 let airEquityLayerView: FeatureLayerView
 let acsLayerView: FeatureLayerView
 let statesLayerView: FeatureLayerView
@@ -179,8 +179,8 @@ function setUpMap() {
             noiseEquityLayer,
             airEquityLayer,
             redliningLayer,
-            airDamageLayer,
-            noiseDamageLayer,
+            airCostLayer,
+            noiseCostLayer,
             statesLayer,
             publicSchoolsLayer,
             universitiesLayer,
@@ -224,9 +224,9 @@ function onViewReady(view: MapView) {
     // this all only gets called the first time.
     let whenLayerViewsCreatedPromises = Promise.all([
         view.whenLayerView(farsLayer),
-        view.whenLayerView(noiseDamageLayer),
+        view.whenLayerView(noiseCostLayer),
         view.whenLayerView(noiseEquityLayer),
-        view.whenLayerView(airDamageLayer),
+        view.whenLayerView(airCostLayer),
         view.whenLayerView(airEquityLayer),
         view.whenLayerView(acsLayer),
         view.whenLayerView(statesLayer),
@@ -239,9 +239,9 @@ function onViewReady(view: MapView) {
     let layerViewsDoneUpdatingPromise = whenLayerViewsCreatedPromises.then(
         ([
             tmpFarsLayerView,
-            tmpNoiseDamageLayerView,
+            tmpNoiseCostLayerView,
             tmpNoiseEquityLayerView,
-            tmpAirDamageLayerView,
+            tmpAirCostLayerView,
             tmpAirEquityLayerView,
             tmpAcsLayerView,
             tmpStatesLayerView,
@@ -251,9 +251,9 @@ function onViewReady(view: MapView) {
             tmpRedliningLayerView
         ]) => {
             farsLayerView = tmpFarsLayerView
-            noiseDamageLayerView = tmpNoiseDamageLayerView
+            noiseCostLayerView = tmpNoiseCostLayerView
             noiseEquityLayerView = tmpNoiseEquityLayerView
-            airDamageLayerView = tmpAirDamageLayerView
+            airCostLayerView = tmpAirCostLayerView
             airEquityLayerView = tmpAirEquityLayerView
             acsLayerView = tmpAcsLayerView
             statesLayerView = tmpStatesLayerView
@@ -264,9 +264,9 @@ function onViewReady(view: MapView) {
 
             return Promise.all([
                 reactiveUtils.whenOnce(() => !tmpFarsLayerView.updating),
-                reactiveUtils.whenOnce(() => !tmpNoiseDamageLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpNoiseCostLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpNoiseEquityLayerView.updating),
-                reactiveUtils.whenOnce(() => !tmpAirDamageLayerView.updating),
+                reactiveUtils.whenOnce(() => !tmpAirCostLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpAirEquityLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpAcsLayerView.updating),
                 reactiveUtils.whenOnce(() => !tmpStatesLayerView.updating),
@@ -287,9 +287,9 @@ function onViewReady(view: MapView) {
             'universities',
             'redlining',
             'fars',
-            'noiseDamage',
+            'noiseCost',
             'noiseEquity',
-            'airDamage',
+            'airCost',
             'airEquity',
             'acs'
         ]
@@ -308,9 +308,9 @@ function onViewReady(view: MapView) {
 
         // wire up filter events for "standard" layers
         filterSetup('fars')
-        filterSetup('noiseDamage')
+        filterSetup('noiseCost')
         filterSetup('noiseEquity')
-        filterSetup('airDamage')
+        filterSetup('airCost')
         filterSetup('airEquity')
         filterSetup('acs')
         // states is a bit special
@@ -371,9 +371,9 @@ function onViewReady(view: MapView) {
                 view.stationary,
                 statesLayerView.updating,
                 farsLayerView.updating,
-                noiseDamageLayerView.updating,
+                noiseCostLayerView.updating,
                 noiseEquityLayerView.updating,
-                airDamageLayerView.updating,
+                airCostLayerView.updating,
                 airEquityLayerView.updating,
                 acsLayerView.updating,
                 urbanLayerView.updating,
@@ -385,9 +385,9 @@ function onViewReady(view: MapView) {
                 stationary,
                 statesU,
                 farsU,
-                noiseDamageU,
+                noiseCostU,
                 noiseEquityU,
-                airDamageU,
+                airCostU,
                 airEquityU,
                 acsU,
                 urbanU,
@@ -399,9 +399,9 @@ function onViewReady(view: MapView) {
                     stationary &&
                     !statesU &&
                     !farsU &&
-                    !noiseDamageU &&
+                    !noiseCostU &&
                     !noiseEquityU &&
-                    !airDamageU &&
+                    !airCostU &&
                     !airEquityU &&
                     !acsU &&
                     !urbanU &&
@@ -437,9 +437,9 @@ function onViewReady(view: MapView) {
                     if (!(simpleChartPanel!.hidden)) {
                         document.getElementById('simple-summary-acs')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-farsfatals')!.innerHTML = '&nbsp;'
-                        document.getElementById('simple-summary-noiseDamage')!.innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-noiseCost')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-noiseEquity')!.innerHTML = '&nbsp;'
-                        document.getElementById('simple-summary-airDamage')!.innerHTML = '&nbsp;'
+                        document.getElementById('simple-summary-airCost')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-airEquity')!.innerHTML = '&nbsp;'
                         
                         // gets the element which will contain the warning that the simple summary must be updated
@@ -497,7 +497,7 @@ function initWidgets(view: MapView) {
 
     // WHEN THE LAYER LIST IS READY
     layerList.when(function () {
-        // console.log("just after creating layerlist", layerList.operationalItems)
+        //console.log("just after creating layerlist", layerList.operationalItems)
         wireUpOnLayerVisibilityChanges()
 
         // DEFINE WHAT HAPPENS FOR A LAYERLIST ITEM WHEN FILTER OR TABLE IS CLICKED
@@ -599,9 +599,9 @@ function initWidgets(view: MapView) {
         layerInfos: [
             { layer: landcoverLayer },
             { layer: farsLayer },
-            { layer: noiseDamageLayer },
+            { layer: noiseCostLayer },
             { layer: noiseEquityLayer },
-            { layer: airDamageLayer },
+            { layer: airCostLayer },
             { layer: airEquityLayer },
             { layer: acsLayer },
             { layer: urbanLayer },
@@ -888,9 +888,9 @@ function onLayerListItemCreated(event: any) {
         item.actionsSections = [[{ title: 'Filter', className: 'esri-icon-filter', id: 'filter' }]]
     }
 
-    // Noise Damage
+    // Noise Cost
     // -----------------------------------------------------------------
-    else if (event.item.title === 'Noise Damage') {
+    else if (event.item.title === 'Noise Cost') {
         const item = event.item
 
         const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
@@ -935,9 +935,9 @@ function onLayerListItemCreated(event: any) {
         ]
     }
 
-    // Air Damage
+    // Air Cost
     // -----------------------------------------------------------------
-    else if (event.item.title === 'Air Damage') {
+    else if (event.item.title === 'Air Cost') {
         const item = event.item
 
         const transparencySlider = new Slider({ min: 0, max: 1, precision: 2, values: [1] })
@@ -1228,7 +1228,7 @@ function initLeftActionBarEvents(view: MapView) {
                                 'simple-summary-farsfatals'
                             )
                             simpleSummaryUpdateEquityStat(view.extent)
-                            simpleSummaryUpdateDamageStat(view.extent)
+                            simpleSummaryUpdateCostStat(view.extent)
                         }
                     } else {
                         // otherwise the datapanel is already open so close it
@@ -1267,7 +1267,7 @@ function wireUpOnLayerVisibilityChanges() {
     // when layer visibility is changed enable or disable its filter, table, and transparency slider
 
     function updateLayerlistActionItems(layer: Layer) {
-        // console.log('visibility change for', layer.title, ' it is now', layer.visible)
+        //console.log('visibility change for', layer.title, ' it is now', layer.visible)
 
         layerList.operationalItems.forEach((oi: ListItem) => {
             if (oi.title === layer.title) {
@@ -1318,9 +1318,9 @@ function wireUpOnLayerVisibilityChanges() {
 
     let layersToWatchForVizChanges = [
         statesLayer,
-        noiseDamageLayer,
+        noiseCostLayer,
         noiseEquityLayer,
-        airDamageLayer,
+        airCostLayer,
         airEquityLayer,
         acsLayer,
         farsLayer,
@@ -1703,9 +1703,9 @@ function getStatesFilter(shortLayerName: string) {
         stateAbbrevField = 'st_abbr'
     }
     // 2ALL1901
-    else if (shortLayerName === 'noiseDamage') {
+    else if (shortLayerName === 'noiseCost') {
         stateAbbrevField = 'STATE_ABB' 
-    } else if (shortLayerName === 'airDamage') {
+    } else if (shortLayerName === 'airCost') {
         stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'noiseEquity') {
         stateAbbrevField = 'STATE_ABB'
@@ -1769,9 +1769,9 @@ function decisionChange(shortLayerName: string) {
         let layersToUpdateWhenStateChanges = [
             'fars',
             'urban',
-            'noiseDamage',
+            'noiseCost',
             'noiseEquity',
-            'airDamage',
+            'airCost',
             'airEquity',
             'acs'
         ]
@@ -1967,32 +1967,32 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
         let equityView = equityViews[i]
         let equitySummaryEl = equitySummaryElements[i]
         let equitySummaryTextEl = equitySummaryTextElements[i]
-        let damageType = equitySummaryTextElements[i].split('-')[2] // Noise or Air
-        damageType = damageType.charAt(0).toUpperCase() + damageType.slice(1) // make title case
+        let costType = equitySummaryTextElements[i].split('-')[2] // Noise or Air
+        costType = costType.charAt(0).toUpperCase() + costType.slice(1) // make title case
 
         // get from current ND field being used to symbolize this layer
         let demographicToUse = equityView.layer.renderer.visualVariables[0].field.split('_')[0]
 
-        // get equity damage field.  This is a bit ugly due to non standard naming conventions on the fields
+        // get equity cost field.  This is a bit ugly due to non standard naming conventions on the fields
 
-        let equityDamageField: string
+        let equityCostField: string
 
         switch (demographicToUse) {
             case 'pacific':
             case 'poverty':
-                equityDamageField = demographicToUse + '_dm'
+                equityCostField = demographicToUse + '_dm'
                 break
             case 'nonwhite':
-                equityDamageField = demographicToUse + '_d'
+                equityCostField = demographicToUse + '_d'
                 break
             case 'nonpoverty':
-                equityDamageField = 'nonpover_1'
+                equityCostField = 'nonpover_1'
                 break
             default:
-                equityDamageField = demographicToUse + '_dmg'
+                equityCostField = demographicToUse + '_dmg'
         }
 
-        //console.log(demographicToUse, equityDamageField)
+        //console.log(demographicToUse, equityCostField)
 
         if (!equityView.visible) {
             document.getElementById(equitySummaryEl)!.innerHTML = '-'
@@ -2025,11 +2025,11 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
                 let sum = 0
 
                 results.features.forEach((result) => {
-                    sum += result.attributes[equityDamageField]
+                    sum += result.attributes[equityCostField]
                 })
 
                 document.getElementById(equitySummaryTextEl)!.innerHTML =
-                    'Total ' + damageType + ' Damage (' + demographicToUse + ')'
+                    'Total ' + costType + ' Cost (' + demographicToUse + ')'
 
                 document.getElementById(equitySummaryEl)!.innerHTML =
                     ' $ ' + Math.round(sum).toLocaleString('en-US')
@@ -2040,35 +2040,35 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
     }
 }
 
-async function simpleSummaryUpdateDamageStat(extent: __esri.Extent) {
-    let damageViews = [noiseDamageLayerView, airDamageLayerView]
-    let damageSummaryElements = ['simple-summary-noiseDamage', 'simple-summary-airDamage']
+async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
+    let costViews = [noiseCostLayerView, airCostLayerView]
+    let costSummaryElements = ['simple-summary-noiseCost', 'simple-summary-airCost']
 
-    for (let i = 0; i < damageViews.length; i++) {
-        let damageView = damageViews[i]
-        let damageSummaryEl = damageSummaryElements[i]
-        // console.log("updating damageview", damageView.layer.title, 'with visibility', damageView.visible)
-        if (!damageView.visible) {
-            document.getElementById(damageSummaryEl)!.innerHTML = '-'
+    for (let i = 0; i < costViews.length; i++) {
+        let costView = costViews[i]
+        let costSummaryEl = costSummaryElements[i]
+        // console.log("updating costview", costView.layer.title, 'with visibility', costView.visible)
+        if (!costView.visible) {
+            document.getElementById(costSummaryEl)!.innerHTML = '-'
             continue
         } else {
             // something changed and it could take a while to update so blank it out
-            document.getElementById(damageSummaryEl)!.innerHTML = '&nbsp;'
+            document.getElementById(costSummaryEl)!.innerHTML = '&nbsp;'
         }
 
         // TODO: typescript is upset about query.extent but any other property breaks functionality
         let query: Query
-        if (damageView.filter) {
-            query = damageView.filter.createQuery()
+        if (costView.filter) {
+            query = costView.filter.createQuery()
             query.extent = extent
         } else {
-            query = damageView.createQuery()
+            query = costView.createQuery()
             query.extent = extent
         }
 
         query.spatialRelationship = 'within'
 
-        damageView
+        costView
             .queryFeatures(query)
             .then(function (results) {
                 //console.log("features = ", results.features.length)
@@ -2095,15 +2095,15 @@ async function simpleSummaryUpdateDamageStat(extent: __esri.Extent) {
                     // console.log(bin, len)
                 })
 
-                let avgDamage = 0.0
+                let avgCost = 0.0
 
                 for (const [bin, sumlen] of Object.entries(sumLengthByBin)) {
                     let contrib = bin * (sumlen / totalLen)
-                    avgDamage += contrib
+                    avgCost += contrib
                     //console.log(bin,  sumlen, contrib);
                 }
 
-                document.getElementById(damageSummaryEl)!.innerHTML = avgDamage.toFixed(1)
+                document.getElementById(costSummaryEl)!.innerHTML = avgCost.toFixed(1)
             })
             .catch(function (error) {
                 console.log('query failed: ', error)
@@ -2117,7 +2117,7 @@ function onSimpleChartBtnClick(view: MapView) {
     simpleSummaryUpdateAcsStat(view.extent)
     simpleSummaryUpdateStat(farsLayerView, view, 'FATALS', 'simple-summary-farsfatals')
     simpleSummaryUpdateEquityStat(view.extent)
-    simpleSummaryUpdateDamageStat(view.extent)
+    simpleSummaryUpdateCostStat(view.extent)
 
 
     // gets the element which will contain the warning that the simple summary must be updated
