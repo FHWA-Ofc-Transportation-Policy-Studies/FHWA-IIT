@@ -1,6 +1,6 @@
 {
-  "name": "ecat",
-  "description": "FHWA Externality Cost Assessment Tool (ECAT)",
+  "name": "iit",
+  "description": "FHWA Inequity Identification Tool (IIT)",
   "version": "1.0.0",
   "type": "module",
   "private": true,
