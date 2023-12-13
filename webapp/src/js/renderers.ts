@@ -1,5 +1,6 @@
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer'
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol'
+//import UniqueValueRenderer from "@arcgis/core/renderers/UniqueValueRenderer.js"
 
 
 // Use this site to choose colors, making value 1.0 the neutral color
@@ -543,35 +544,36 @@ export let noiseRenderer = {
     },
     uniqueValueInfos: [
         {
-            value: '1',
-            symbol: { type: 'simple-line', color: '#fdd0a2', width: 0.5, style: 'solid' }
-        },
-        {
-            value: '2',
-            symbol: { type: 'simple-line', color: '#fdae6b', width: 1, style: 'solid' }
-        },
-        {
-            value: '3',
-            symbol: { type: 'simple-line', color: '#fd8d3c', width: 2, style: 'solid' }
-        },
-        {
-            value: '4',
-            symbol: { type: 'simple-line', color: '#f16913', width: 4, style: 'solid' }
-        },
-        {
-            value: '5',
-            symbol: { type: 'simple-line', color: '#d94801', width: 7, style: 'solid' }
+            value: '7',
+            symbol: { type: 'simple-line', color: '#7f2704', width: 15, style: 'solid' }
         },
         {
             value: '6',
             symbol: { type: 'simple-line', color: '#a63603', width: 11, style: 'solid' }
         },
         {
-            value: '7',
-            symbol: { type: 'simple-line', color: '#7f2704', width: 15, style: 'solid' }
-        }
+            value: '5',
+            symbol: { type: 'simple-line', color: '#d94801', width: 7, style: 'solid' }
+        },
+        {
+            value: '4',
+            symbol: { type: 'simple-line', color: '#f16913', width: 4, style: 'solid' }
+        },
+        {
+            value: '3',
+            symbol: { type: 'simple-line', color: '#fd8d3c', width: 2, style: 'solid' }
+        },
+        {
+            value: '2',
+            symbol: { type: 'simple-line', color: '#fdae6b', width: 1, style: 'solid' }
+        },
+        {
+            value: '1',
+            symbol: { type: 'simple-line', color: '#fdd0a2', width: 0.5, style: 'solid' }
+        }  
     ]
 }
+noiseRenderer.orderByClassesEnabled = true;
 
 export let airRenderer = {
     type: 'unique-value',
@@ -584,35 +586,36 @@ export let airRenderer = {
     },
     uniqueValueInfos: [
         {
-            value: '1',
-            symbol: { type: 'simple-line', color: '#bfdfff', width: 0.5, style: 'solid' }
-        },
-        {
-            value: '2',
-            symbol: { type: 'simple-line', color: '#a0c2e2', width: 1, style: 'solid' }
-        },
-        {
-            value: '3',
-            symbol: { type: 'simple-line', color: '#83a6c6', width: 2, style: 'solid' }
-        },
-        {
-            value: '4',
-            symbol: { type: 'simple-line', color: '#658baa', width: 4, style: 'solid' }
-        },
-        {
-            value: '5',
-            symbol: { type: 'simple-line', color: '#48708f', width: 7, style: 'solid' }
+            value: '7',
+            symbol: { type: 'simple-line', color: '#003f5c', width: 15, style: 'solid' }
         },
         {
             value: '6',
             symbol: { type: 'simple-line', color: '#2a5775', width: 11, style: 'solid' }
         },
         {
-            value: '7',
-            symbol: { type: 'simple-line', color: '#003f5c', width: 15, style: 'solid' }
+            value: '5',
+            symbol: { type: 'simple-line', color: '#48708f', width: 7, style: 'solid' }
+        },
+        {
+            value: '4',
+            symbol: { type: 'simple-line', color: '#658baa', width: 4, style: 'solid' }
+        },
+        {
+            value: '3',
+            symbol: { type: 'simple-line', color: '#83a6c6', width: 2, style: 'solid' }
+        },
+        {
+            value: '2',
+            symbol: { type: 'simple-line', color: '#a0c2e2', width: 1, style: 'solid' }
+        },
+        {
+            value: '1',
+            symbol: { type: 'simple-line', color: '#bfdfff', width: 0.5, style: 'solid' }
         }
     ]
 }
+airRenderer.orderByClassesEnabled = true;
 
 // ACS Renderers
 

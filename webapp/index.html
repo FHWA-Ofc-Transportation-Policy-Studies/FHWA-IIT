@@ -362,7 +362,7 @@
             <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb7" value="7" checked="checked"></calcite-checkbox>7 - Local</calcite-label>
           </calcite-block>
 
-          <calcite-block collapsible heading="Annual Noise Cost ($ per 1/10 mile)" id="noiseCost-fltr-block-dmg">
+          <calcite-block collapsible heading="Annual Noise Cost ($ per 1/10 mile)" id="noiseCost-fltr-block-cost">
             <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb1" value="1" checked="checked"></calcite-checkbox>Bin 1 &lt;= $100</calcite-label>
             <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb2" value="2" checked="checked"></calcite-checkbox>Bin 2 &lt;= $1,000</calcite-label>
             <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb3" value="3" checked="checked"></calcite-checkbox>Bin 3 &lt;= $10,000</calcite-label>
@@ -389,7 +389,7 @@
             <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb7" value="7" checked="checked"></calcite-checkbox>7 - Local</calcite-label>
           </calcite-block>
 
-          <calcite-block collapsible heading="Annual Air Cost ($ per 1/10 mile)" id="airCost-fltr-block-dmg">
+          <calcite-block collapsible heading="Annual Air Cost ($ per 1/10 mile)" id="airCost-fltr-block-cost">
             <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb1" value="1" checked="checked"></calcite-checkbox>Bin 1 &lt;= $100</calcite-label>
             <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb2" value="2" checked="checked"></calcite-checkbox>Bin 2 &lt;= $1,000</calcite-label>
             <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb3" value="3" checked="checked"></calcite-checkbox>Bin 3 &lt;= $10,000</calcite-label>
@@ -453,49 +453,49 @@
             <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-White Cost" id="noiseEquity-fltr-block-nonwhitedmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonwhitedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonwhitedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Non-White Cost" id="noiseEquity-fltr-block-nonwhitecost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonwhitecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="White Cost" id="noiseEquity-fltr-block-whitedmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-whitedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-whitedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="White Cost" id="noiseEquity-fltr-block-whitecost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-whitecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-whitecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Black Cost" id="noiseEquity-fltr-block-blackdmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-blackdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-blackdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Black Cost" id="noiseEquity-fltr-block-blackcost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-blackcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-blackcost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Asian Cost" id="noiseEquity-fltr-block-asiandmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-asiandmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-asiandmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Asian Cost" id="noiseEquity-fltr-block-asiancost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-asiancost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-asiancost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Native Cost" id="noiseEquity-fltr-block-nativedmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nativedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nativedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Native Cost" id="noiseEquity-fltr-block-nativecost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nativecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nativecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Pacific Cost" id="noiseEquity-fltr-block-pacificdmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-pacificdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-pacificdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Pacific Cost" id="noiseEquity-fltr-block-pacificcost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-pacificcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-pacificcost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Other Cost" id="noiseEquity-fltr-block-otherdmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-otherdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-otherdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Other Cost" id="noiseEquity-fltr-block-othercost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-othercost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-othercost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Poverty Cost" id="noiseEquity-fltr-block-povertydmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-povertydmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-povertydmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Poverty Cost" id="noiseEquity-fltr-block-povertycost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-povertycost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-povertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-Poverty Cost" id="noiseEquity-fltr-block-nonpovertydmg">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonpovertydmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertydmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Non-Poverty Cost" id="noiseEquity-fltr-block-nonpovertycost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonpovertycost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
   
 
@@ -551,49 +551,49 @@
             <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-White Cost" id="airEquity-fltr-block-nonwhitedmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonwhitedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonwhitedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Non-White Cost" id="airEquity-fltr-block-nonwhitecost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonwhitecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="White Cost" id="airEquity-fltr-block-whitedmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-whitedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-whitedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="White Cost" id="airEquity-fltr-block-whitecost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-whitecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-whitecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Black Cost" id="airEquity-fltr-block-blackdmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-blackdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-blackdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Black Cost" id="airEquity-fltr-block-blackcost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-blackcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-blackcost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Asian Cost" id="airEquity-fltr-block-asiandmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-asiandmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-asiandmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Asian Cost" id="airEquity-fltr-block-asiancost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-asiancost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-asiancost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Native Cost" id="airEquity-fltr-block-nativedmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nativedmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nativedmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Native Cost" id="airEquity-fltr-block-nativecost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nativecost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nativecost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Pacific Cost" id="airEquity-fltr-block-pacificdmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-pacificdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-pacificdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Pacific Cost" id="airEquity-fltr-block-pacificcost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-pacificcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-pacificcost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Other Cost" id="airEquity-fltr-block-otherdmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-otherdmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-otherdmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Other Cost" id="airEquity-fltr-block-othercost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-othercost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-othercost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Poverty Cost" id="airEquity-fltr-block-povertydmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-povertydmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-povertydmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Poverty Cost" id="airEquity-fltr-block-povertycost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-povertycost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-povertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-Poverty Cost" id="airEquity-fltr-block-nonpovertydmg">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonpovertydmg-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertydmg-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          <calcite-block collapsible heading="Non-Poverty Cost" id="airEquity-fltr-block-nonpovertycost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonpovertycost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
         </calcite-panel>
