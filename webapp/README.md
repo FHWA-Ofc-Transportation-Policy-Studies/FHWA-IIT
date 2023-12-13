@@ -1,4 +1,4 @@
-# FHWA-ECAT WEBAPP
+# FHWA-IIT WEBAPP
 
 # Requirements
 
@@ -10,7 +10,7 @@ Make sure your computer has Node.js installed. Free download is available at htt
 
 Upon cloning the repository, run `npm install` in the command line, making sure you are in the root folder of the webapp in the repository.
 
-For example, if the repository is in `FHWA-ECAT`, make sure you are in `FHWA-ECAT/webapp` when running commands
+For example, if the repository is in `FHWA-IIT`, make sure you are in `FHWA-IIT/webapp` when running commands
 
 ## Step 2
 
