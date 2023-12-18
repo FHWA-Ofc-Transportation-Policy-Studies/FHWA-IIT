@@ -16,8 +16,8 @@ import * as promiseUtils from '@arcgis/core/core/promiseUtils'
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils'
 import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils'
 
-import settings from '../config/settings.json'
-import start_locations from '../config/start_locations.json'
+import settings from './config/settings.json'
+import start_locations from './config/start_locations.json'
 import {
     farsLayer,
     noiseCostLayer,
@@ -97,6 +97,7 @@ import '@esri/calcite-components/dist/components/calcite-tree-item'
 
 import '@arcgis/core/assets/esri/themes/light/main.css'
 import '@esri/calcite-components/dist/calcite/calcite.css'
+import './style.css'
 
 import Point from '@arcgis/core/geometry/Point'
 import Layer from '@arcgis/core/layers/Layer'
@@ -108,8 +109,6 @@ import Query from '@arcgis/core/rest/support/Query'
 // ========================================================
 //                Region: Global Variables
 // ========================================================
-
-esriConfig.apiKey = import.meta.env.VITE_API_KEY
 
 export let activeActionId: string | null = null
 
@@ -153,7 +152,7 @@ let universitiesLayerView: FeatureLayerView
 let redliningLayerView: FeatureLayerView
 
 // for dc
-const start_location = start_locations[settings["start_location"]]
+const start_location = start_locations[settings["START_LOCATION"]]
 export const defaultZoomLevel: number = start_location.zoom
 export const defaultCenterPoint = new Point({ x: start_location.longitude, y: start_location.latitude })
 
@@ -176,15 +175,15 @@ function setUpMap() {
             landcoverLayer,
             urbanLayer,
             acsLayer,
+            redliningLayer,
             noiseEquityLayer,
             airEquityLayer,
-            redliningLayer,
             airCostLayer,
             noiseCostLayer,
-            statesLayer,
             publicSchoolsLayer,
             universitiesLayer,
-            farsLayer
+            farsLayer,
+            statesLayer
         ]
     })
 
@@ -2131,29 +2130,16 @@ function onSimpleChartBtnClick(view: MapView) {
 //                      Region: MAIN
 // ========================================================
 
-// set up what's needed to return filter checkboxes to the default state
-let checkboxElements: HTMLCollectionOf<HTMLCalciteCheckboxElement> = document.getElementsByTagName('calcite-checkbox')
-for (let i = 0; i < checkboxElements.length; i++) {
-    defaultCheckBoxState[checkboxElements[i].id] = checkboxElements[i].checked
-}
+esriConfig.apiKey = import.meta.env.VITE_API_KEY
 
-// set up what's needed to return filter sliders to the default state
-let sliderElements = document.getElementsByTagName('calcite-slider')
-for (let i = 0; i < sliderElements.length; i++) {
-    defaultSliderState[sliderElements[i].id] = [sliderElements[i].minValue, sliderElements[i].maxValue]
-}
-
-// DO THIS FOR DEV SO YOU GO RIGHT TO THE APPLICATION.  THIS WILL NOT ALLOW YOU TO GO BACK TO THE INTRO PAGE
-// appPanel.style.display = 'block'
-// entryPanel.style.display = 'none'
-// let view = setUpMap()
-// view.when(onViewReady(view))
-
-//DO THIS FOR PRODUCTION SO YOU START ON THE MAIN PAGE
-let appPanel = document.getElementById('appPanel')
-appPanel!.style.display = 'none'
 let entryPanel = document.getElementById('entryPanel')
 entryPanel!.style.display = 'block'
+//entryPanel!.style.display = 'none'
+
+let appPanel = document.getElementById('appPanel')
+appPanel!.style.display = 'none'
+//appPanel!.style.display = 'block'
+
 document.getElementById('sign-in-btn')!.addEventListener('click', function () {
     appPanel!.style.display = 'block'
     entryPanel!.style.display = 'none'
@@ -2161,37 +2147,33 @@ document.getElementById('sign-in-btn')!.addEventListener('click', function () {
     mapview.when(() => {onViewReady(mapview)})
 })
 
-if (settings.app_mode.toLowerCase() === 'local_dev') {
-    // document.getElementById("devMessageEntryPanel").innerHTML = "LOCAL DEV"
-    // document.getElementById("devMessageAppPanel").innerHTML = "LOCAL DEV"
+if (import.meta.env.MODE == "development" || import.meta.env.MODE == "staging") {
+    //console.log("mode is ", import.meta.env.MODE)
     document.getElementById('devMessageEntryPanel')!.innerHTML = 'DEVELOPMENT'
     document.getElementById('devMessageAppPanel')!.innerHTML = 'DEVELOPMENT'
 }
 
-if (settings.app_mode.toLowerCase() === 'deployed_dev') {
-    document.getElementById('devMessageEntryPanel')!.innerHTML = 'DEVELOPMENT'
-    document.getElementById('devMessageAppPanel')!.innerHTML = 'DEVELOPMENT'
-}
-
-if (
-    settings.app_mode.toLowerCase() === 'local_dev' ||
-    settings.app_mode.toLowerCase() === 'deployed_dev'
-) {
-    document.getElementById('devMessageEntryPanel')!.onclick = function () {
-        let modal = document.getElementById('updatesModal') as HTMLCalciteModalElement
-        modal!.open = true
-    }
-}
-
-document.querySelectorAll('[id=versionName]').forEach((node) => {
-    node.innerHTML = settings.version
-})
 
 document.querySelectorAll('[id=versionDate]').forEach((node) => {
-    node.innerHTML = settings.date
+    node.innerHTML = settings.VERSION_DATE
 })
 
-document.getElementById('updatesModalOkBtn')!.onclick = function () {
-    let modal = document.getElementById('updatesModal') as HTMLCalciteModalElement
-        modal!.open = false
+document.querySelectorAll('[id=versionName]').forEach((node) => {
+    node.innerHTML = settings.VERSION_NAME
+})
+
+
+// set up what's needed to return filter checkboxes to the default state
+let checkboxElements: HTMLCollectionOf<HTMLCalciteCheckboxElement> = document.getElementsByTagName('calcite-checkbox')
+for (let i = 0; i < checkboxElements.length; i++) {
+    defaultCheckBoxState[checkboxElements[i].id] = checkboxElements[i].checked
+}
+
+// set up what's needed to return filter sliders to the default state
+let sliderElements: HTMLCollectionOf<HTMLCalciteSliderElement> = document.getElementsByTagName('calcite-slider')
+for (let i = 0; i < sliderElements.length; i++) {
+    let sliderElem = sliderElements[i]
+    if (sliderElem) {
+        defaultSliderState[sliderElem.id] = [sliderElements[i].minValue, sliderElements[i].maxValue]
+    }
 }

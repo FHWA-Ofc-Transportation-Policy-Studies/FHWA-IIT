@@ -1,9 +1,14 @@
 {
-    "app_mode": "LOCAL_DEV",
-    "version" : "beta 1.1", 
-    "date": "December 12, 2023",
-    "start_location": "DC",
+  
+  
+    "VERSION_NAME" : "beta 1.1 - for review", 
+    
+    "VERSION_DATE": "December 18, 2023",
+
+    "START_LOCATION": "DC",
+
     "_COMMENT": "The order of layers matters, since they dictate in which order field names are replaced when displaying filters",
+
     "layers": [
         {
             "fullName": "FARS (number of crashes)",
