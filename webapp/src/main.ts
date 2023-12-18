@@ -1,5 +1,5 @@
 // ========================================================
-//                     Region: Imports
+//#region                   IMPORTS
 // ========================================================
 import esriConfig from '@arcgis/core/config'
 import Basemap from '@arcgis/core/Basemap'
@@ -107,7 +107,7 @@ import Query from '@arcgis/core/rest/support/Query'
 //#endregion
 
 // ========================================================
-//                Region: Global Variables
+//#region                GLOBAL VARIABLES
 // ========================================================
 
 export let activeActionId: string | null = null
@@ -164,7 +164,7 @@ let streetViewCursorDiv: HTMLElement
 //#endregion
 
 // ========================================================
-//                   Region: CORE SETUP
+//#region                  CORE SETUP
 // ========================================================
 
 function setUpMap() {
@@ -689,12 +689,14 @@ function initWidgets(view: MapView) {
 
             filterModalTitle!.innerHTML = getFullNameForLayerFromShortName(shortLayerName) + ' filter'
 
-            let theLayerView = eval(shortLayerName + 'LayerView')
+            let theLayerView = getLayerViewFromShortName(shortLayerName)
+
+            if (!theLayerView) return
 
             if (!theLayerView.filter.where) {
                 filterModalContent!.innerHTML = 'No filter defined, showing all features'
             } else {
-                console.log(theLayerView.filter)
+                //console.log(theLayerView.filter)
                 let filterDescription: string = theLayerView.filter.where
                 all_selectors.forEach((sel) => {
                     // console.log("trying to replace", sel.fieldName, "with", sel.fieldLabel)
@@ -1259,7 +1261,7 @@ function initLeftActionBarEvents(view: MapView) {
 //#endregion
 
 // ========================================================
-//                 Region: OTHER FUNCTIONS
+//#region                OTHER FUNCTIONS
 // ========================================================
 
 function wireUpOnLayerVisibilityChanges() {
@@ -1476,10 +1478,42 @@ function wireUpPresetButtonViews(view: MapView) {
 
 }
 
+/**
+ * get the layerview given the shortname
+ */
+function getLayerViewFromShortName(shortName: string): FeatureLayerView | null {
+    switch (shortName) {
+        case 'fars':
+            return farsLayerView
+        case 'acs':
+            return acsLayerView
+        case 'urban':
+            return urbanLayerView
+        case 'noiseCost':
+            return noiseCostLayerView
+        case 'noiseEquity':
+            return noiseEquityLayerView
+        case 'airCost':
+            return airCostLayerView
+        case 'airEquity':
+            return airEquityLayerView
+        case 'states':
+            return statesLayerView
+        case 'publicSchools':
+            return publicSchoolsLayerView
+        case 'universities':
+            return universitiesLayerView
+        case 'redlining':
+            return redliningLayerView
+        default:
+            return null
+    }
+}
+
 //#endregion
 
 // ========================================================
-//                   Region: FILTERS
+//#region                   FILTERS
 // ========================================================
 
 function filterBlockClick(event: Event) {
@@ -1745,7 +1779,8 @@ function updateFilterForStandardLayer(layerToUpdate: string) {
     // console.log("====  updateFilterForStandardLayer ", layerToUpdate);
     let theQuery = getLayerFilter(layerToUpdate)
     // console.log('the query for ', layerToUpdate, 'is ', theQuery)
-    let theLayerView = eval(layerToUpdate + 'LayerView')
+    let theLayerView = getLayerViewFromShortName(layerToUpdate)
+    if (!theLayerView) return
     theLayerView.filter = { where: theQuery }
     // console.log("====  DONE updateFilterForStandardLayer ", layerToUpdate);
 }
@@ -1851,7 +1886,7 @@ function filterStatesSetup() {
 //#endregion
 
 // ========================================================
-//              Region: Simple Summary Chart
+//#region              SIMPLE SUMMARY CHART
 // ========================================================
 
 async function simpleSummaryUpdateStat(aLayerView: FeatureLayerView, view: MapView, sumField: string, htmlTag: string) {
@@ -1876,7 +1911,7 @@ async function simpleSummaryUpdateStat(aLayerView: FeatureLayerView, view: MapVi
         query.geometry = view.extent
     }
 
-    query.spatialRelationship = 'within'
+    //query.spatialRelationship = 'within'
 
     aLayerView
         .queryFeatures(query)
@@ -2111,7 +2146,7 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
 }
 
 function onSimpleChartBtnClick(view: MapView) {
-    //console.log('on simple summary btn with view', view)
+    //console.log('on simple summary btn with view')
 
     simpleSummaryUpdateAcsStat(view.extent)
     simpleSummaryUpdateStat(farsLayerView, view, 'FATALS', 'simple-summary-farsfatals')
@@ -2127,7 +2162,7 @@ function onSimpleChartBtnClick(view: MapView) {
 //#endregion
 
 // ========================================================
-//                      Region: MAIN
+//#region                      MAIN
 // ========================================================
 
 esriConfig.apiKey = import.meta.env.VITE_API_KEY
@@ -2177,3 +2212,5 @@ for (let i = 0; i < sliderElements.length; i++) {
         defaultSliderState[sliderElem.id] = [sliderElements[i].minValue, sliderElements[i].maxValue]
     }
 }
+
+//#endregion
