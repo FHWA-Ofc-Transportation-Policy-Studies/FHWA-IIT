@@ -535,7 +535,7 @@ export let urbanRender = {
 
 export let noiseRenderer = {
     type: 'unique-value',
-    field: 'bin_dl',
+    field: 'bin_cl',
     defaultSymbol: {
         type: 'simple-line',
         color: '#ffa200',
@@ -577,7 +577,7 @@ noiseRenderer.orderByClassesEnabled = true;
 
 export let airRenderer = {
     type: 'unique-value',
-    field: 'bin_dl',
+    field: 'bin_cl',
     defaultSymbol: {
         type: 'simple-line',
         color: '#00CCFF',
@@ -742,7 +742,7 @@ export let noiseEquityRendererNonWhite = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'nonwhite_n',
+            field: 'nonwhite_e',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Nonwhite" }
         }  as __esri.VisualVariableProperties
@@ -754,7 +754,7 @@ export let airEquityRendererNonWhite = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'nonwhite_n',
+            field: 'nonwhite_e',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Nonwhite" }
         }  as __esri.VisualVariableProperties
@@ -766,7 +766,7 @@ export let noiseEquityRendererWhite = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'white_ndp',
+            field: 'white_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - White" }
         }  as __esri.VisualVariableProperties
@@ -778,7 +778,7 @@ export let airEquityRendererWhite = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'white_ndp',
+            field: 'white_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - White" }
         }  as __esri.VisualVariableProperties
@@ -790,7 +790,7 @@ export let noiseEquityRendererBlack = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'black_ndp',
+            field: 'black_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Black" }
         }  as __esri.VisualVariableProperties
@@ -802,7 +802,7 @@ export let airEquityRendererBlack = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'black_ndp',
+            field: 'black_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Black" }
         }  as __esri.VisualVariableProperties
@@ -814,7 +814,7 @@ export let noiseEquityRendererAsian = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'asian_ndp',
+            field: 'asian_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Asian" }
         }  as __esri.VisualVariableProperties
@@ -826,7 +826,7 @@ export let airEquityRendererAsian = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'asian_ndp',
+            field: 'asian_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Asian" }
         }  as __esri.VisualVariableProperties
@@ -838,7 +838,7 @@ export let noiseEquityRendererNative = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'native_ndp',
+            field: 'native_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Native" }
         }  as __esri.VisualVariableProperties
@@ -850,7 +850,7 @@ export let airEquityRendererNative = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'native_ndp',
+            field: 'native_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Native" }
         }  as __esri.VisualVariableProperties
@@ -862,7 +862,7 @@ export let noiseEquityRendererPacific = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'pacific_nd',
+            field: 'pacific_eq',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Pacific" }
         }  as __esri.VisualVariableProperties
@@ -874,7 +874,7 @@ export let airEquityRendererPacific = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'pacific_nd',
+            field: 'pacific_eq',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Pacific" }
         }  as __esri.VisualVariableProperties
@@ -886,7 +886,7 @@ export let noiseEquityRendererOther = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'other_ndp',
+            field: 'other_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Other" }
         }  as __esri.VisualVariableProperties
@@ -898,7 +898,7 @@ export let airEquityRendererOther = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'other_ndp',
+            field: 'other_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Other" }
         }  as __esri.VisualVariableProperties
@@ -910,7 +910,7 @@ export let noiseEquityRendererNonPoverty = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'nonpoverty',
+            field: 'npvrty_eqr',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Nonpoverty" }
         }  as __esri.VisualVariableProperties
@@ -922,7 +922,7 @@ export let airEquityRendererNonPoverty = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'nonpoverty',
+            field: 'npvrty_eqr',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Nonpoverty" }
         }  as __esri.VisualVariableProperties
@@ -934,7 +934,7 @@ export let noiseEquityRendererPoverty = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'poverty_nd',
+            field: 'poverty_eq',
             stops: noiseEquityStops,
             legendOptions: { title: "Noise Equity Ratio - Poverty" }
         }  as __esri.VisualVariableProperties
@@ -946,7 +946,7 @@ export let airEquityRendererPoverty = new SimpleRenderer({
     visualVariables: [
         {
             type: 'color',
-            field: 'poverty_nd',
+            field: 'poverty_eq',
             stops: airEquityStops,
             legendOptions: { title: "Air Equity Ratio - Poverty" }
         }  as __esri.VisualVariableProperties

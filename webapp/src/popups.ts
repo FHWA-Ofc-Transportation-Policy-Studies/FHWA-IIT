@@ -36,7 +36,7 @@ function costPopupTemplateContentFunction(feature: any) {
             costDescrip = 'unknown fuction class'
     }
 
-    switch (feature.graphic.attributes.bin_dl) {
+    switch (feature.graphic.attributes.bin_cl) {
         case 1:
             costBin = '1 (<= $100)'
             break
@@ -92,7 +92,7 @@ export let noisePopupTemplate = {
         { fieldName: 'ROUTE_NUMB' },
         { fieldName: 'F_SYSTEM' },
         { fieldName: 'FACILITY_T' },
-        { fieldName: 'bin_dl' }
+        { fieldName: 'bin_cl' }
     ]
 }
 
@@ -105,7 +105,7 @@ export let airPopupTemplate = {
         { fieldName: 'ROUTE_NUMB' },
         { fieldName: 'F_SYSTEM' },
         { fieldName: 'FACILITY_T' },
-        { fieldName: 'bin_dl' }
+        { fieldName: 'bin_cl' }
     ]
 }
 
@@ -121,93 +121,98 @@ export let noiseEquityPopupTemplate = {
                 { fieldName: 'name', label: 'County' },
                 { fieldName: 'GEOID', label: 'County FIPS' },
                 {
-                    fieldName: 'nonwhite_n',
+                    fieldName: 'nonwhite_e',
                     label: 'Noise Equity Ratio: Nonwhite',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'white_ndp',
+                    fieldName: 'white_eqr',
                     label: 'Noise Equity Ratio: White',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'black_ndp',
+                    fieldName: 'black_eqr',
                     label: 'Noise Equity Ratio: Black',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'asian_ndp',
+                    fieldName: 'asian_eqr',
                     label: 'Noise Equity Ratio: Asian',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'native_ndp',
+                    fieldName: 'native_eqr',
                     label: 'Noise Equity Ratio: Native',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'pacific_nd',
+                    fieldName: 'pacific_eq',
                     label: 'Noise Equity Ratio: Pacific',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'other_ndp',
+                    fieldName: 'other_eqr',
                     label: 'Noise Equity Ratio: Other',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'poverty_nd',
+                    fieldName: 'poverty_eq',
                     label: 'Noise Equity Ratio: Poverty',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'nonpoverty',
+                    fieldName: 'npvrty_eqr',
                     label: 'Noise Equity Ratio: Nonpoverty',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'nonwhite_d',
+                    fieldName: 'nonwhite_c',
                     label: 'Noise Cost: Nonwhite',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'white_dmg',
+                    fieldName: 'white_cst',
                     label: 'Noise Cost: White',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'black_dmg',
+                    fieldName: 'black_cst',
                     label: 'Noise Cost: Black',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'asian_dmg',
+                    fieldName: 'asian_cst',
                     label: 'Noise Cost: Asian',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'native_dmg',
+                    fieldName: 'native_cst',
                     label: 'Noise Cost: Native',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'pacific_dm',
+                    fieldName: 'pacific_cs',
                     label: 'Noise Cost: Pacific',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'other_dmg',
+                    fieldName: 'other_cst',
                     label: 'Noise Cost: Other',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'poverty_dm',
+                    fieldName: 'poverty_cs',
                     label: 'Noise Cost: Poverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'nonpover_1',
+                    fieldName: 'npvrty_cst',
                     label: 'Noise Cost: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'total_cst',
+                    label: 'Noise Cost: Total',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
@@ -251,8 +256,13 @@ export let noiseEquityPopupTemplate = {
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'nonpover_2',
+                    fieldName: 'npvrty_pop',
                     label: 'Population: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'total_pop',
+                    label: 'Population: Total',
                     format: { digitSeparator: true, places: 0 }
                 }
             ]
@@ -271,93 +281,98 @@ export let airEquityPopupTemplate = {
                 { fieldName: 'name', label: 'County' },
                 { fieldName: 'GEOID', label: 'County FIPS' },
                 {
-                    fieldName: 'nonwhite_n',
+                    fieldName: 'nonwhite_e',
                     label: 'Air Equity Ratio: Nonwhite',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'white_ndp',
+                    fieldName: 'white_eqr',
                     label: 'Air Equity Ratio: White',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'black_ndp',
+                    fieldName: 'black_eqr',
                     label: 'Air Equity Ratio: Black',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'asian_ndp',
+                    fieldName: 'asian_eqr',
                     label: 'Air Equity Ratio: Asian',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'native_ndp',
+                    fieldName: 'native_eqr',
                     label: 'Air Equity Ratio: Native',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'pacific_nd',
+                    fieldName: 'pacific_eq',
                     label: 'Air Equity Ratio: Pacific',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'other_ndp',
+                    fieldName: 'other_eqr',
                     label: 'Air Equity Ratio: Other',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'poverty_nd',
+                    fieldName: 'poverty_eq',
                     label: 'Air Equity Ratio: Poverty',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'nonpoverty',
+                    fieldName: 'npvrty_eqr',
                     label: 'Air Equity Ratio: Nonpoverty',
                     format: { digitSeparator: true, places: 2 }
                 },
                 {
-                    fieldName: 'nonwhite_d',
+                    fieldName: 'nonwhite_c',
                     label: 'Air Cost: Nonwhite',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'white_dmg',
+                    fieldName: 'white_cst',
                     label: 'Air Cost: White',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'black_dmg',
+                    fieldName: 'black_cst',
                     label: 'Air Cost: Black',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'asian_dmg',
+                    fieldName: 'asian_cst',
                     label: 'Air Cost: Asian',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'native_dmg',
+                    fieldName: 'native_cst',
                     label: 'Air Cost: Native',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'pacific_dm',
+                    fieldName: 'pacific_cs',
                     label: 'Air Cost: Pacific',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'other_dmg',
+                    fieldName: 'other_cst',
                     label: 'Air Cost: Other',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'poverty_dm',
+                    fieldName: 'poverty_cs',
                     label: 'Air Cost: Poverty',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'nonpover_1',
+                    fieldName: 'npvrty_cst',
                     label: 'Air Cost: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'total_cst',
+                    label: 'Air Cost: Total',
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
@@ -401,8 +416,13 @@ export let airEquityPopupTemplate = {
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'nonpover_2',
+                    fieldName: 'npvrty_pop',
                     label: 'Population: Nonpoverty',
+                    format: { digitSeparator: true, places: 0 }
+                },
+                {
+                    fieldName: 'total_pop',
+                    label: 'Population: Total',
                     format: { digitSeparator: true, places: 0 }
                 }
             ]

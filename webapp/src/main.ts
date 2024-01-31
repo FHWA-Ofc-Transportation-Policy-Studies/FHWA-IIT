@@ -2014,16 +2014,16 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
         switch (demographicToUse) {
             case 'pacific':
             case 'poverty':
-                equityCostField = demographicToUse + '_dm'
+                equityCostField = demographicToUse + '_eq'
                 break
             case 'nonwhite':
-                equityCostField = demographicToUse + '_d'
+                equityCostField = demographicToUse + '_e'
                 break
             case 'nonpoverty':
                 equityCostField = 'nonpover_1'
                 break
             default:
-                equityCostField = demographicToUse + '_dmg'
+                equityCostField = demographicToUse + '_eqr'
         }
 
         //console.log(demographicToUse, equityCostField)
@@ -2115,7 +2115,7 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
                 var sumLengthByBin: { [key: number]: number } = {}
 
                 results.features.forEach((result) => {
-                    let bin = result.attributes['bin_dl']
+                    let bin = result.attributes['bin_cl']   // cl = cost per length
                     let len = result.attributes['Shape__Length']
 
                     totalLen += len

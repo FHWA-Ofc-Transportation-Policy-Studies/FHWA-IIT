@@ -87,7 +87,7 @@ export const farsLayer = new FeatureLayer({
 
 export const noiseCostLayer = new FeatureLayer({
     title: 'Noise Cost',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_bin_reduced_simplified_00005/FeatureServer/0',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost/FeatureServer',
     visible: true,
     outFields: ['*'],
     renderer: noiseRenderer as __esri.RendererProperties,
@@ -97,7 +97,7 @@ export const noiseCostLayer = new FeatureLayer({
 
 export const airCostLayer = new FeatureLayer({
     title: 'Air Cost',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost/FeatureServer',
     visible: false,
     outFields: ['*'],
     renderer: airRenderer as __esri.RendererProperties,
@@ -107,7 +107,7 @@ export const airCostLayer = new FeatureLayer({
 
 export const noiseEquityLayer = new FeatureLayer({
     title: 'Noise Equity',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_equity_county/FeatureServer',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost_equity_county/FeatureServer',
     visible: true,
     outFields: ['*'],
     renderer: noiseEquityRendererNonWhite as __esri.RendererProperties,
@@ -117,7 +117,7 @@ export const noiseEquityLayer = new FeatureLayer({
 
 export const airEquityLayer = new FeatureLayer({
     title: 'Air Equity',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost_equity_county/FeatureServer',
     visible: false,
     outFields: ['*'],
     renderer: airEquityRendererNonWhite as __esri.RendererProperties,
