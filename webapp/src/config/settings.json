@@ -54,7 +54,7 @@
             "shortName": "noiseCost",
             "selectors": [
                 {"name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class"},
-                {"name": "cost", "fieldName": "bin_dl", "fieldType": "integer", "fieldLabel": "Noise Cost Bin"}
+                {"name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Noise Cost Bin"}
             ]
         },
         {
@@ -86,7 +86,7 @@
             "shortName": "airCost",
             "selectors": [
                 {"name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class"},
-                {"name": "cost", "fieldName": "bin_dl", "fieldType": "integer", "fieldLabel": "Air Cost Bin"}
+                {"name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Air Cost Bin"}
             ]
         },
         {
