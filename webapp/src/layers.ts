@@ -1,12 +1,6 @@
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
-import {
-    noisePopupTemplate,
-    airPopupTemplate,
-    noiseEquityPopupTemplate,
-    airEquityPopupTemplate,
-    acsPopupTemplate
-} from './popups'
+import { noisePopupTemplate, airPopupTemplate, noiseEquityPopupTemplate, airEquityPopupTemplate, acsPopupTemplate } from './popups'
 
 import {
     farsRender,
@@ -16,11 +10,11 @@ import {
     airEquityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender,
-    universityRenderer,
+    universityRenderer
 } from './renderers'
 
 // ################################################################
-// #REGION: LAYER CREATION
+//#region LAYER CREATION
 
 export const statesLayer = new FeatureLayer({
     title: 'States',
@@ -69,7 +63,7 @@ export const farsLayer = new FeatureLayer({
     outFields: ['*'],
     renderer: farsRender as __esri.RendererProperties,
     //definitionExpression: "fatals = 2",
-    featureReduction: farsClusterConfig as __esri.FeatureReductionBinningProperties & { type: "binning"; },
+    featureReduction: farsClusterConfig as __esri.FeatureReductionBinningProperties & { type: 'binning' },
     popupTemplate: {
         title: 'Fatal Crash ',
         content: [
@@ -127,7 +121,7 @@ export const airEquityLayer = new FeatureLayer({
 
 export const acsLayer = new FeatureLayer({
     title: 'ACS Population',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_ACS_pop_2019/FeatureServer',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_ACS2019_CBG_pop/FeatureServer',
     visible: false,
     outFields: ['*'],
     renderer: acsRendererNonWhite as __esri.RendererProperties,
@@ -161,9 +155,7 @@ export const publicSchoolsLayer = new FeatureLayer({
         content: [
             {
                 type: 'fields',
-                fieldInfos: [
-                    { fieldName: 'NAME', label: 'Name of Public School' },
-                ]
+                fieldInfos: [{ fieldName: 'NAME', label: 'Name of Public School' }]
             }
         ]
     }
@@ -182,7 +174,7 @@ export const universitiesLayer = new FeatureLayer({
                 type: 'fields',
                 fieldInfos: [
                     { fieldName: 'NAME', label: 'Name of University' },
-                    { fieldName: 'TOT_ENROLL', label: 'Total Enrollment' },
+                    { fieldName: 'TOT_ENROLL', label: 'Total Enrollment' }
                 ]
             }
         ]
@@ -199,11 +191,9 @@ export const redliningLayer = new FeatureLayer({
         content: [
             {
                 type: 'fields',
-                fieldInfos: [
-                    { fieldName: 'holc_grade', label: 'HOLC Grade' },
-                ]
+                fieldInfos: [{ fieldName: 'holc_grade', label: 'HOLC Grade' }]
             }
         ]
     }
 })
-// # ENDREGION
+//#endregion

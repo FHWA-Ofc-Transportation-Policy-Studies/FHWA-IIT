@@ -448,49 +448,49 @@ export let acsPopupTemplate = {
                     format: { digitSeparator: true, places: 0 }
                 },
                 {
-                    fieldName: 'nonwhite',
+                    fieldName: 'nonwhite__',
                     label: 'Nonwhite % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'white',
+                    fieldName: 'white__',
                     label: 'White % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'black',
+                    fieldName: 'black__',
                     label: 'Black % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'asian',
+                    fieldName: 'asian__',
                     label: 'Asian % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'native',
+                    fieldName: 'native__',
                     label: 'Native % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'pacific',
+                    fieldName: 'pacific__',
                     label: 'Pacific % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'other',
+                    fieldName: 'other__',
                     label: 'Other % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'poverty',
+                    fieldName: 'poverty__',
                     label: 'Poverty % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 },
                 {
-                    fieldName: 'nonpoverty',
+                    fieldName: 'npvrty__',
                     label: 'Nonpoverty % Population',
-                    format: { digitSeparator: true, places: 2 }
+                    format: { digitSeparator: true, places: 1 }
                 }
             ]
         }

@@ -63,7 +63,7 @@ import {
 } from './renderers'
 
 import { setAssetPath } from '@esri/calcite-components/dist/components'
-setAssetPath("https://js.arcgis.com/calcite-components/1.9.2/assets")
+setAssetPath('https://js.arcgis.com/calcite-components/1.9.2/assets')
 
 import '@esri/calcite-components/dist/components/calcite-action'
 import '@esri/calcite-components/dist/components/calcite-action-bar'
@@ -113,15 +113,15 @@ import Query from '@arcgis/core/rest/support/Query'
 export let activeActionId: string | null = null
 
 // used by reset to set everyting back to how it was at startup
-let defaultCheckBoxState: { [key: string]: boolean }  = {}
+let defaultCheckBoxState: { [key: string]: boolean } = {}
 let defaultSliderState: { [key: string]: [number | undefined, number | undefined] } = {}
 let defaultLayerVisibility: { [key: string]: boolean } = {}
 
 type selectorType = {
-    "name": string,
-    "fieldName": string,
-    "fieldType": string,
-    "fieldLabel": string
+    name: string
+    fieldName: string
+    fieldType: string
+    fieldLabel: string
 }
 
 // used to rename field names when showing the filter present on a layer
@@ -152,7 +152,7 @@ let universitiesLayerView: FeatureLayerView
 let redliningLayerView: FeatureLayerView
 
 // for dc
-const start_location = start_locations[settings["START_LOCATION"]]
+const start_location = start_locations[settings['START_LOCATION']]
 export const defaultZoomLevel: number = start_location.zoom
 export const defaultCenterPoint = new Point({ x: start_location.longitude, y: start_location.latitude })
 
@@ -322,17 +322,13 @@ function onViewReady(view: MapView) {
             //console.log(mp.y.toFixed(3), mp.x.toFixed(3) + ', zoom level ' + view.zoom) // lat lon
             if (activeActionId == 'streetview') {
                 //let url = "https://maps.google.com?q=" + mp.y.toFixed(4) + "," + mp.x.toFixed(4)
-                let url =
-                    'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' +
-                    mp.y.toFixed(4) +
-                    ',' +
-                    mp.x.toFixed(4)
+                let url = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + mp.y.toFixed(4) + ',' + mp.x.toFixed(4)
 
                 window.open(url, '_blank')
 
                 // stree view is a one shot deal, set it to no longer be
                 activeActionId = null
-                
+
                 let streetViewAction = document.querySelector('[data-action-id="streetview"]') as HTMLCalciteActionElement
                 streetViewAction!.active = false
                 // TODO unselect button
@@ -380,20 +376,7 @@ function onViewReady(view: MapView) {
                 universitiesLayerView.updating,
                 redliningLayerView.updating
             ],
-            ([
-                stationary,
-                statesU,
-                farsU,
-                noiseCostU,
-                noiseEquityU,
-                airCostU,
-                airEquityU,
-                acsU,
-                urbanU,
-                schoolsU,
-                universitiesU,
-                redliningU
-            ]) => {
+            ([stationary, statesU, farsU, noiseCostU, noiseEquityU, airCostU, airEquityU, acsU, urbanU, schoolsU, universitiesU, redliningU]) => {
                 if (
                     stationary &&
                     !statesU &&
@@ -415,7 +398,7 @@ function onViewReady(view: MapView) {
 
                         document.getElementById('updating_spinner')!.style.display = 'none'
 
-                        let simpleSummaryButton = document.getElementById('simple-summary-btn') as HTMLCalciteButtonElement 
+                        let simpleSummaryButton = document.getElementById('simple-summary-btn') as HTMLCalciteButtonElement
                         simpleSummaryButton!.disabled = false
 
                         updatesRelatedToUpdatedViewComplete = true
@@ -428,19 +411,19 @@ function onViewReady(view: MapView) {
 
                     document.getElementById('updating_spinner')!.style.display = 'block'
 
-                    let simpleSummaryButton = document.getElementById('simple-summary-btn') as HTMLCalciteButtonElement 
-                        simpleSummaryButton!.disabled = true
+                    let simpleSummaryButton = document.getElementById('simple-summary-btn') as HTMLCalciteButtonElement
+                    simpleSummaryButton!.disabled = true
 
                     // if the simple summary is open
                     let simpleChartPanel = document.querySelector("[data-panel-id='simpleChart']") as HTMLCalcitePanelElement
-                    if (!(simpleChartPanel!.hidden)) {
+                    if (!simpleChartPanel!.hidden) {
                         document.getElementById('simple-summary-acs')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-farsfatals')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-noiseCost')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-noiseEquity')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-airCost')!.innerHTML = '&nbsp;'
                         document.getElementById('simple-summary-airEquity')!.innerHTML = '&nbsp;'
-                        
+
                         // gets the element which will contain the warning that the simple summary must be updated
                         let updateText = document.getElementsByClassName('simple-summary-canvas-container')[0]
                         updateText!.innerHTML = ''
@@ -448,7 +431,7 @@ function onViewReady(view: MapView) {
                         // this event fires many times, only append this text once
                         var isEmpty = updateText!.innerHTML.trim() === ''
                         if (isEmpty) {
-                            updateText!.innerHTML = 
+                            updateText!.innerHTML =
                                 '<h3 style="font-weight:normal;padding: 0px; margin: 0px">A change has been made which has invalidated the summary statistics.  When ready please click the update button.</h3>'
                         }
                     }
@@ -459,29 +442,25 @@ function onViewReady(view: MapView) {
         // when the layers panel is dismissed collapse the expanded actions (I think only one layer
         // can have expanded actions but it's much cleaner to come back and have none expanded) as well
         // as its transparency sliders
-        document
-            .querySelector("[data-panel-id='layers']")!
-            .addEventListener('CalcitePanelClose', function (event) {
-                let panel = event.target as HTMLCalcitePanelElement
-                if (panel.closed == false) {
-                    layerList.operationalItems.forEach((item) => {
-                        item.actionsOpen = false
-                        item.panel.open = false
-                    })
-                    // close the panel
-                    panel.closed = true
-                } 
-            })
+        document.querySelector("[data-panel-id='layers']")!.addEventListener('CalcitePanelClose', function (event) {
+            let panel = event.target as HTMLCalcitePanelElement
+            if (panel.closed == false) {
+                layerList.operationalItems.forEach((item) => {
+                    item.actionsOpen = false
+                    item.panel.open = false
+                })
+                // close the panel
+                panel.closed = true
+            }
+        })
 
         // what to do when the X in the upper right hand of the simple summary is pressed
-        document
-            .querySelector("[data-panel-id='simpleChart']")!
-            .addEventListener('calcitePanelDismissedChange', function (event) {
-                let panel = event.target as HTMLCalcitePanelElement
-                if (panel.closed === true) {
-                    panel.hidden = true
-                }
-            })
+        document.querySelector("[data-panel-id='simpleChart']")!.addEventListener('calcitePanelDismissedChange', function (event) {
+            let panel = event.target as HTMLCalcitePanelElement
+            if (panel.closed === true) {
+                panel.hidden = true
+            }
+        })
     })
 }
 
@@ -515,10 +494,7 @@ function initWidgets(view: MapView) {
                         symbologyPanel.closed = true
                     })
 
-                    if (
-                        filterPanel.id ==
-                        getShortNameForLayerFromFullName(event.item.layer.title) + '-fltr-panel'
-                    ) { 
+                    if (filterPanel.id == getShortNameForLayerFromFullName(event.item.layer.title) + '-fltr-panel') {
                         if (filterPanel.closed == true || filterPanel.hidden == true) {
                             // open the filter panel
                             filterPanel.hidden = false
@@ -553,11 +529,7 @@ function initWidgets(view: MapView) {
                 // iterate through all filter panels and hide all others and show the one of interest
                 document.querySelectorAll('[id$=symbology-panel]').forEach((node) => {
                     let symbologyPanel = node as HTMLCalcitePanelElement
-                    if (
-                        symbologyPanel.id ==
-                        getShortNameForLayerFromFullName(event.item.layer.title) +
-                            '-symbology-panel'
-                    ) {
+                    if (symbologyPanel.id == getShortNameForLayerFromFullName(event.item.layer.title) + '-symbology-panel') {
                         if (symbologyPanel.hidden === true) {
                             symbologyPanel.hidden = false
                             symbologyPanel.closed = false
@@ -640,7 +612,7 @@ function initWidgets(view: MapView) {
                 suggestionsEnabled: true,
                 categories: ['LatLong']
             } as __esri.SearchSourceProperties
-        ] 
+        ]
     })
 
     searchWidget.on('select-result', function (event) {
@@ -711,12 +683,12 @@ function initWidgets(view: MapView) {
 
     // WIRE UP SIMPLE SUMMARY INFO MODAL
     document.getElementById('simple-summary-info')!.addEventListener('click', function (e) {
-        (document.getElementById('simple-summary-info-modal') as HTMLCalciteModalElement)!.open = true
+        ;(document.getElementById('simple-summary-info-modal') as HTMLCalciteModalElement)!.open = true
     })
 
     // WIRE UP GLOBL RESET ON CLICKING THE YES BUTTON
     document.getElementById('reset-all-modal-yes-btn')!.addEventListener('click', function (e) {
-        (document.getElementById('reset-all-modal') as HTMLCalciteModalElement).open = false
+        ;(document.getElementById('reset-all-modal') as HTMLCalciteModalElement).open = false
 
         // reset extent
         // ------------
@@ -748,42 +720,40 @@ function initWidgets(view: MapView) {
     })
 
     // WIRE UP ACS SYMBOLOGY EVENT
-    document
-        .getElementById('acs-symbology-select')!
-        .addEventListener('calciteSelectChange', function (event) {
-            let acsSymbologySelect = event.target as HTMLCalciteSelectElement
-            switch (acsSymbologySelect.value) {
-                case 'acsRendererNonWhite':
-                    acsLayer.renderer = acsRendererNonWhite
-                    break
-                case 'acsRendererWhite':
-                    acsLayer.renderer = acsRendererWhite
-                    break
-                case 'acsRendererBlack':
-                    acsLayer.renderer = acsRendererBlack
-                    break
-                case 'acsRendererAsian':
-                    acsLayer.renderer = acsRendererAsian
-                    break
-                case 'acsRendererNative':
-                    acsLayer.renderer = acsRendererNative
-                    break
-                case 'acsRendererPacific':
-                    acsLayer.renderer = acsRendererPacific
-                    break
-                case 'acsRendererOther':
-                    acsLayer.renderer = acsRendererOther
-                    break
-                case 'acsRendererNonPoverty':
-                    acsLayer.renderer = acsRendererNonPoverty
-                    break
-                case 'acsRendererPoverty':
-                    acsLayer.renderer = acsRendererPoverty
-                    break
-                default:
-                    acsLayer.renderer = acsRendererNonWhite
-            }
-        })
+    document.getElementById('acs-symbology-select')!.addEventListener('calciteSelectChange', function (event) {
+        let acsSymbologySelect = event.target as HTMLCalciteSelectElement
+        switch (acsSymbologySelect.value) {
+            case 'acsRendererNonWhite':
+                acsLayer.renderer = acsRendererNonWhite
+                break
+            case 'acsRendererWhite':
+                acsLayer.renderer = acsRendererWhite
+                break
+            case 'acsRendererBlack':
+                acsLayer.renderer = acsRendererBlack
+                break
+            case 'acsRendererAsian':
+                acsLayer.renderer = acsRendererAsian
+                break
+            case 'acsRendererNative':
+                acsLayer.renderer = acsRendererNative
+                break
+            case 'acsRendererPacific':
+                acsLayer.renderer = acsRendererPacific
+                break
+            case 'acsRendererOther':
+                acsLayer.renderer = acsRendererOther
+                break
+            case 'acsRendererNonPoverty':
+                acsLayer.renderer = acsRendererNonPoverty
+                break
+            case 'acsRendererPoverty':
+                acsLayer.renderer = acsRendererPoverty
+                break
+            default:
+                acsLayer.renderer = acsRendererNonWhite
+        }
+    })
 
     let equityLayers = [noiseEquityLayer, airEquityLayer]
     let equitySymbologyElements = ['noiseEquity-symbology-select', 'airEquity-symbology-select']
@@ -791,69 +761,67 @@ function initWidgets(view: MapView) {
     for (let i = 0; i < equityLayers.length; i++) {
         let equityLayer = equityLayers[i]
         let equitySymbologyEl = equitySymbologyElements[i]
-        document
-            .getElementById(equitySymbologyEl)!
-            .addEventListener('calciteSelectChange', function (event) {
-                let equitySymbologySelect = event.target as HTMLCalciteSelectElement
-                switch (equitySymbologySelect.value) {
-                    case 'noiseEquityRendererNonWhite':
-                        equityLayer.renderer = noiseEquityRendererNonWhite
-                        break
-                    case 'noiseEquityRendererWhite':
-                        equityLayer.renderer = noiseEquityRendererWhite
-                        break
-                    case 'noiseEquityRendererBlack':
-                        equityLayer.renderer = noiseEquityRendererBlack
-                        break
-                    case 'noiseEquityRendererAsian':
-                        equityLayer.renderer = noiseEquityRendererAsian
-                        break
-                    case 'noiseEquityRendererNative':
-                        equityLayer.renderer = noiseEquityRendererNative
-                        break
-                    case 'noiseEquityRendererPacific':
-                        equityLayer.renderer = noiseEquityRendererPacific
-                        break
-                    case 'noiseEquityRendererOther':
-                        equityLayer.renderer = noiseEquityRendererOther
-                        break
-                    case 'noiseEquityRendererNonPoverty':
-                        equityLayer.renderer = noiseEquityRendererNonPoverty
-                        break
-                    case 'noiseEquityRendererPoverty':
-                        equityLayer.renderer = noiseEquityRendererPoverty
-                        break
-                    case 'airEquityRendererNonWhite':
-                        equityLayer.renderer = airEquityRendererNonWhite
-                        break
-                    case 'airEquityRendererWhite':
-                        equityLayer.renderer = airEquityRendererWhite
-                        break
-                    case 'airEquityRendererBlack':
-                        equityLayer.renderer = airEquityRendererBlack
-                        break
-                    case 'airEquityRendererAsian':
-                        equityLayer.renderer = airEquityRendererAsian
-                        break
-                    case 'airEquityRendererNative':
-                        equityLayer.renderer = airEquityRendererNative
-                        break
-                    case 'airEquityRendererPacific':
-                        equityLayer.renderer = airEquityRendererPacific
-                        break
-                    case 'airEquityRendererOther':
-                        equityLayer.renderer = airEquityRendererOther
-                        break
-                    case 'airEquityRendererNonPoverty':
-                        equityLayer.renderer = airEquityRendererNonPoverty
-                        break
-                    case 'airEquityRendererPoverty':
-                        equityLayer.renderer = airEquityRendererPoverty
-                        break
-                    default:
-                        equityLayer.renderer = airEquityRendererNonWhite
-                }
-            })
+        document.getElementById(equitySymbologyEl)!.addEventListener('calciteSelectChange', function (event) {
+            let equitySymbologySelect = event.target as HTMLCalciteSelectElement
+            switch (equitySymbologySelect.value) {
+                case 'noiseEquityRendererNonWhite':
+                    equityLayer.renderer = noiseEquityRendererNonWhite
+                    break
+                case 'noiseEquityRendererWhite':
+                    equityLayer.renderer = noiseEquityRendererWhite
+                    break
+                case 'noiseEquityRendererBlack':
+                    equityLayer.renderer = noiseEquityRendererBlack
+                    break
+                case 'noiseEquityRendererAsian':
+                    equityLayer.renderer = noiseEquityRendererAsian
+                    break
+                case 'noiseEquityRendererNative':
+                    equityLayer.renderer = noiseEquityRendererNative
+                    break
+                case 'noiseEquityRendererPacific':
+                    equityLayer.renderer = noiseEquityRendererPacific
+                    break
+                case 'noiseEquityRendererOther':
+                    equityLayer.renderer = noiseEquityRendererOther
+                    break
+                case 'noiseEquityRendererNonPoverty':
+                    equityLayer.renderer = noiseEquityRendererNonPoverty
+                    break
+                case 'noiseEquityRendererPoverty':
+                    equityLayer.renderer = noiseEquityRendererPoverty
+                    break
+                case 'airEquityRendererNonWhite':
+                    equityLayer.renderer = airEquityRendererNonWhite
+                    break
+                case 'airEquityRendererWhite':
+                    equityLayer.renderer = airEquityRendererWhite
+                    break
+                case 'airEquityRendererBlack':
+                    equityLayer.renderer = airEquityRendererBlack
+                    break
+                case 'airEquityRendererAsian':
+                    equityLayer.renderer = airEquityRendererAsian
+                    break
+                case 'airEquityRendererNative':
+                    equityLayer.renderer = airEquityRendererNative
+                    break
+                case 'airEquityRendererPacific':
+                    equityLayer.renderer = airEquityRendererPacific
+                    break
+                case 'airEquityRendererOther':
+                    equityLayer.renderer = airEquityRendererOther
+                    break
+                case 'airEquityRendererNonPoverty':
+                    equityLayer.renderer = airEquityRendererNonPoverty
+                    break
+                case 'airEquityRendererPoverty':
+                    equityLayer.renderer = airEquityRendererPoverty
+                    break
+                default:
+                    equityLayer.renderer = airEquityRendererNonWhite
+            }
+        })
     }
 
     document.querySelectorAll('[id$=-fltr-panel]').forEach((node) => {
@@ -1189,9 +1157,9 @@ function initLeftActionBarEvents(view: MapView) {
             // if any of the other panels are open then close them (this could be refactored!!)
             for (let i = 0; i < complexActions.length; ++i) {
                 let dataPanel: HTMLCalcitePanelElement | null = document.querySelector(`[data-panel-id=${complexActions[i]}]`)
-                
-                if(!dataPanel) return
-                
+
+                if (!dataPanel) return
+
                 if (dataPanel.hidden !== true || dataPanel.closed !== true) {
                     dataPanel.hidden = true
                     dataPanel.closed = true
@@ -1222,12 +1190,7 @@ function initLeftActionBarEvents(view: MapView) {
                         // when the simple summary is opened update everything on it
                         if (activeActionId == 'simpleChart') {
                             simpleSummaryUpdateAcsStat(view.extent)
-                            simpleSummaryUpdateStat(
-                                farsLayerView,
-                                view,
-                                'FATALS',
-                                'simple-summary-farsfatals'
-                            )
+                            simpleSummaryUpdateStat(farsLayerView, view, 'FATALS', 'simple-summary-farsfatals')
                             simpleSummaryUpdateEquityStat(view.extent)
                             simpleSummaryUpdateCostStat(view.extent)
                         }
@@ -1252,9 +1215,7 @@ function initLeftActionBarEvents(view: MapView) {
 
     // iterate through all of the left action bar actions and set up their events
     for (let i = 0; i < allActions.length; ++i) {
-        document
-            .querySelector(`[data-action-id=${allActions[i]}]`)!
-            .addEventListener('click', leftActionBarEvent)
+        document.querySelector(`[data-action-id=${allActions[i]}]`)!.addEventListener('click', leftActionBarEvent)
     }
 }
 
@@ -1392,7 +1353,7 @@ function getFieldNameAndTypeForSelectId(shortName: string, selectorName: string)
     return [fieldName, fieldType]
 }
 
-function resetFilters(){
+function resetFilters() {
     // reset filters
     // -------------
     settings['layers']
@@ -1430,7 +1391,7 @@ function resetFilters(){
     })
 }
 
-function resetSymbology(){
+function resetSymbology() {
     // reset layer symbologies
     airEquityLayer.renderer = airEquityRendererNonWhite
     noiseEquityLayer.renderer = noiseEquityRendererNonWhite
@@ -1439,7 +1400,7 @@ function resetSymbology(){
     // reset symbology dropdowns
     for (let i = 0; i < layersWithSymbology.length; i++) {
         let selectElement = document.getElementById(layersWithSymbology[i] + '-symbology-select') as HTMLCalciteSelectElement
-        selectElement.value = layersWithSymbology[i] + "RendererNonWhite"
+        selectElement.value = layersWithSymbology[i] + 'RendererNonWhite'
     }
 
     // if any symbology panel is open close it
@@ -1448,12 +1409,11 @@ function resetSymbology(){
         symbologyPanel.closed = true
         symbologyPanel.hidden = true
     })
-
 }
 
 function wireUpPresetButtonViews(view: MapView) {
     let presetButtons = document.getElementsByClassName('presetViewButton')
-    for(let i = 0; i < presetButtons.length; i++) {
+    for (let i = 0; i < presetButtons.length; i++) {
         let button = presetButtons[i]
         button.addEventListener('click', () => {
             // set layer visibility for this preset view
@@ -1461,7 +1421,7 @@ function wireUpPresetButtonViews(view: MapView) {
             // This is to keep the basemap, which can change, always visible
             let presetName: string = button.id.split('-')[0]
             let presetLayerVisibility = settings.presetViews[presetName]
-             // set layer visibility
+            // set layer visibility
             view.map.allLayers.forEach((l) => {
                 l.visible = presetLayerVisibility[l.title]
                 l.opacity = 1
@@ -1472,10 +1432,8 @@ function wireUpPresetButtonViews(view: MapView) {
 
             resetFilters()
             resetSymbology()
-            
         })
     }
-
 }
 
 /**
@@ -1592,20 +1550,13 @@ function getLayerFilter(shortLayerName: string) {
         //console.log('-------------------------------------');
         //console.log('Building sub part query for filterVariable: ', aFilterVariable);
 
-        const [fieldName, fieldType] = getFieldNameAndTypeForSelectId(
-            shortLayerName,
-            aFilterVariable
-        )
+        const [fieldName, fieldType] = getFieldNameAndTypeForSelectId(shortLayerName, aFilterVariable)
         //console.log("fieldName = ", fieldName, "fieldType = ", fieldType);
 
-        let sliderNodes = document.querySelectorAll(
-            '[id^=' + shortLayerName + '-fltr-sel-' + aFilterVariable + '-slider]'
-        )
+        let sliderNodes = document.querySelectorAll('[id^=' + shortLayerName + '-fltr-sel-' + aFilterVariable + '-slider]')
         //console.log("slider nodes = ", sliderNodes)
 
-        let checkBoxNodes = document.querySelectorAll(
-            '[id^=' + shortLayerName + '-fltr-sel-' + aFilterVariable + '-cb]'
-        )
+        let checkBoxNodes = document.querySelectorAll('[id^=' + shortLayerName + '-fltr-sel-' + aFilterVariable + '-cb]')
         // console.log("checkbox nodes = ", checkBoxNodes)
 
         // SLIDERS
@@ -1641,23 +1592,16 @@ function getLayerFilter(shortLayerName: string) {
             if (atMin && !atMax) {
                 let subQuery = fieldName + ' <= ' + currentMax
                 queryParts.push('(' + subQuery + ')')
-                theSliderLabel!.innerHTML =
-                    ' <= ' + currentMax.toLocaleString() + getUnits(shortLayerName, fieldName as string)
+                theSliderLabel!.innerHTML = ' <= ' + currentMax.toLocaleString() + getUnits(shortLayerName, fieldName as string)
             } else if (!atMin && atMax) {
                 let subQuery = fieldName + ' >= ' + currentMin
                 queryParts.push('(' + subQuery + ')')
-                theSliderLabel!.innerHTML =
-                    ' >= ' + currentMin.toLocaleString() + getUnits(shortLayerName, fieldName as string)
+                theSliderLabel!.innerHTML = ' >= ' + currentMin.toLocaleString() + getUnits(shortLayerName, fieldName as string)
             } else if (!atMin && !atMax) {
-                let subQuery =
-                    fieldName + ' >= ' + currentMin + ' and ' + fieldName + ' <= ' + currentMax
+                let subQuery = fieldName + ' >= ' + currentMin + ' and ' + fieldName + ' <= ' + currentMax
                 queryParts.push('(' + subQuery + ')')
                 theSliderLabel!.innerHTML =
-                    '>= ' +
-                    currentMin.toLocaleString() +
-                    ' and <= ' +
-                    currentMax.toLocaleString() +
-                    getUnits(shortLayerName, fieldName as string)
+                    '>= ' + currentMin.toLocaleString() + ' and <= ' + currentMax.toLocaleString() + getUnits(shortLayerName, fieldName as string)
             } else {
                 theSliderLabel!.innerHTML = 'no filter set'
             }
@@ -1737,7 +1681,7 @@ function getStatesFilter(shortLayerName: string) {
     }
     // 2ALL1901
     else if (shortLayerName === 'noiseCost') {
-        stateAbbrevField = 'STATE_ABB' 
+        stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'airCost') {
         stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'noiseEquity') {
@@ -1800,15 +1744,7 @@ function decisionChange(shortLayerName: string) {
             statesLayerView.filter = null
         }
 
-        let layersToUpdateWhenStateChanges = [
-            'fars',
-            'urban',
-            'noiseCost',
-            'noiseEquity',
-            'airCost',
-            'airEquity',
-            'acs'
-        ]
+        let layersToUpdateWhenStateChanges = ['fars', 'urban', 'noiseCost', 'noiseEquity', 'airCost', 'airEquity', 'acs']
 
         layersToUpdateWhenStateChanges.forEach((layerToUpdateWhenStateChanges) => {
             updateFilterForStandardLayer(layerToUpdateWhenStateChanges)
@@ -1877,7 +1813,7 @@ function filterStatesSetup() {
     let selectNoneBtn = document.querySelector('#states-fltr-stateabb-selectnone-btn')
     selectNoneBtn!.addEventListener('click', function (event) {
         document.querySelectorAll('[id^=states-fltr-sel-stateabb-cb]').forEach((node) => {
-            (node as HTMLCalciteCheckboxElement).checked = false
+            ;(node as HTMLCalciteCheckboxElement).checked = false
         })
         decisionChangeFromEvent(event)
     })
@@ -1979,10 +1915,8 @@ async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
                 sum += result.attributes[demographicToUse] * result.attributes['population']
             })
 
-            document.getElementById('simple-summary-acs-text')!.innerHTML =
-                'ACS Population (' + demographicToUse + ')'
-            document.getElementById('simple-summary-acs')!.innerHTML =
-                Math.round(sum).toLocaleString('en-US')
+            document.getElementById('simple-summary-acs-text')!.innerHTML = 'ACS Population (' + demographicToUse + ')'
+            document.getElementById('simple-summary-acs')!.innerHTML = Math.round(sum).toLocaleString('en-US')
         })
         .catch(function (error) {
             console.log('query failed: ', error)
@@ -1992,10 +1926,7 @@ async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
 async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
     let equityViews = [noiseEquityLayerView, airEquityLayerView]
     let equitySummaryElements = ['simple-summary-noiseEquity', 'simple-summary-airEquity']
-    let equitySummaryTextElements = [
-        'simple-summary-noise-equity-text',
-        'simple-summary-air-equity-text'
-    ]
+    let equitySummaryTextElements = ['simple-summary-noise-equity-text', 'simple-summary-air-equity-text']
 
     for (let i = 0; i < equityViews.length; i++) {
         let equityView = equityViews[i]
@@ -2062,11 +1993,9 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
                     sum += result.attributes[equityCostField]
                 })
 
-                document.getElementById(equitySummaryTextEl)!.innerHTML =
-                    'Total ' + costType + ' Cost (' + demographicToUse + ')'
+                document.getElementById(equitySummaryTextEl)!.innerHTML = 'Total ' + costType + ' Cost (' + demographicToUse + ')'
 
-                document.getElementById(equitySummaryEl)!.innerHTML =
-                    ' $ ' + Math.round(sum).toLocaleString('en-US')
+                document.getElementById(equitySummaryEl)!.innerHTML = ' $ ' + Math.round(sum).toLocaleString('en-US')
             })
             .catch(function (error) {
                 console.log('query failed: ', error)
@@ -2115,7 +2044,7 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
                 var sumLengthByBin: { [key: number]: number } = {}
 
                 results.features.forEach((result) => {
-                    let bin = result.attributes['bin_cl']   // cl = cost per length
+                    let bin = result.attributes['bin_cl'] // cl = cost per length
                     let len = result.attributes['Shape__Length']
 
                     totalLen += len
@@ -2153,7 +2082,6 @@ function onSimpleChartBtnClick(view: MapView) {
     simpleSummaryUpdateEquityStat(view.extent)
     simpleSummaryUpdateCostStat(view.extent)
 
-
     // gets the element which will contain the warning that the simple summary must be updated
     let updateText = document.getElementsByClassName('simple-summary-canvas-container')[0]
     updateText!.innerHTML = ''
@@ -2179,15 +2107,16 @@ document.getElementById('sign-in-btn')!.addEventListener('click', function () {
     appPanel!.style.display = 'block'
     entryPanel!.style.display = 'none'
     let mapview = setUpMap()
-    mapview.when(() => {onViewReady(mapview)})
+    mapview.when(() => {
+        onViewReady(mapview)
+    })
 })
 
-if (import.meta.env.MODE == "development" || import.meta.env.MODE == "staging") {
+if (import.meta.env.MODE == 'development' || import.meta.env.MODE == 'staging') {
     //console.log("mode is ", import.meta.env.MODE)
     document.getElementById('devMessageEntryPanel')!.innerHTML = 'DEVELOPMENT'
     document.getElementById('devMessageAppPanel')!.innerHTML = 'DEVELOPMENT'
 }
-
 
 document.querySelectorAll('[id=versionDate]').forEach((node) => {
     node.innerHTML = settings.VERSION_DATE
@@ -2196,7 +2125,6 @@ document.querySelectorAll('[id=versionDate]').forEach((node) => {
 document.querySelectorAll('[id=versionName]').forEach((node) => {
     node.innerHTML = settings.VERSION_NAME
 })
-
 
 // set up what's needed to return filter checkboxes to the default state
 let checkboxElements: HTMLCollectionOf<HTMLCalciteCheckboxElement> = document.getElementsByTagName('calcite-checkbox')
