@@ -100,31 +100,31 @@
           <ul>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_dmg_bin_reduced_simplified_00005/FeatureServer/0"
+              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost/FeatureServer"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Noise Cost Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/ArcGIS/rest/services/US_noise_dmg_equity_county/FeatureServer/0"
+              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost_equity_county/FeatureServer"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Noise Equity Ratio Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg/FeatureServer"
+              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost/FeatureServer"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Air Cost Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_dmg_equity_county/FeatureServer"
+              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost_equity_county/FeatureServer"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Air Equity Ratio Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/ArcGIS/rest/services/US_ACS_pop_2019/FeatureServer/0"
+              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_ACS2019_CBG_pop/FeatureServer"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 ACS Population Feature Service</a>
             </li>
@@ -422,50 +422,52 @@
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseEquity-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseEquity-show-fltr"></calcite-action>
 
-          <calcite-block collapsible heading="Non-White Noise Equity Ratio" id="noiseEquity-fltr-block-nonwhitendp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonwhitendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonwhitendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Non-White Noise Equity Ratio" id="noiseEquity-fltr-block-nonwhiteeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonwhiteeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonwhiteeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="White Noise Equity Ratio" id="noiseEquity-fltr-block-whitendp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-whitendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-whitendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="White Noise Equity Ratio" id="noiseEquity-fltr-block-whiteeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-whiteeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-whiteeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Black Noise Equity Ratio" id="noiseEquity-fltr-block-blackndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-blackndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-blackndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Black Noise Equity Ratio" id="noiseEquity-fltr-block-blackeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-blackeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-blackeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Asian Noise Equity Ratio" id="noiseEquity-fltr-block-asianndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-asianndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-asianndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Asian Noise Equity Ratio" id="noiseEquity-fltr-block-asianeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-asianeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-asianeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Native Noise Equity Ratio" id="noiseEquity-fltr-block-nativendp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nativendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nativendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Native Noise Equity Ratio" id="noiseEquity-fltr-block-nativeeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nativeeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nativeeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Pacific Noise Equity Ratio" id="noiseEquity-fltr-block-pacificndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-pacificndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-pacificndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Pacific Noise Equity Ratio" id="noiseEquity-fltr-block-pacificeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-pacificeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-pacificeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Other Noise Equity Ratio" id="noiseEquity-fltr-block-otherndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-otherndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-otherndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Other Noise Equity Ratio" id="noiseEquity-fltr-block-othereqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-othereqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-othereqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-povertyndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-povertyndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-povertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-povertyeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-povertyeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-povertyeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-nonpovertyndp">
-            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonpovertyndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Non-Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-nonpovertyeqr">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonpovertyeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertyeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
+
+          <!-- ------------------  -->
 
           <calcite-block collapsible heading="Non-White Cost" id="noiseEquity-fltr-block-nonwhitecost">
             <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
@@ -520,50 +522,52 @@
           <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airEquity-fltr-reset"></calcite-action>
           <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airEquity-show-fltr"></calcite-action>
 
-          <calcite-block collapsible heading="Non-White Air Equity Ratio" id="airEquity-fltr-block-nonwhitendp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonwhitendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonwhitendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Non-White Air Equity Ratio" id="airEquity-fltr-block-nonwhiteeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonwhiteeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonwhiteeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="White Air Equity Ratio" id="airEquity-fltr-block-whitendp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-whitendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-whitendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="White Air Equity Ratio" id="airEquity-fltr-block-whiteeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-whiteeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-whiteeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Black Air Equity Ratio" id="airEquity-fltr-block-blackndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-blackndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-blackndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Black Air Equity Ratio" id="airEquity-fltr-block-blackeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-blackeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-blackeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Asian Air Equity Ratio" id="airEquity-fltr-block-asianndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-asianndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-asianndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Asian Air Equity Ratio" id="airEquity-fltr-block-asianeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-asianeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-asianeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Native Air Equity Ratio" id="airEquity-fltr-block-nativendp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nativendp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nativendp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Native Air Equity Ratio" id="airEquity-fltr-block-nativeeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nativeeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nativeeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Pacific Air Equity Ratio" id="airEquity-fltr-block-pacificndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-pacificndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-pacificndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Pacific Air Equity Ratio" id="airEquity-fltr-block-pacificeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-pacificeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-pacificeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Other Air Equity Ratio" id="airEquity-fltr-block-otherndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-otherndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-otherndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Other Air Equity Ratio" id="airEquity-fltr-block-othereqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-othereqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-othereqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Poverty Air Equity Ratio" id="airEquity-fltr-block-povertyndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-povertyndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-povertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Poverty Air Equity Ratio" id="airEquity-fltr-block-povertyeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-povertyeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-povertyeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
 
-          <calcite-block collapsible heading="Non-Poverty Air Equity Ratio" id="airEquity-fltr-block-nonpovertyndp">
-            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonpovertyndp-slider-label" alignment="center"></calcite-label>
-            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertyndp-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+          <calcite-block collapsible heading="Non-Poverty Air Equity Ratio" id="airEquity-fltr-block-nonpovertyeqr">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonpovertyeqr-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertyeqr-slider"       snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
           </calcite-block>
+
+               <!-- ------------------  -->
 
           <calcite-block collapsible heading="Non-White Cost" id="airEquity-fltr-block-nonwhitecost">
             <calcite-label  class="slider-label" id="airEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
