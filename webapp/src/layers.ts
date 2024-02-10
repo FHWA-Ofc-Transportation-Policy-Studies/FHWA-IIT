@@ -10,8 +10,10 @@ import {
     airEquityRendererNonWhite,
     acsRendererNonWhite,
     urbanRender,
-    universityRenderer
+    universityRenderer,
+    redliningRenderer
 } from './renderers'
+import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer'
 
 // ################################################################
 //#region LAYER CREATION
@@ -105,9 +107,10 @@ export const noiseEquityLayer = new FeatureLayer({
     visible: true,
     outFields: ['*'],
     renderer: noiseEquityRendererNonWhite as __esri.RendererProperties,
-    popupTemplate: noiseEquityPopupTemplate
-    //definitionExpression: "fclass = 1"
+    popupTemplate: noiseEquityPopupTemplate,
+    // blendMode: "normal"
 })
+noiseEquityLayer.opacity = 0.66
 
 export const airEquityLayer = new FeatureLayer({
     title: 'Air Equity',
@@ -115,9 +118,10 @@ export const airEquityLayer = new FeatureLayer({
     visible: false,
     outFields: ['*'],
     renderer: airEquityRendererNonWhite as __esri.RendererProperties,
-    popupTemplate: airEquityPopupTemplate
-    //definitionExpression: "fclass = 1"
+    popupTemplate: airEquityPopupTemplate,
+    // blendMode: "normal"
 })
+airEquityLayer.opacity = 0.66
 
 export const acsLayer = new FeatureLayer({
     title: 'ACS Population',
@@ -128,6 +132,7 @@ export const acsLayer = new FeatureLayer({
     popupTemplate: acsPopupTemplate,
     definitionExpression: 'population > 0'
 })
+acsLayer.opacity = .80
 
 export const urbanLayer = new FeatureLayer({
     title: 'Adjusted Urban Area Boundaries',
@@ -186,6 +191,7 @@ export const redliningLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/ak2bo87wLfUpMrt1/arcgis/rest/services/HOLC_Redlining_Polygons_v1/FeatureServer',
     visible: false,
     outFields: ['*'],
+    // renderer: redliningRenderer,
     popupTemplate: {
         title: 'Redlined Neighborhood',
         content: [
@@ -196,4 +202,5 @@ export const redliningLayer = new FeatureLayer({
         ]
     }
 })
+
 //#endregion

@@ -3,7 +3,7 @@
   
     "VERSION_NAME" : "beta 1.3 - for review", 
     
-    "VERSION_DATE": "February 2, 2024",
+    "VERSION_DATE": "February 9, 2024",
 
     "START_LOCATION": "DC",
 
@@ -31,15 +31,15 @@
             "shortName": "acs",
             "selectors": [
                 {"name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people"},
-                {"name": "pctwhite", "fieldName": "pctwhite", "fieldType": "float", "fieldLabel": "% white", "units": "* 100"},
-                {"name": "pctnonwhite", "fieldName": "pctnonwhite", "fieldType": "float", "fieldLabel": "% non-white", "units": "* 100"},
-                {"name": "pctblack", "fieldName": "pctblack", "fieldType": "float", "fieldLabel": "% black", "units": "* 100"},
-                {"name": "pctnative", "fieldName": "pctnative", "fieldType": "float", "fieldLabel": "% native", "units": "* 100"},
-                {"name": "pctasian", "fieldName": "pctasian", "fieldType": "float", "fieldLabel": "% asian", "units": "* 100"},
-                {"name": "pctpacific", "fieldName": "pctpacific", "fieldType": "float", "fieldLabel": "% pacific", "units": "* 100"},
-                {"name": "pctother", "fieldName": "pctother", "fieldType": "float", "fieldLabel": "% other", "units": "* 100"},
-                {"name": "pctpoverty", "fieldName": "pctpoverty", "fieldType": "float", "fieldLabel": "% poverty", "units": "* 100"},
-                {"name": "pctnonpoverty", "fieldName": "pctnonpoverty", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "* 100"}
+                {"name": "pctwhite", "fieldName": "white__", "fieldType": "float", "fieldLabel": "% white", "units": "%"},
+                {"name": "pctnonwhite", "fieldName": "nonwhite__", "fieldType": "float", "fieldLabel": "% non-white", "units": "%"},
+                {"name": "pctblack", "fieldName": "black__", "fieldType": "float", "fieldLabel": "% black", "units": "%"},
+                {"name": "pctnative", "fieldName": "native__", "fieldType": "float", "fieldLabel": "% native", "units": "%"},
+                {"name": "pctasian", "fieldName": "asian__", "fieldType": "float", "fieldLabel": "% asian", "units": "%"},
+                {"name": "pctpacific", "fieldName": "pacific__", "fieldType": "float", "fieldLabel": "% pacific", "units": "%"},
+                {"name": "pctother", "fieldName": "other__", "fieldType": "float", "fieldLabel": "% other", "units": "%"},
+                {"name": "pctpoverty", "fieldName": "poverty__", "fieldType": "float", "fieldLabel": "% poverty", "units": "%"},
+                {"name": "pctnonpoverty", "fieldName": "npvrty__", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "%"}
             ]
         },
         {
@@ -80,7 +80,8 @@
                 {"name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars"},
                 {"name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars"},
                 {"name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars"},
-                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"}
+                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"},
+                {"name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars"}
 
 
             ]
@@ -115,7 +116,8 @@
                 {"name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars"},
                 {"name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars"},
                 {"name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars"},
-                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"}
+                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"},
+                {"name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars"}
             ]
         },
         {

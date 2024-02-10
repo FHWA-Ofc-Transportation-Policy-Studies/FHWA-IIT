@@ -103,6 +103,7 @@ import Point from '@arcgis/core/geometry/Point'
 import Layer from '@arcgis/core/layers/Layer'
 import ListItem from '@arcgis/core/widgets/LayerList/ListItem'
 import Query from '@arcgis/core/rest/support/Query'
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
 //#endregion
 
@@ -205,6 +206,7 @@ function setUpMap() {
 }
 
 function onViewReady(view: MapView) {
+
     // while controled by layerview updates, this needs to be here when we start out
     document.getElementById('updating_spinner')!.style.display = 'block'
 
@@ -461,6 +463,28 @@ function onViewReady(view: MapView) {
                 panel.hidden = true
             }
         })
+
+
+        
+        view.map.allLayers.forEach((l) => {
+
+            // console.log(l.title)
+
+            if (l.title == 'Redlined Neighborhoods') {
+            
+                l.renderer.orderByClassesEnabled = true
+
+                // console.log(r)
+
+                // // redliningLayer.renderer.orderByClassesEnabled = true
+            }
+        })
+        
+
+
+  
+
+
     })
 }
 
@@ -699,7 +723,16 @@ function initWidgets(view: MapView) {
         // ----------------------------
         view.map.allLayers.forEach((l) => {
             l.visible = defaultLayerVisibility[l.title]
-            l.opacity = 1
+            
+            if (l.title.endsWith(" Equity")){
+                l.opacity = .66
+            }
+            else if (l.title === "ACS Population") {
+                l.opacity = .80
+            }
+            else {
+                l.opacity = 1
+            }
         })
 
         resetFilters()
@@ -1423,8 +1456,12 @@ function wireUpPresetButtonViews(view: MapView) {
             let presetLayerVisibility = settings.presetViews[presetName]
             // set layer visibility
             view.map.allLayers.forEach((l) => {
+
                 l.visible = presetLayerVisibility[l.title]
-                l.opacity = 1
+
+                if (l.title.endsWith(' Equity') ) {
+                    l.opacity = .66
+                }
             })
             urbanLayer.opacity = 1
 
@@ -1515,7 +1552,7 @@ function getLayerFilter(shortLayerName: string) {
                 .selectors.filter((item) => item.fieldName === fieldname)[0].units
 
             if (unitsFromConfig) {
-                units = ' (' + unitsFromConfig + ')'
+                units = ' ' + unitsFromConfig
             }
         } catch {
             units = ''
@@ -2103,7 +2140,7 @@ let appPanel = document.getElementById('appPanel')
 appPanel!.style.display = 'none'
 //appPanel!.style.display = 'block'
 
-document.getElementById('sign-in-btn')!.addEventListener('click', function () {
+document.getElementById('open-tool-btn')!.addEventListener('click', function () {
     appPanel!.style.display = 'block'
     entryPanel!.style.display = 'none'
     let mapview = setUpMap()

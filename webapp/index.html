@@ -52,10 +52,10 @@
       <div class="mainPageLeft">
 
         <h3>Overview</h3>
-        The Inequity Identification Tool (IIT) is an interactive mapping application that shows the county level noise-equity ratios as well 
-        as the noise cost of roads and demographic data at the census block group level. The noise-equity ratio is the percent of noise cost
-        absorbed by a demographic divided by their percent of the population. For more information on the methodology, see the below resources
-        and documentation.
+        The Inequity Identification Tool (IIT) is an interactive mapping application to highlight highway externalities, such as noise and air pollution, and who they affect. In addition to featuring road segments with estimates of the magnitude of externality costs, the IIT includes county level equity ratios—the percent of highway externality cost borne by a demographic divided by their percent of the population within the county—for each externality type and demographic. It also includes layers such as population and demographic data at the census block group level from the Census database, fatal crashes from the FARS database, school locations, and historic redlining maps from the ArcGIS Living Atlas. The IIT can be helpful for anyone interested in the equity of highway externality exposure. Currently, the IIT covers noise and air pollution from highways, with other modules in development. For more information on the methodology and data please see the below resources and documentation.
+ 
+        <p>
+        <b>Note:</b>&nbsp;Although IIT estimates the cost externalities at the road segment-level, due to its focus on the analysis of the system-level rather than the road segment-level and the uncertainty inherent in this type of modeling, it should not be taken as a precise estimate for use in other federal processes such as NEPA. Users should supplement IIT’s results with tools designed for a finer spatial scale to conduct project-level analysis.
         <p></p>
 
         <div>
@@ -83,7 +83,7 @@
             </li>
         
             <li>
-              <a href="https://storymaps.arcgis.com/stories/238226870f0045a5bbe7e1bc7e64e622"
+              <a href="https://storymaps.arcgis.com/stories/16790013e04c44b2a931789336b6e442"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Visualizing the External Costs of Highway Use</a>
             </li>
@@ -93,38 +93,44 @@
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 External Costs of Highway Users Analysis Tool (ECAT)</a>
             </li>
-        
+
+            <li>
+              <a href="https://github.com/FHWA-Ofc-Transportation-Policy-Studies/FHWA-IIT"
+                style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
+                Inequity Identification Tool GitHub Repository</a>
+            </li>
+
           </ul>
         
           <h3>Data Files</h3>
           <ul>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost/FeatureServer"
+              <a href="https://usdot.maps.arcgis.com/home/item.html?id=f89a8dd9f9664aaabf506288a6a34c25"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Noise Cost Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_noise_cost_equity_county/FeatureServer"
+              <a href="https://usdot.maps.arcgis.com/home/item.html?id=2cb147af9f484778b36c40fd8597376d"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Noise Equity Ratio Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost/FeatureServer"
+              <a href="https://usdot.maps.arcgis.com/home/item.html?id=7aa62d0752774a19bd94b3f4fb865c85"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Air Cost Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_air_cost_equity_county/FeatureServer"
+              <a href="https://usdot.maps.arcgis.com/home/item.html?id=79c1aa58e3f7497b8805b755b5173126"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 Air Equity Ratio Feature Service</a>
             </li>
         
             <li>
-              <a href="https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/US_ACS2019_CBG_pop/FeatureServer"
+              <a href="https://usdot.maps.arcgis.com/home/item.html?id=75ee26021dd046f2af802878ed30a1df"
                 style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
                 ACS Population Feature Service</a>
             </li>
@@ -145,7 +151,7 @@
 
         <img id="screen-shot" src="./screenshot.jpg" width="85%">
         <p>
-          <calcite-button id="sign-in-btn" scale="l" style="margin: 30px;">Access Tool</calcite-button>
+          <calcite-button id="open-tool-btn" scale="l" style="margin: 30px;">Open Tool</calcite-button>
         </p>
 
       </div> <!-- end main page right -->
@@ -513,6 +519,13 @@
             <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-nonpovertycost-slider-label" alignment="center"></calcite-label>
             <calcite-slider class="slider"       id="noiseEquity-fltr-sel-nonpovertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
+
+
+          <calcite-block collapsible heading="Total Cost" id="noiseEquity-fltr-block-totalcost">
+            <calcite-label  class="slider-label" id="noiseEquity-fltr-sel-totalcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="noiseEquity-fltr-sel-totalcost-slider"       snap min="1" min-value="1" max-value="25000000" max="25000000" step="100000"></calcite-slider>
+          </calcite-block>
+  
   
 
         </calcite-panel>
@@ -614,6 +627,11 @@
             <calcite-slider class="slider"       id="airEquity-fltr-sel-nonpovertycost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
           </calcite-block>
 
+          <calcite-block collapsible heading="Total Cost" id="airEquity-fltr-block-totalcost">
+            <calcite-label  class="slider-label" id="airEquity-fltr-sel-totalcost-slider-label" alignment="center"></calcite-label>
+            <calcite-slider class="slider"       id="airEquity-fltr-sel-totalcost-slider"       snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+          </calcite-block>
+
         </calcite-panel>
 
         <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" hidden closable>
@@ -663,47 +681,47 @@
 
         <calcite-block collapsible heading="Percent White" id="acs-fltr-block-pctwhite">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctwhite-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctwhite-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctwhite-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Non-White" id="acs-fltr-block-pctnonwhite">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctnonwhite-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctnonwhite-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctnonwhite-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Black" id="acs-fltr-block-pctblack">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctblack-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctblack-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctblack-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Native" id="acs-fltr-block-pctnative">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctnative-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctnative-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctnative-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Asian" id="acs-fltr-block-pctasian">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctasian-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctasian-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctasian-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Pacific" id="acs-fltr-block-pctpacific">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctpacific-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctpacific-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctpacific-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Other" id="acs-fltr-block-pctother">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctother-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctother-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctother-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Poverty" id="acs-fltr-block-pctpoverty">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctpoverty-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctpoverty-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctpoverty-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
         <calcite-block collapsible heading="Percent Non-Poverty" id="acs-fltr-block-pctnonpoverty">
         <calcite-label  class="slider-label" id="acs-fltr-sel-pctnonpoverty-slider-label" alignment="center"></calcite-label>
-        <calcite-slider class="slider"       id="acs-fltr-sel-pctnonpoverty-slider"       snap min="0" min-value="0" max-value="1" max="1" step=".01"></calcite-slider>
+        <calcite-slider class="slider"       id="acs-fltr-sel-pctnonpoverty-slider"       snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
 
