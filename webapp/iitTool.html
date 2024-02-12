@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <meta charset="UTF-8" />
+  <title>Inequity Identification Tool</title>
+  <link rel="icon" href="https://www.fhwa.dot.gov/images/fhwa/icon/favicon.ico" type="image/png">
+  <link rel="stylesheet" href="./src/iitTool.css" />
+</head>
+
+<body>
+
+  <calcite-modal id="show-fltr-modal" hidden>
+    <div slot="header" id="show-fltr-modal-title"></div>
+    <div slot="content" id="show-fltr-modal-content"></div>
+  </calcite-modal>
+
+  <calcite-modal id="reset-all-modal" width="s" hidden>
+    <div slot="header" id="modal-title">Reset</div>
+    <div slot="content">Are you sure you want to reset the map and filters?</div>
+    <calcite-button id="reset-all-modal-yes-btn" slot="primary" width="full">Yes</calcite-button>
+    <calcite-button id="reset-all-modal-no-btn" slot="secondary" width="full">No</calcite-button>
+  </calcite-modal>
+
+  <calcite-modal id="simple-summary-info-modal" hidden>
+    <div slot="header" id="simple-summary-info-title">Details on Summary Numbers</div>
+    <div slot="content" id="simple-summary-info-content">
+      <ul>
+        <li>
+          All numbers are based on features currently shown on the map. Feature which are no longer visible due to filtering will not be included in the statistics. Polygon and line features which are only partialy on the map will also be included in the statistics.
+        </li>
+      </ul>
+    </div>
+  </calcite-modal>
+
+  <calcite-shell content-behind>
+
+    <header slot="header" id="page-header">
+
+      <div id="header-content">
+    
+        <div class="main-content-section-div" id="logo-div">
+          <img src="./FHWA_logo_square.png" id="logo-img" alt="DOT Logo">
+        </div>
+    
+        <div class="main-content-section-div" id="title-div">
+    
+          <div id="title-div-main-title">
+            <a id="main-title" href="index.html">
+              Inequity Identification Tool</a>
+            </a>
+          </div>
+    
+          <div id="title-div-sub-title">
+            <a id="subtitle-a" href="https://www.fhwa.dot.gov/policy/otps/">
+              FHWA Office of Transportation Policy Studies</a>
+            </a>
+          </div>
+    
+        </div>
+
+        <div class="main-content-section-div header-divider"></div>
+
+        <div class="main-content-section-div" id="preset-views-div">
+          <h3 id="preset-buttons-label">See Preset Views</h3>
+          <div id="preset-buttons-div">
+            <calcite-button class="presetViewButton" id="air-preset-view-btn" width="full">Air Cost</calcite-button>
+            <calcite-button class="presetViewButton" id="noise-preset-view-btn" width="full">Noise Cost</calcite-button>
+          </div>
+        </div>
+
+        <div class="main-content-section-div header-divider"></div>
+    
+        <div class="main-content-section-div" id="version-div">
+    
+          <div id="version-div-name">
+            Name
+          </div>
+    
+          <div id="version-div-date">
+            Date
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </header>
+
+    <!-- ====================  LEFT SIDE SHELL PRIMARY PANEL ====================  -->
+
+    <calcite-shell-panel slot="panel-start" position="start" id="left-shell-panel" display-mode="float">
+
+      <!-- app actions -->
+      <calcite-action-bar slot="action-bar">
+
+        <calcite-action-group>
+          <calcite-action data-action-id="home" icon="home" text="Reset" textenabled="true"></calcite-action>
+        </calcite-action-group>
+
+        <calcite-action-group>
+          <calcite-action data-action-id="layers" icon="layers" text="Layers" textenabled="true" label="Layers"></calcite-action>
+          <calcite-action data-action-id="legend" icon="legend" text="Legend" textenabled="true" label="Legend"></calcite-action>
+          <calcite-action data-action-id="basemaps" icon="basemap" text="Basemap" textenabled="true" label="Basemap"></calcite-action>
+          <calcite-action data-action-id="simpleChart" icon="pie-chart" text="Simple Summary" textenabled="true" label="Simple Summary"></calcite-action>
+        </calcite-action-group>
+
+        <calcite-action-group>
+          <calcite-action data-action-id="streetview" icon="car" text="Street/Road View" textenabled="true" label="Street/Road View"></calcite-action>
+        </calcite-action-group>
+
+        <calcite-loader id="updating_spinner" style="display:none" nopadding scale="s" active></calcite-loader>
+
+      </calcite-action-bar>
+
+      <!--panels which provide a div for JS API widgets -->
+
+      <calcite-panel heading="Layers" height-scale="l" width-scale="s" data-panel-id="layers" hidden closable>
+        <div id="layers-container"></div>
+      </calcite-panel>
+
+      <calcite-panel heading="Legend" data-panel-id="legend" height-scale="l" width-scale="l" hidden closable>
+        <div id="legend-container"></div>
+      </calcite-panel>
+
+      <calcite-panel heading="Basemaps" height-scale="l" width-scale="s" data-panel-id="basemaps" hidden closable>
+        <div id="basemaps-container"></div>
+      </calcite-panel>
+
+      <!--Simple Summary Chart -->
+      <!-- ---------------------->
+
+      <calcite-panel heading="Simple Summary" height-scale="l" width-scale="l" data-panel-id="simpleChart" hidden closable>
+
+        <calcite-action icon="information" text-enabled text="Additional Information" slot="header-menu-actions" id="simple-summary-info"></calcite-action>
+
+        <div id="simple-summary-main-div">
+
+          <div class="simple-summary-stat-box">
+            <strong id="simple-summary-acs-text">ACS Population</strong>
+            <div id="simple-summary-acs">0</div>
+          </div>
+
+          <div class="simple-summary-stat-box">
+            <strong>FARS Fatalities (all)</strong>
+            <div id="simple-summary-farsfatals">-</div>
+          </div>
+
+          <div class="simple-summary-stat-box">
+            <strong>Average Noise Cost Bin</strong>
+            <div id="simple-summary-noiseCost">0</div>
+          </div>
+
+          <div class="simple-summary-stat-box">
+            <strong id="simple-summary-noise-equity-text">Total Noise Cost Dollars</strong>
+            <div id="simple-summary-noiseEquity">0</div>
+          </div>
+
+          <div class="simple-summary-stat-box">
+            <strong>Average Air Cost Bin</strong>
+            <div id="simple-summary-airCost">0</div>
+          </div>
+
+          <div class="simple-summary-stat-box">
+            <strong id="simple-summary-air-equity-text">Total Air Cost Dollars</strong>
+            <div id="simple-summary-airEquity">0</div>
+          </div>
+
+          <div class="simple-summary-sub-container">
+            <calcite-button id="simple-summary-btn">Update</calcite-button>
+          </div>
+
+          <div class="simple-summary-sub-container">
+            <div class="simple-summary-canvas-container">
+            </div>
+          </div>
+
+        </div>
+
+      </calcite-panel>
+
+
+    </calcite-shell-panel>
+
+    <!-- ==================== RIGHT SIDE PANEL (FOR FILTERS AND SYMBOLOGY) ==================== -->
+    <!-- note that the ids for these panels have to be the lower case of the layer name 
+        with spaces replaced by -, and "-fltr" at the end -->
+
+    <calcite-shell-panel slot="panel-end" position="end" id="right-shell-panel" height-scale="l" display-mode="float">
+
+
+      <!-- ============================= FARS ============================== -->
+
+      <calcite-panel heading="FARS (number of crashes) Filter" id="fars-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="fars-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="fars-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Year" id="fars-fltr-block-year">
+          <calcite-label layout="inline"><calcite-checkbox id="fars-fltr-sel-year-cb2019" value="2019" checked="checked"></calcite-checkbox>2019</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="fars-fltr-sel-year-cb2018" value="2018"></calcite-checkbox>2018</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="fars-fltr-sel-year-cb2017" value="2017"></calcite-checkbox>2017</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="fars-fltr-sel-year-cb2016" value="2016"></calcite-checkbox>2016</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="fars-fltr-sel-year-cb2015" value="2015"></calcite-checkbox>2015</calcite-label>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Fatalities" id="fars-fltr-block-fatalities">
+          <calcite-label class="slider-label" id="fars-fltr-sel-fatalities-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="fars-fltr-sel-fatalities-slider" snap min="1" min-value="1" max-value="5" max="5" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Fatals African American" id="fars-fltr-block-fatalsafamer">
+          <calcite-label class="slider-label" id="fars-fltr-sel-fatalsafamer-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="fars-fltr-sel-fatalsafamer-slider" snap min="0" min-value="0" max-value="5" max="5" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Fatals American Indian" id="fars-fltr-block-fatalsamerind">
+          <calcite-label class="slider-label" id="fars-fltr-sel-fatalsamerind-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="fars-fltr-sel-fatalsamerind-slider" snap min="0" min-value="0" max-value="5" max="5" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Fatals pedestrian" id="fars-fltr-block-fatalsped">
+          <calcite-label class="slider-label" id="fars-fltr-sel-fatalsped-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="fars-fltr-sel-fatalsped-slider" snap min="0" min-value="0" max-value="5" max="5" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Fatals bicyclist" id="fars-fltr-block-fatalsbicycle">
+          <calcite-label class="slider-label" id="fars-fltr-sel-fatalsbicycle-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="fars-fltr-sel-fatalsbicycle-slider" snap min="0" min-value="0" max-value="5" max="5" step="1"></calcite-slider>
+        </calcite-block>
+
+      </calcite-panel>
+
+
+      <!-- =============================== Cost =============================== -->
+
+      <calcite-panel heading="Noise Cost Filter" id="noiseCost-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseCost-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseCost-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Functional Class" id="noiseCost-fltr-block-funcclass">
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb1" value="1" checked="checked"></calcite-checkbox>1 - Interstate</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb2" value="2" checked="checked"></calcite-checkbox>2 - Prin. Arterial, Oth. Frwys and Expys</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb3" value="3" checked="checked"></calcite-checkbox>3 - Prin. Arterial, Oth.</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb4" value="4" checked="checked"></calcite-checkbox>4 - Minor Arterial</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb5" value="5" checked="checked"></calcite-checkbox>5 - Major Collector</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb6" value="6" checked="checked"></calcite-checkbox>6 - Minor Collector</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-funcclass-cb7" value="7" checked="checked"></calcite-checkbox>7 - Local</calcite-label>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Annual Noise Cost ($ per 1/10 mile)" id="noiseCost-fltr-block-cost">
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb1" value="1" checked="checked"></calcite-checkbox>Bin 1 &lt;= $100</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb2" value="2" checked="checked"></calcite-checkbox>Bin 2 &lt;= $1,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb3" value="3" checked="checked"></calcite-checkbox>Bin 3 &lt;= $10,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb4" value="4" checked="checked"></calcite-checkbox>Bin 4 &lt;= $100,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb5" value="5" checked="checked"></calcite-checkbox>Bin 5 &lt;= $500,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb5" value="6" checked="checked"></calcite-checkbox>Bin 6 &lt;= $1,000,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="noiseCost-fltr-sel-cost-cb5" value="7" checked="checked"></calcite-checkbox>Bin 7 &gt;= $1,000,000</calcite-label>
+        </calcite-block>
+
+      </calcite-panel>
+
+      <calcite-panel heading="Air Cost Filter" id="airCost-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airCost-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airCost-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Functional Class" id="airCost-fltr-block-funcclass">
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb1" value="1" checked="checked"></calcite-checkbox>1 - Interstate</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb2" value="2" checked="checked"></calcite-checkbox>2 - Prin. Arterial, Oth. Frwys and Expys</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb3" value="3" checked="checked"></calcite-checkbox>3 - Prin. Arterial, Oth.</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb4" value="4" checked="checked"></calcite-checkbox>4 - Minor Arterial</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb5" value="5" checked="checked"></calcite-checkbox>5 - Major Collector</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb6" value="6" checked="checked"></calcite-checkbox>6 - Minor Collector</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-funcclass-cb7" value="7" checked="checked"></calcite-checkbox>7 - Local</calcite-label>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Annual Air Cost ($ per 1/10 mile)" id="airCost-fltr-block-cost">
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb1" value="1" checked="checked"></calcite-checkbox>Bin 1 &lt;= $100</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb2" value="2" checked="checked"></calcite-checkbox>Bin 2 &lt;= $1,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb3" value="3" checked="checked"></calcite-checkbox>Bin 3 &lt;= $10,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb4" value="4" checked="checked"></calcite-checkbox>Bin 4 &lt;= $100,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb5" value="5" checked="checked"></calcite-checkbox>Bin 5 &lt;= $500,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb5" value="6" checked="checked"></calcite-checkbox>Bin 6 &lt;= $1,000,000</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="airCost-fltr-sel-cost-cb5" value="7" checked="checked"></calcite-checkbox>Bin 7 &gt;= $1,000,000</calcite-label>
+        </calcite-block>
+
+      </calcite-panel>
+
+      <!-- =============================== Equity Ratio =============================== -->
+
+      <calcite-panel heading="Noise Equity Filter" id="noiseEquity-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseEquity-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseEquity-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Non-White Noise Equity Ratio" id="noiseEquity-fltr-block-nonwhiteeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nonwhiteeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nonwhiteeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="White Noise Equity Ratio" id="noiseEquity-fltr-block-whiteeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-whiteeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-whiteeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Black Noise Equity Ratio" id="noiseEquity-fltr-block-blackeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-blackeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-blackeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Asian Noise Equity Ratio" id="noiseEquity-fltr-block-asianeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-asianeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-asianeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Native Noise Equity Ratio" id="noiseEquity-fltr-block-nativeeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nativeeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nativeeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Pacific Noise Equity Ratio" id="noiseEquity-fltr-block-pacificeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-pacificeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-pacificeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Other Noise Equity Ratio" id="noiseEquity-fltr-block-othereqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-othereqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-othereqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-povertyeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-povertyeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-povertyeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Non-Poverty Noise Equity Ratio" id="noiseEquity-fltr-block-nonpovertyeqr">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nonpovertyeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nonpovertyeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <!-- ------------------  -->
+
+        <calcite-block collapsible heading="Non-White Cost" id="noiseEquity-fltr-block-nonwhitecost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nonwhitecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="White Cost" id="noiseEquity-fltr-block-whitecost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-whitecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-whitecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Black Cost" id="noiseEquity-fltr-block-blackcost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-blackcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-blackcost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Asian Cost" id="noiseEquity-fltr-block-asiancost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-asiancost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-asiancost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Native Cost" id="noiseEquity-fltr-block-nativecost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nativecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nativecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Pacific Cost" id="noiseEquity-fltr-block-pacificcost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-pacificcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-pacificcost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Other Cost" id="noiseEquity-fltr-block-othercost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-othercost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-othercost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Poverty Cost" id="noiseEquity-fltr-block-povertycost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-povertycost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-povertycost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Non-Poverty Cost" id="noiseEquity-fltr-block-nonpovertycost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-nonpovertycost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-nonpovertycost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+
+        <calcite-block collapsible heading="Total Cost" id="noiseEquity-fltr-block-totalcost">
+          <calcite-label class="slider-label" id="noiseEquity-fltr-sel-totalcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="noiseEquity-fltr-sel-totalcost-slider" snap min="1" min-value="1" max-value="25000000" max="25000000" step="100000"></calcite-slider>
+        </calcite-block>
+
+
+
+      </calcite-panel>
+
+      <calcite-panel heading="Air Equity Filter" id="airEquity-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airEquity-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airEquity-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Non-White Air Equity Ratio" id="airEquity-fltr-block-nonwhiteeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nonwhiteeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nonwhiteeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="White Air Equity Ratio" id="airEquity-fltr-block-whiteeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-whiteeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-whiteeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Black Air Equity Ratio" id="airEquity-fltr-block-blackeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-blackeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-blackeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Asian Air Equity Ratio" id="airEquity-fltr-block-asianeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-asianeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-asianeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Native Air Equity Ratio" id="airEquity-fltr-block-nativeeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nativeeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nativeeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Pacific Air Equity Ratio" id="airEquity-fltr-block-pacificeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-pacificeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-pacificeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Other Air Equity Ratio" id="airEquity-fltr-block-othereqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-othereqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-othereqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Poverty Air Equity Ratio" id="airEquity-fltr-block-povertyeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-povertyeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-povertyeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Non-Poverty Air Equity Ratio" id="airEquity-fltr-block-nonpovertyeqr">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nonpovertyeqr-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nonpovertyeqr-slider" snap min=".1" min-value=".1" max-value="3" max="3" step=".1"></calcite-slider>
+        </calcite-block>
+
+        <!-- ------------------  -->
+
+        <calcite-block collapsible heading="Non-White Cost" id="airEquity-fltr-block-nonwhitecost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nonwhitecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nonwhitecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="White Cost" id="airEquity-fltr-block-whitecost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-whitecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-whitecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Black Cost" id="airEquity-fltr-block-blackcost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-blackcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-blackcost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Asian Cost" id="airEquity-fltr-block-asiancost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-asiancost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-asiancost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Native Cost" id="airEquity-fltr-block-nativecost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nativecost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nativecost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Pacific Cost" id="airEquity-fltr-block-pacificcost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-pacificcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-pacificcost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Other Cost" id="airEquity-fltr-block-othercost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-othercost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-othercost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Poverty Cost" id="airEquity-fltr-block-povertycost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-povertycost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-povertycost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Non-Poverty Cost" id="airEquity-fltr-block-nonpovertycost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-nonpovertycost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-nonpovertycost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Total Cost" id="airEquity-fltr-block-totalcost">
+          <calcite-label class="slider-label" id="airEquity-fltr-sel-totalcost-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="airEquity-fltr-sel-totalcost-slider" snap min="1" min-value="1" max-value="10000000" max="10000000" step="25000"></calcite-slider>
+        </calcite-block>
+
+      </calcite-panel>
+
+      <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" hidden closable>
+        <calcite-block heading="Select Noise Equity Ratio Demographic" open>
+          <calcite-select id="noiseEquity-symbology-select">
+            <calcite-option label="Non White" value="noiseEquityRendererNonWhite"></calcite-option>
+            <calcite-option label="White" value="noiseEquityRendererWhite"></calcite-option>
+            <calcite-option label="Black" value="noiseEquityRendererBlack"></calcite-option>
+            <calcite-option label="Asian" value="noiseEquityRendererAsian"></calcite-option>
+            <calcite-option label="Native" value="noiseEquityRendererNative"></calcite-option>
+            <calcite-option label="Pacific" value="noiseEquityRendererPacific"></calcite-option>
+            <calcite-option label="Other" value="noiseEquityRendererOther"></calcite-option>
+            <calcite-option label="Non Poverty" value="noiseEquityRendererNonPoverty"></calcite-option>
+            <calcite-option label="Poverty" value="noiseEquityRendererPoverty"></calcite-option>
+          </calcite-select>
+        </calcite-block>
+      </calcite-panel>
+
+      <calcite-panel heading="Air Equity Symbology" width-scale="l" id="airEquity-symbology-panel" hidden closable>
+        <calcite-block heading="Select Air Equity Ratio Demographic" open>
+          <calcite-select id="airEquity-symbology-select">
+            <calcite-option label="Non White" value="airEquityRendererNonWhite"></calcite-option>
+            <calcite-option label="White" value="airEquityRendererWhite"></calcite-option>
+            <calcite-option label="Black" value="airEquityRendererBlack"></calcite-option>
+            <calcite-option label="Asian" value="airEquityRendererAsian"></calcite-option>
+            <calcite-option label="Native" value="airEquityRendererNative"></calcite-option>
+            <calcite-option label="Pacific" value="airEquityRendererPacific"></calcite-option>
+            <calcite-option label="Other" value="airEquityRendererOther"></calcite-option>
+            <calcite-option label="Non Poverty" value="airEquityRendererNonPoverty"></calcite-option>
+            <calcite-option label="Poverty" value="airEquityRendererPoverty"></calcite-option>
+          </calcite-select>
+        </calcite-block>
+      </calcite-panel>
+
+      <!-- =============================== ACS population =============================== -->
+
+      <calcite-panel heading="ACS Population Filter" id="acs-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="acs-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="acs-show-fltr"></calcite-action>
+
+
+        <calcite-block collapsible heading="Population" id="acs-fltr-block-population">
+          <calcite-label class="slider-label" id="acs-fltr-sel-population-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-population-slider" snap min="1" min-value="1" max-value="5000" max="5000" step="100"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent White" id="acs-fltr-block-pctwhite">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctwhite-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctwhite-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Non-White" id="acs-fltr-block-pctnonwhite">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctnonwhite-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctnonwhite-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Black" id="acs-fltr-block-pctblack">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctblack-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctblack-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Native" id="acs-fltr-block-pctnative">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctnative-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctnative-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Asian" id="acs-fltr-block-pctasian">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctasian-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctasian-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Pacific" id="acs-fltr-block-pctpacific">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctpacific-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctpacific-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Other" id="acs-fltr-block-pctother">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctother-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctother-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Poverty" id="acs-fltr-block-pctpoverty">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctpoverty-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctpoverty-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+        <calcite-block collapsible heading="Percent Non-Poverty" id="acs-fltr-block-pctnonpoverty">
+          <calcite-label class="slider-label" id="acs-fltr-sel-pctnonpoverty-slider-label" alignment="center"></calcite-label>
+          <calcite-slider class="slider" id="acs-fltr-sel-pctnonpoverty-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
+        </calcite-block>
+
+
+
+
+      </calcite-panel>
+
+
+      <calcite-panel heading="ACS Population Symbology" width-scale="l" id="acs-symbology-panel" hidden closable>
+        <calcite-block heading="Select % Population Attribute" open>
+          <calcite-select id="acs-symbology-select">
+            <calcite-option label="Non White" value="acsRendererNonWhite"></calcite-option>
+            <calcite-option label="White" value="acsRendererWhite"></calcite-option>
+            <calcite-option label="Black" value="acsRendererBlack"></calcite-option>
+            <calcite-option label="Asian" value="acsRendererAsian"></calcite-option>
+            <calcite-option label="Native" value="acsRendererNative"></calcite-option>
+            <calcite-option label="Pacific" value="acsRendererPacific"></calcite-option>
+            <calcite-option label="Other" value="acsRendererOther"></calcite-option>
+            <calcite-option label="Non Poverty" value="acsRendererNonPoverty"></calcite-option>
+            <calcite-option label="Poverty" value="acsRendererPoverty"></calcite-option>
+          </calcite-select>
+        </calcite-block>
+      </calcite-panel>
+
+
+      <!-- =============================== STATES =============================== -->
+
+      <calcite-panel heading="States Filter" id="states-fltr-panel" hidden closable>
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="states-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="states-show-fltr"></calcite-action>
+
+        <!-- ===== State ===== -->
+        <calcite-block collapsible heading="State" id="states-fltr-block-stateabb">
+
+          <div class="paddedDiv">
+            <calcite-button id="states-fltr-stateabb-selectall-btn" appearance="Transparent">Select all</calcite-button>
+            <calcite-button id="states-fltr-stateabb-selectnone-btn" appearance="Transparent">Select none</calcite-button>
+          </div>
+
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbal" value="AL" checked="checked"></calcite-checkbox>Alabama </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbak" value="AK" checked="checked"></calcite-checkbox>Alaska </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbaz" value="AZ" checked="checked"></calcite-checkbox>Arizona </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbar" value="AR" checked="checked"></calcite-checkbox>Arkansas </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbca" value="CA" checked="checked"></calcite-checkbox>California </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbco" value="CO" checked="checked"></calcite-checkbox>Colorado </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbct" value="CT" checked="checked"></calcite-checkbox>Connecticut </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbde" value="DE" checked="checked"></calcite-checkbox>Delaware </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbdc" value="DC" checked="checked"></calcite-checkbox>District of Columbia </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbfl" value="FL" checked="checked"></calcite-checkbox>Florida </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbga" value="GA" checked="checked"></calcite-checkbox>Georgia </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbhi" value="HI" checked="checked"></calcite-checkbox>Hawaii </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbid" value="ID" checked="checked"></calcite-checkbox>Idaho </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbil" value="IL" checked="checked"></calcite-checkbox>Illinois </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbin" value="IN" checked="checked"></calcite-checkbox>Indiana </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbia" value="IA" checked="checked"></calcite-checkbox>Iowa </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbks" value="KS" checked="checked"></calcite-checkbox>Kansas </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbky" value="KY" checked="checked"></calcite-checkbox>Kentucky </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbla" value="LA" checked="checked"></calcite-checkbox>Louisiana </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbme" value="ME" checked="checked"></calcite-checkbox>Maine </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbmd" value="MD" checked="checked"></calcite-checkbox>Maryland </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbma" value="MA" checked="checked"></calcite-checkbox>Massachusetts </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbmi" value="MI" checked="checked"></calcite-checkbox>Michigan </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbmn" value="MN" checked="checked"></calcite-checkbox>Minnesota </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbms" value="MS" checked="checked"></calcite-checkbox>Mississippi </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbmo" value="MO" checked="checked"></calcite-checkbox>Missouri </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbmt" value="MT" checked="checked"></calcite-checkbox>Montana </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbne" value="NE" checked="checked"></calcite-checkbox>Nebraska </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnv" value="NV" checked="checked"></calcite-checkbox>Nevada </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnh" value="NH" checked="checked"></calcite-checkbox>New Hampshire </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnj" value="NJ" checked="checked"></calcite-checkbox>New Jersey </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnm" value="NM" checked="checked"></calcite-checkbox>New Mexico </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbny" value="NY" checked="checked"></calcite-checkbox>New York </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnc" value="NC" checked="checked"></calcite-checkbox>North Carolina </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbnd" value="ND" checked="checked"></calcite-checkbox>North Dakota </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cboh" value="OH" checked="checked"></calcite-checkbox>Ohio </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbok" value="OK" checked="checked"></calcite-checkbox>Oklahoma </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbor" value="OR" checked="checked"></calcite-checkbox>Oregon </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbpa" value="PA" checked="checked"></calcite-checkbox>Pennsylvania </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbri" value="RI" checked="checked"></calcite-checkbox>Rhode Island </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbsc" value="SC" checked="checked"></calcite-checkbox>South Carolina </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbsd" value="SD" checked="checked"></calcite-checkbox>South Dakota </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbtn" value="TN" checked="checked"></calcite-checkbox>Tennessee </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbtx" value="TX" checked="checked"></calcite-checkbox>Texas </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbut" value="UT" checked="checked"></calcite-checkbox>Utah </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbvt" value="VT" checked="checked"></calcite-checkbox>Vermont </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbva" value="VA" checked="checked"></calcite-checkbox>Virginia </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbwa" value="WA" checked="checked"></calcite-checkbox>Washington </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbwv" value="WV" checked="checked"></calcite-checkbox>West Virginia </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbwi" value="WI" checked="checked"></calcite-checkbox>Wisconsin </calcite-label>
+          <calcite-label layout="inline"> <calcite-checkbox id="states-fltr-sel-stateabb-cbwy" value="WY" checked="checked"></calcite-checkbox>Wyoming </calcite-label>
+        </calcite-block>
+
+      </calcite-panel>
+
+      <!-- =========================== Disadvantaged =========================== -->
+
+      <calcite-panel heading="Disadvantaged Filter" id="disadvantaged-fltr-panel" hidden closable class="calcite-theme-auto">
+
+        <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="disadvantaged-fltr-reset"></calcite-action>
+        <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="disadvantaged-show-fltr"></calcite-action>
+
+        <calcite-block collapsible heading="Disadvantaged Categories" id="disadvantaged-fltr-block-disadcats">
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-Transpor_1" checked="checked"></calcite-checkbox>Transportation</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-HealthDis"></calcite-checkbox>Health</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-EconomyDis"></calcite-checkbox>Economy</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-EquityDis"></calcite-checkbox>Equity</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-Resilien_1"></calcite-checkbox>Resilience</calcite-label>
+          <calcite-label layout="inline"><calcite-checkbox id="disadvantaged-fltr-sel-EnviroDis"></calcite-checkbox>Environment</calcite-label>
+        </calcite-block>
+
+      </calcite-panel> <!-- end right side contenxtual panel-->
+
+    </calcite-shell-panel>
+
+    <div id="viewDiv">
+    </div>
+
+  </calcite-shell>
+
+  <script type="module" src="/src/iitTool.ts"></script>
+
+</body>
+
+</html>

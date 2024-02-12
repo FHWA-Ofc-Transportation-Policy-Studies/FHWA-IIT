@@ -1,9 +1,7 @@
 {
-  
-  
     "VERSION_NAME" : "beta 1.3 - for review", 
     
-    "VERSION_DATE": "February 9, 2024",
+    "VERSION_DATE": "February 12, 2024",
 
     "START_LOCATION": "DC",
 
@@ -61,7 +59,6 @@
             "fullName": "Noise Equity",
             "shortName": "noiseEquity",
             "selectors": [
-          
                 {"name": "nonwhiteeqr", "fieldName": "nonwhite_e", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio"},
                 {"name": "whiteeqr", "fieldName": "white_eqr", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio"},
                 {"name": "blackeqr", "fieldName": "black_eqr", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio"},
@@ -82,8 +79,6 @@
                 {"name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars"},
                 {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"},
                 {"name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars"}
-
-
             ]
         },
         {

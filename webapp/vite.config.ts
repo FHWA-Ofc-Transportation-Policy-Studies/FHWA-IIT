@@ -1,3 +1,5 @@
+
+import { resolve } from 'path'
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
@@ -5,7 +7,13 @@ export default defineConfig(({ mode }) => {
     return {
       publicDir: "public/fhwa",
       build: {
-        chunkSizeWarningLimit: 1500
+        chunkSizeWarningLimit: 1500,
+        rollupOptions: {
+          input: {
+            main: resolve(__dirname, 'index.html'),
+            nested: resolve(__dirname, 'iitTool.html'),
+          },
+        },
       },
       server: {
         port: 3000,
@@ -19,7 +27,13 @@ export default defineConfig(({ mode }) => {
     return {
       publicDir: "public/fhwa",
       build: {
-        chunkSizeWarningLimit: 1500
+        chunkSizeWarningLimit: 1500,
+        rollupOptions: {
+          input: {
+            main: resolve(__dirname, 'index.html'),
+            nested: resolve(__dirname, 'iitTool.html'),
+          },
+        },
       },
       server: {
         port: 3000,

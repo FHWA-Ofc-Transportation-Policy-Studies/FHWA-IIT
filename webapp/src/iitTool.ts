@@ -97,7 +97,7 @@ import '@esri/calcite-components/dist/components/calcite-tree-item'
 
 import '@arcgis/core/assets/esri/themes/light/main.css'
 import '@esri/calcite-components/dist/calcite/calcite.css'
-import './style.css'
+// import './iitTool.css'
 
 import Point from '@arcgis/core/geometry/Point'
 import Layer from '@arcgis/core/layers/Layer'
@@ -486,6 +486,19 @@ function onViewReady(view: MapView) {
 
 
     })
+
+    // all the modals are hidden in the html otherwise they appear in a weird way at page load
+    // set them to not be hidden here (this doesn't mean they are open)
+
+    let m = document.getElementById('show-fltr-modal') as HTMLCalciteModalElement
+    m.hidden = false
+
+    m = document.getElementById('reset-all-modal') as HTMLCalciteModalElement
+    m.hidden = false
+
+    m = document.getElementById('simple-summary-info-modal') as HTMLCalciteModalElement
+    m.hidden = false
+
 }
 
 function initWidgets(view: MapView) {
@@ -1913,9 +1926,11 @@ async function simpleSummaryUpdateStat(aLayerView: FeatureLayerView, view: MapVi
 
 async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
     // get from current ND field being used to symbolize this layer
-    let demographicToUse = acsLayerView.layer.renderer.visualVariables[0].field.split('_')[0]
+    let demographicToUseField = acsLayerView.layer.renderer.visualVariables[0].field //.split('_')[0]
 
-    //console.log("demographic to use for simple summary ACS stats: ", demographicToUse)
+    let demographicToUseTitle = acsLayerView.layer.renderer.visualVariables[0].field.split('_')[0]
+
+    // console.log("demographic to use for simple summary ACS stats: ", demographicToUseField, demographicToUseTitle)
 
     if (!acsLayerView.visible) {
         document.getElementById('simple-summary-acs')!.innerHTML = '-'
@@ -1940,7 +1955,7 @@ async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
     acsLayerView
         .queryFeatures(query)
         .then(function (results) {
-            //console.log("features = ", results.features.length)
+            // console.log("features = ", results.features.length)
 
             // TODO not sure this is needed anymore
             document.getElementById('simple-summary-main-div')!.style.display = 'flex'
@@ -1949,10 +1964,10 @@ async function simpleSummaryUpdateAcsStat(extent: __esri.Extent) {
 
             results.features.forEach((result) => {
                 // for each block group multiply the population by the demographic percent to get the pop of this demographic
-                sum += result.attributes[demographicToUse] * result.attributes['population']
+                sum += ( result.attributes[demographicToUseField] / 100.0)  * result.attributes['population']
             })
 
-            document.getElementById('simple-summary-acs-text')!.innerHTML = 'ACS Population (' + demographicToUse + ')'
+            document.getElementById('simple-summary-acs-text')!.innerHTML = 'ACS Population (' + demographicToUseTitle + ')'
             document.getElementById('simple-summary-acs')!.innerHTML = Math.round(sum).toLocaleString('en-US')
         })
         .catch(function (error) {
@@ -1973,28 +1988,25 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
         costType = costType.charAt(0).toUpperCase() + costType.slice(1) // make title case
 
         // get from current ND field being used to symbolize this layer
-        let demographicToUse = equityView.layer.renderer.visualVariables[0].field.split('_')[0]
+        let demographicToUsePrefix = equityView.layer.renderer.visualVariables[0].field.split('_')[0]
 
         // get equity cost field.  This is a bit ugly due to non standard naming conventions on the fields
 
         let equityCostField: string
 
-        switch (demographicToUse) {
+        switch (demographicToUsePrefix) {
             case 'pacific':
             case 'poverty':
-                equityCostField = demographicToUse + '_eq'
+                equityCostField = demographicToUsePrefix + '_cs'
                 break
             case 'nonwhite':
-                equityCostField = demographicToUse + '_e'
-                break
-            case 'nonpoverty':
-                equityCostField = 'nonpover_1'
+                equityCostField = demographicToUsePrefix + '_c'
                 break
             default:
-                equityCostField = demographicToUse + '_eqr'
+                equityCostField = demographicToUsePrefix + '_cst'
         }
 
-        //console.log(demographicToUse, equityCostField)
+        // console.log(demographicToUsePrefix, equityCostField)
 
         if (!equityView.visible) {
             document.getElementById(equitySummaryEl)!.innerHTML = '-'
@@ -2019,7 +2031,7 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
         equityView
             .queryFeatures(query)
             .then(function (results) {
-                //console.log("features = ", results.features.length)
+                // console.log("features = ", results.features.length)
 
                 // TODO not sure this is needed anymore
                 document.getElementById('simple-summary-main-div')!.style.display = 'flex'
@@ -2030,7 +2042,7 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
                     sum += result.attributes[equityCostField]
                 })
 
-                document.getElementById(equitySummaryTextEl)!.innerHTML = 'Total ' + costType + ' Cost (' + demographicToUse + ')'
+                document.getElementById(equitySummaryTextEl)!.innerHTML = 'Total ' + costType + ' Cost (' + demographicToUsePrefix + ')'
 
                 document.getElementById(equitySummaryEl)!.innerHTML = ' $ ' + Math.round(sum).toLocaleString('en-US')
             })
@@ -2041,13 +2053,17 @@ async function simpleSummaryUpdateEquityStat(extent: __esri.Extent) {
 }
 
 async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
+
     let costViews = [noiseCostLayerView, airCostLayerView]
     let costSummaryElements = ['simple-summary-noiseCost', 'simple-summary-airCost']
 
     for (let i = 0; i < costViews.length; i++) {
+
         let costView = costViews[i]
         let costSummaryEl = costSummaryElements[i]
+
         // console.log("updating costview", costView.layer.title, 'with visibility', costView.visible)
+
         if (!costView.visible) {
             document.getElementById(costSummaryEl)!.innerHTML = '-'
             continue
@@ -2071,7 +2087,8 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
         costView
             .queryFeatures(query)
             .then(function (results) {
-                //console.log("features = ", results.features.length)
+
+                // console.log("features = ", results.features.length)
 
                 // TODO not sure this is needed anymore
                 document.getElementById('simple-summary-main-div')!.style.display = 'flex'
@@ -2081,6 +2098,7 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
                 var sumLengthByBin: { [key: number]: number } = {}
 
                 results.features.forEach((result) => {
+
                     let bin = result.attributes['bin_cl'] // cl = cost per length
                     let len = result.attributes['Shape__Length']
 
@@ -2094,6 +2112,8 @@ async function simpleSummaryUpdateCostStat(extent: __esri.Extent) {
 
                     // console.log(bin, len)
                 })
+
+                // console.log(sumLengthByBin)
 
                 let avgCost = 0.0
 
@@ -2132,36 +2152,18 @@ function onSimpleChartBtnClick(view: MapView) {
 
 esriConfig.apiKey = import.meta.env.VITE_API_KEY
 
-let entryPanel = document.getElementById('entryPanel')
-entryPanel!.style.display = 'block'
-//entryPanel!.style.display = 'none'
-
-let appPanel = document.getElementById('appPanel')
-appPanel!.style.display = 'none'
-//appPanel!.style.display = 'block'
-
-document.getElementById('open-tool-btn')!.addEventListener('click', function () {
-    appPanel!.style.display = 'block'
-    entryPanel!.style.display = 'none'
-    let mapview = setUpMap()
-    mapview.when(() => {
-        onViewReady(mapview)
-    })
-})
-
 if (import.meta.env.MODE == 'development' || import.meta.env.MODE == 'staging') {
-    //console.log("mode is ", import.meta.env.MODE)
-    document.getElementById('devMessageEntryPanel')!.innerHTML = 'DEVELOPMENT'
-    document.getElementById('devMessageAppPanel')!.innerHTML = 'DEVELOPMENT'
+    let versionNameDiv = document.getElementById('version-div-name')
+    versionNameDiv!.innerHTML = 'DEVELOPMENT'
+    versionNameDiv!.style.color = 'orange'
+    versionNameDiv!.style.fontWeight = 'bold'
+    versionNameDiv!.style.fontSize = '18px'
+    document.getElementById('version-div-date')!.innerHTML = settings.VERSION_DATE
 }
-
-document.querySelectorAll('[id=versionDate]').forEach((node) => {
-    node.innerHTML = settings.VERSION_DATE
-})
-
-document.querySelectorAll('[id=versionName]').forEach((node) => {
-    node.innerHTML = settings.VERSION_NAME
-})
+else {
+    document.getElementById('version-div-name')!.innerHTML = settings.VERSION_NAME
+    document.getElementById('version-div-date')!.innerHTML = settings.VERSION_DATE
+}
 
 // set up what's needed to return filter checkboxes to the default state
 let checkboxElements: HTMLCollectionOf<HTMLCalciteCheckboxElement> = document.getElementsByTagName('calcite-checkbox')
@@ -2177,5 +2179,12 @@ for (let i = 0; i < sliderElements.length; i++) {
         defaultSliderState[sliderElem.id] = [sliderElements[i].minValue, sliderElements[i].maxValue]
     }
 }
+
+window.addEventListener('load', () => {
+    let mapview = setUpMap()
+    mapview.when(() => {
+        onViewReady(mapview)
+    })
+})
 
 //#endregion
