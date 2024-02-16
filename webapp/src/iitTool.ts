@@ -1726,10 +1726,8 @@ function getStatesFilter(shortLayerName: string) {
     // it has to be handle separately
     let stateAbbrevField = 'STUSPS'
 
-    if (shortLayerName === 'disadvantaged') {
+    if (shortLayerName === 'disadvantaged')
         stateAbbrevField = 'st_abbr'
-    }
-    // 2ALL1901
     else if (shortLayerName === 'noiseCost') {
         stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'airCost') {
@@ -1740,7 +1738,10 @@ function getStatesFilter(shortLayerName: string) {
         stateAbbrevField = 'STATE_ABB'
     } else if (shortLayerName === 'acs') {
         stateAbbrevField = 'STATE_ABB'
+    } else if (shortLayerName === 'fars') {
+        stateAbbrevField = 'STATE_ABB'
     }
+
     let statesQuery
 
     // whenever there is a decision change something is going to be updated and it's always

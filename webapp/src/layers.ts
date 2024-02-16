@@ -60,7 +60,7 @@ const farsClusterConfig = {
 
 export const farsLayer = new FeatureLayer({
     title: 'FARS (number of crashes)',
-    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/TTET_FARS_vb1p1/FeatureServer',
+    url: 'https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/fars_for_iit_gdb/FeatureServer',
     visible: false,
     outFields: ['*'],
     renderer: farsRender as __esri.RendererProperties,
