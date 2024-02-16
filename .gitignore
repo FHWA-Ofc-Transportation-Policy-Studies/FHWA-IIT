@@ -24,3 +24,6 @@
 /webapp/fhwa_iit
 /webapp/fhwa_iit-dev
 *.local
+
+/webapp/prep_layers/input
+/webapp/prep_layers/output
