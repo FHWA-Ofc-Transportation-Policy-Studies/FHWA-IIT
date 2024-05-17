@@ -1,7 +1,7 @@
 {
-    "VERSION_NAME" : "beta 1.3 - for review", 
-    
-    "VERSION_DATE": "February 16, 2024",
+    "VERSION_NAME": "beta 1.4 - for review",
+
+    "VERSION_DATE": "May 17, 2024",
 
     "START_LOCATION": "DC",
 
@@ -12,137 +12,141 @@
             "fullName": "FARS (number of crashes)",
             "shortName": "fars",
             "selectors": [
-                {"name": "year", "fieldName": "YEAR", "fieldType": "integer", "fieldLabel": "Year"},
-                {"name": "fatalities", "fieldName": "FATALS", "fieldType": "integer", "fieldLabel": "Fatals"},
-                {"name": "fatalsafamer", "fieldName": "FTL_BLACK", "fieldType": "integer", "fieldLabel": "Fatals Afr. American"},
-                {"name": "fatalsamerind", "fieldName": "FTL_AMER_INDIAN ", "fieldType": "integer", "fieldLabel": "Fatals Amer. Indian"},
-                {"name": "fatalsped", "fieldName": "FTL_PEDESTRIAN", "fieldType": "integer", "fieldLabel": "Fatals Ped."},
-                {"name": "fatalsbicycle", "fieldName": "FTL_BICYCLIST", "fieldType": "integer", "fieldLabel": "Fatals Bicycle"}
+                { "name": "year", "fieldName": "YEAR", "fieldType": "integer", "fieldLabel": "Year" },
+                { "name": "fatalities", "fieldName": "FATALS", "fieldType": "integer", "fieldLabel": "Fatals" },
+                { "name": "fatalsafamer", "fieldName": "FTL_BLACK", "fieldType": "integer", "fieldLabel": "Fatals Afr. American" },
+                { "name": "fatalsamerind", "fieldName": "FTL_AMER_INDIAN ", "fieldType": "integer", "fieldLabel": "Fatals Amer. Indian" },
+                { "name": "fatalsped", "fieldName": "FTL_PEDESTRIAN", "fieldType": "integer", "fieldLabel": "Fatals Ped." },
+                { "name": "fatalsbicycle", "fieldName": "FTL_BICYCLIST", "fieldType": "integer", "fieldLabel": "Fatals Bicycle" }
             ],
             "charts": [
-                {"type": "simpleSum", "chartName": "Total Fatalities", "sumField": "FATALS"},
-                {"type": "simpleSum", "chartName": "African American Fatalities", "sumField": "FTL_BLACK"}
+                { "type": "simpleSum", "chartName": "Total Fatalities", "sumField": "FATALS" },
+                { "type": "simpleSum", "chartName": "African American Fatalities", "sumField": "FTL_BLACK" }
             ]
         },
         {
             "fullName": "ACS Population",
             "shortName": "acs",
             "selectors": [
-                {"name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people"},
-                {"name": "pctwhite", "fieldName": "white__", "fieldType": "float", "fieldLabel": "% white", "units": "%"},
-                {"name": "pctnonwhite", "fieldName": "nonwhite__", "fieldType": "float", "fieldLabel": "% non-white", "units": "%"},
-                {"name": "pctblack", "fieldName": "black__", "fieldType": "float", "fieldLabel": "% black", "units": "%"},
-                {"name": "pctnative", "fieldName": "native__", "fieldType": "float", "fieldLabel": "% native", "units": "%"},
-                {"name": "pctasian", "fieldName": "asian__", "fieldType": "float", "fieldLabel": "% asian", "units": "%"},
-                {"name": "pctpacific", "fieldName": "pacific__", "fieldType": "float", "fieldLabel": "% pacific", "units": "%"},
-                {"name": "pctother", "fieldName": "other__", "fieldType": "float", "fieldLabel": "% other", "units": "%"},
-                {"name": "pctpoverty", "fieldName": "poverty__", "fieldType": "float", "fieldLabel": "% poverty", "units": "%"},
-                {"name": "pctnonpoverty", "fieldName": "npvrty__", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "%"}
+                { "name": "population", "fieldName": "population", "fieldType": "float", "fieldLabel": "Population", "units": "people" },
+                { "name": "pctwhite", "fieldName": "white__", "fieldType": "float", "fieldLabel": "% white", "units": "%" },
+                { "name": "pctnonwhite", "fieldName": "nonwhite__", "fieldType": "float", "fieldLabel": "% non-white", "units": "%" },
+                { "name": "pctblack", "fieldName": "black__", "fieldType": "float", "fieldLabel": "% black", "units": "%" },
+                { "name": "pctnative", "fieldName": "native__", "fieldType": "float", "fieldLabel": "% native", "units": "%" },
+                { "name": "pctasian", "fieldName": "asian__", "fieldType": "float", "fieldLabel": "% asian", "units": "%" },
+                { "name": "pctpacific", "fieldName": "pacific__", "fieldType": "float", "fieldLabel": "% pacific", "units": "%" },
+                { "name": "pctother", "fieldName": "other__", "fieldType": "float", "fieldLabel": "% other", "units": "%" },
+                { "name": "pctpoverty", "fieldName": "poverty__", "fieldType": "float", "fieldLabel": "% poverty", "units": "%" },
+                { "name": "pctnonpoverty", "fieldName": "npvrty__", "fieldType": "float", "fieldLabel": "% non-poverty", "units": "%" }
             ]
         },
         {
             "fullName": "Adjusted Urban Area Boundaries",
             "shortName": "urban",
-            "charts": [
-                {"type": "simpleSum", "chartName": "Urban Area", "sumField": "SQ_MILES"}
-            ]
+            "charts": [{ "type": "simpleSum", "chartName": "Urban Area", "sumField": "SQ_MILES" }]
         },
         {
             "fullName": "Noise Cost",
             "shortName": "noiseCost",
             "selectors": [
-                {"name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class"},
-                {"name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Noise Cost Bin"}
+                { "name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class" },
+                { "name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Noise Cost Bin" }
             ]
         },
         {
             "fullName": "Noise Equity",
             "shortName": "noiseEquity",
             "selectors": [
-                {"name": "nonwhiteeqr", "fieldName": "nonwhite_e", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio"},
-                {"name": "whiteeqr", "fieldName": "white_eqr", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio"},
-                {"name": "blackeqr", "fieldName": "black_eqr", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio"},
-                {"name": "asianeqr", "fieldName": "asian_eqr", "fieldType": "float", "fieldLabel": "Asian Equity Ratio", "units": "ratio"},
-                {"name": "nativeeqr", "fieldName": "native_eqr", "fieldType": "float", "fieldLabel": "Native Equity Ratio", "units": "ratio"},
-                {"name": "pacificeqr", "fieldName": "pacific_eq", "fieldType": "float", "fieldLabel": "Pacific Equity Ratio", "units": "ratio"},
-                {"name": "othereqr", "fieldName": "other_eqr", "fieldType": "float", "fieldLabel": "Other Equity Ratio", "units": "ratio"},
-                {"name": "povertyeqr", "fieldName": "poverty_eq", "fieldType": "float", "fieldLabel": "Poverty Equity Ratio", "units": "ratio"},
-                {"name": "nonpovertyeqr", "fieldName": "npvrty_eqr ", "fieldType": "float", "fieldLabel": "Non-Poverty Equity Ratio", "units": "ratio"},
+                { "name": "nonwhiteeqr", "fieldName": "nonwhite_e", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio" },
+                { "name": "whiteeqr", "fieldName": "white_eqr", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio" },
+                { "name": "blackeqr", "fieldName": "black_eqr", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio" },
+                { "name": "asianeqr", "fieldName": "asian_eqr", "fieldType": "float", "fieldLabel": "Asian Equity Ratio", "units": "ratio" },
+                { "name": "nativeeqr", "fieldName": "native_eqr", "fieldType": "float", "fieldLabel": "Native Equity Ratio", "units": "ratio" },
+                { "name": "pacificeqr", "fieldName": "pacific_eq", "fieldType": "float", "fieldLabel": "Pacific Equity Ratio", "units": "ratio" },
+                { "name": "othereqr", "fieldName": "other_eqr", "fieldType": "float", "fieldLabel": "Other Equity Ratio", "units": "ratio" },
+                { "name": "povertyeqr", "fieldName": "poverty_eq", "fieldType": "float", "fieldLabel": "Poverty Equity Ratio", "units": "ratio" },
+                {
+                    "name": "nonpovertyeqr",
+                    "fieldName": "npvrty_eqr ",
+                    "fieldType": "float",
+                    "fieldLabel": "Non-Poverty Equity Ratio",
+                    "units": "ratio"
+                },
 
-                {"name": "nonwhitecost", "fieldName": "nonwhite_c", "fieldType": "float", "fieldLabel": "Non-White Cost", "units": "dollars"},
-                {"name": "whitecost", "fieldName": "white_cst", "fieldType": "float", "fieldLabel": "White Cost", "units": "dollars"},                
-                {"name": "blackcost", "fieldName": "black_cst", "fieldType": "float", "fieldLabel": "Black Cost", "units": "dollars"},
-                {"name": "asiancost", "fieldName": "asian_cst", "fieldType": "float", "fieldLabel": "Asian Cost", "units": "dollars"},
-                {"name": "nativecost", "fieldName": "native_cst", "fieldType": "float", "fieldLabel": "Native Cost", "units": "dollars"},
-                {"name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars"},
-                {"name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars"},
-                {"name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars"},
-                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"},
-                {"name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars"}
+                { "name": "nonwhitecost", "fieldName": "nonwhite_c", "fieldType": "float", "fieldLabel": "Non-White Cost", "units": "dollars" },
+                { "name": "whitecost", "fieldName": "white_cst", "fieldType": "float", "fieldLabel": "White Cost", "units": "dollars" },
+                { "name": "blackcost", "fieldName": "black_cst", "fieldType": "float", "fieldLabel": "Black Cost", "units": "dollars" },
+                { "name": "asiancost", "fieldName": "asian_cst", "fieldType": "float", "fieldLabel": "Asian Cost", "units": "dollars" },
+                { "name": "nativecost", "fieldName": "native_cst", "fieldType": "float", "fieldLabel": "Native Cost", "units": "dollars" },
+                { "name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars" },
+                { "name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars" },
+                { "name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars" },
+                { "name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars" },
+                { "name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars" }
             ]
         },
         {
             "fullName": "Air Cost",
             "shortName": "airCost",
             "selectors": [
-                {"name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class"},
-                {"name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Air Cost Bin"}
+                { "name": "funcclass", "fieldName": "F_SYSTEM", "fieldType": "integer", "fieldLabel": "Func. Class" },
+                { "name": "cost", "fieldName": "bin_cl", "fieldType": "integer", "fieldLabel": "Air Cost Bin" }
             ]
         },
         {
             "fullName": "Air Equity",
             "shortName": "airEquity",
             "selectors": [
-                {"name": "nonwhiteeqr", "fieldName": "nonwhite_e", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio"},
-                {"name": "whiteeqr", "fieldName": "white_eqr", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio"},
-                {"name": "blackeqr", "fieldName": "black_eqr", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio"},
-                {"name": "asianeqr", "fieldName": "asian_eqr", "fieldType": "float", "fieldLabel": "Asian Equity Ratio", "units": "ratio"},
-                {"name": "nativeeqr", "fieldName": "native_eqr", "fieldType": "float", "fieldLabel": "Native Equity Ratio", "units": "ratio"},
-                {"name": "pacificeqr", "fieldName": "pacific_eq", "fieldType": "float", "fieldLabel": "Pacific Equity Ratio", "units": "ratio"},
-                {"name": "othereqr", "fieldName": "other_eqr", "fieldType": "float", "fieldLabel": "Other Equity Ratio", "units": "ratio"},
-                {"name": "povertyeqr", "fieldName": "poverty_eq", "fieldType": "float", "fieldLabel": "Poverty Equity Ratio", "units": "ratio"},
-                {"name": "nonpovertyeqr", "fieldName": "npvrty_eqr", "fieldType": "float", "fieldLabel": "Non-Poverty Equity Ratio", "units": "ratio"},
-                
-                {"name": "nonwhitecost", "fieldName": "nonwhite_c", "fieldType": "float", "fieldLabel": "Non-White Cost", "units": "dollars"},
-                {"name": "whitecost", "fieldName": "white_cst", "fieldType": "float", "fieldLabel": "White Cost", "units": "dollars"},                
-                {"name": "blackcost", "fieldName": "black_cst", "fieldType": "float", "fieldLabel": "Black Cost", "units": "dollars"},
-                {"name": "asiancost", "fieldName": "asian_cst", "fieldType": "float", "fieldLabel": "Asian Cost", "units": "dollars"},
-                {"name": "nativecost", "fieldName": "native_cst", "fieldType": "float", "fieldLabel": "Native Cost", "units": "dollars"},
-                {"name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars"},
-                {"name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars"},
-                {"name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars"},
-                {"name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars"},
-                {"name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars"}
+                { "name": "nonwhiteeqr", "fieldName": "nonwhite_e", "fieldType": "float", "fieldLabel": "Non-White Equity Ratio", "units": "ratio" },
+                { "name": "whiteeqr", "fieldName": "white_eqr", "fieldType": "float", "fieldLabel": "White Equity Ratio", "units": "ratio" },
+                { "name": "blackeqr", "fieldName": "black_eqr", "fieldType": "float", "fieldLabel": "Black Equity Ratio", "units": "ratio" },
+                { "name": "asianeqr", "fieldName": "asian_eqr", "fieldType": "float", "fieldLabel": "Asian Equity Ratio", "units": "ratio" },
+                { "name": "nativeeqr", "fieldName": "native_eqr", "fieldType": "float", "fieldLabel": "Native Equity Ratio", "units": "ratio" },
+                { "name": "pacificeqr", "fieldName": "pacific_eq", "fieldType": "float", "fieldLabel": "Pacific Equity Ratio", "units": "ratio" },
+                { "name": "othereqr", "fieldName": "other_eqr", "fieldType": "float", "fieldLabel": "Other Equity Ratio", "units": "ratio" },
+                { "name": "povertyeqr", "fieldName": "poverty_eq", "fieldType": "float", "fieldLabel": "Poverty Equity Ratio", "units": "ratio" },
+                {
+                    "name": "nonpovertyeqr",
+                    "fieldName": "npvrty_eqr",
+                    "fieldType": "float",
+                    "fieldLabel": "Non-Poverty Equity Ratio",
+                    "units": "ratio"
+                },
+
+                { "name": "nonwhitecost", "fieldName": "nonwhite_c", "fieldType": "float", "fieldLabel": "Non-White Cost", "units": "dollars" },
+                { "name": "whitecost", "fieldName": "white_cst", "fieldType": "float", "fieldLabel": "White Cost", "units": "dollars" },
+                { "name": "blackcost", "fieldName": "black_cst", "fieldType": "float", "fieldLabel": "Black Cost", "units": "dollars" },
+                { "name": "asiancost", "fieldName": "asian_cst", "fieldType": "float", "fieldLabel": "Asian Cost", "units": "dollars" },
+                { "name": "nativecost", "fieldName": "native_cst", "fieldType": "float", "fieldLabel": "Native Cost", "units": "dollars" },
+                { "name": "pacificcost", "fieldName": "pacific_cs", "fieldType": "float", "fieldLabel": "Pacific Cost", "units": "dollars" },
+                { "name": "othercost", "fieldName": "other_cst", "fieldType": "float", "fieldLabel": "Other Cost", "units": "dollars" },
+                { "name": "povertycost", "fieldName": "poverty_cs", "fieldType": "float", "fieldLabel": "Poverty Cost", "units": "dollars" },
+                { "name": "nonpovertycost", "fieldName": "npvrty_cst", "fieldType": "float", "fieldLabel": "Non-Poverty Cost", "units": "dollars" },
+                { "name": "totalcost", "fieldName": "total_cst", "fieldType": "float", "fieldLabel": "Total Cost", "units": "dollars" }
             ]
         },
         {
             "fullName": "States",
             "shortName": "states",
-            "selectors": [
-                {"name": "stateabb", "fieldName": "STUSPS", "fieldType": "text", "fieldLabel": "State"}
-            ]
+            "selectors": [{ "name": "stateabb", "fieldName": "STUSPS", "fieldType": "text", "fieldLabel": "State" }]
         },
         {
             "fullName": "Public Schools",
             "shortName": "publicSchools",
-            "selectors": [
-                {"name": "schoolname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "School Name"}
-            ]
+            "selectors": [{ "name": "schoolname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "School Name" }]
         },
         {
             "fullName": "Universities",
             "shortName": "universities",
             "selectors": [
-                {"name": "universityname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "University Name"},
-                {"name": "enrollment", "fieldName": "TOT_ENROLL", "fieldType": "integer", "fieldLabel": "Total Enrollment"}
+                { "name": "universityname", "fieldName": "NAME", "fieldType": "text", "fieldLabel": "University Name" },
+                { "name": "enrollment", "fieldName": "TOT_ENROLL", "fieldType": "integer", "fieldLabel": "Total Enrollment" }
             ]
         },
         {
             "fullName": "Redlined Neighborhoods",
             "shortName": "redlining",
-            "selectors": [
-                {"name": "grade", "fieldName": "holc_grade", "fieldType": "text", "fieldLabel": "HOLC Grade"}
-            ]
+            "selectors": [{ "name": "grade", "fieldName": "holc_grade", "fieldType": "text", "fieldLabel": "HOLC Grade" }]
         }
     ],
     "presetViews": {

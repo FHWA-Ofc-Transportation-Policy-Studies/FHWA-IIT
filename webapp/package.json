@@ -1,23 +1,23 @@
 {
-  "name": "iit",
-  "description": "FHWA Inequity Identification Tool (IIT)",
-  "version": "1.0.0",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build_dev": "vite build --outDir fhwa_iit-dev --mode staging",
-    "build_prod": "vite build --outDir fhwa_iit --mode production",
-    "preview_dev": "vite preview --outDir dist_dev"
-  },
-  "devDependencies": {
-    "@types/node": "^20.4.4",
-    "prettier": "^2.8.8",
-    "typescript": "^4.8.4",
-    "vite": "^4.3.9"
-  },
-  "dependencies": {
-    "@arcgis/core": "~4.28",
-    "@esri/calcite-components": "~1.9.2"
-  }
+    "name": "iit",
+    "description": "FHWA Inequity Identification Tool (IIT)",
+    "version": "1.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build_dev": "vite build --outDir fhwa_iit-dev --mode staging",
+        "build_prod": "vite build --outDir fhwa_iit --mode production",
+        "preview_dev": "vite preview --outDir dist_dev"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.4",
+        "prettier": "^3.2.5",
+        "typescript": "^5.4.3",
+        "vite": "^5.2.2"
+    },
+    "dependencies": {
+        "@arcgis/core": "~4.29",
+        "@esri/calcite-components": "~2.8"
+    }
 }

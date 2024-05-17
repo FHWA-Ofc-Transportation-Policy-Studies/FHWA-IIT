@@ -1,288 +1,241 @@
-@import 'https://js.arcgis.com/4.28/@arcgis/core/assets/esri/themes/light/main.css';
-
+@import 'https://js.arcgis.com/4.29/@arcgis/core/assets/esri/themes/light/main.css';
 
 html,
 body,
 #viewDiv {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  border-color: white;
-  /* border-width:10px; */
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    border-color: white;
+    /* border-width:10px; */
 }
 
-
 calcite-loader {
-  align-self: center;
-  justify-self: center;
+    align-self: center;
+    justify-self: center;
 }
 
 .calcite-panel {
-  --calcite-shell-panel-width: 800vw;
-  --calcite-shell-panel-max-width: 800vw;
+    --calcite-shell-panel-width: 800vw;
+    --calcite-shell-panel-max-width: 800vw;
 }
 
 .calcite-shell-panel {
-  --calcite-shell-panel-width: 800vw;
-   --calcite-shell-panel-max-width: 800vw;
+    --calcite-shell-panel-width: 800vw;
+    --calcite-shell-panel-max-width: 800vw;
 }
 
 .action {
-  color: blue;
-  cursor: pointer;
-  text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 calcite-shell-panel {
-  --calcite-panel-width-multiplier: var(--calcite-panel-width-multiplier);
+    --calcite-panel-width-multiplier: var(--calcite-panel-width-multiplier);
 }
 
-
-/* make the table taller and make the right margin big so 
-you can still click the zoom in and zoom out buttons */
-/* #table-shell {
-  height: 250px;
-  margin-right: 35px;
-}  */
-
-calcite-panel[id="fars-fltr-panel"],
-calcite-panel[id="nhs-fltr-panel"],
-calcite-panel[id="tracts-fltr-panel"],
-calcite-panel[id="states-fltr-panel"],
-calcite-panel[id="neighborhoods-fltr-panel"],
-calcite-panel[id="regions-fltr-panel"],
-calcite-panel[id="disadvantaged-fltr-panel"]
-{
-  --calcite-panel-width: 25vw;
-  --calcite-panel-min-width: 15vw;
-  --calcite-panel-max-width: 35vw;
-} 
-
-/* don't diplay layer subtitle in legend */
-.esri-legend__layer-caption {
-  display:none;
-  }
-
-/* reduce spacing between patches in legend */
-.esri-legend__layer-cell {
-  padding:1px
-}
-
-/* when 4.23 came out the layers dialog was getting cut off at the right */
-.esri-layer-list__item-container {
-  margin-right:12px
-}
-
-/* reduce whitespace between legend patches */
-.esri-legend__service {
-  padding-top: 5px;
-  padding-bottom: 2px;
-  padding-right: 8px;
-  padding-left: 8px;
+calcite-panel[id='fars-fltr-panel'],
+calcite-panel[id='nhs-fltr-panel'],
+calcite-panel[id='tracts-fltr-panel'],
+calcite-panel[id='states-fltr-panel'],
+calcite-panel[id='neighborhoods-fltr-panel'],
+calcite-panel[id='regions-fltr-panel'],
+calcite-panel[id='disadvantaged-fltr-panel'] {
+    --calcite-panel-width: 25vw;
+    --calcite-panel-min-width: 15vw;
+    --calcite-panel-max-width: 35vw;
 }
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
 }
 
 /* The Close Button */
 .close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-#cursorText{
-  position:absolute;
-  border:1px solid black;
-  padding: 5px;
-  background: white;
+#cursorText {
+    position: absolute;
+    border: 1px solid black;
+    padding: 5px;
+    background: white;
 }
-
-/* .updateLi {
-  margin: 12px 0;
-  padding-left: 12px
-} */
 
 .slider {
-  padding-left: 10px;
-  padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
-
 
 /* =======================================================================
 == simple summary charts
 ==========================================================================  */
 
-#simple-summary-main-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 5px;
-  /* border: 2px solid greenyellow; */
-  padding: 7px;
-  height: 100%;
-  /* width: 90%; */
-  /* justify-content: center;
-  align-items: center; */
-}
-
 #simple-summary-btn {
-  padding-top: 20px;
-}
-
-.simple-summary-stat-box {
-  border: 1px solid lightgray;
-  margin: 5px;
-  padding: 5px;
-  width: 100%;
-  /*height: 30px; */
-  padding: 5px;
+    padding-top: 10px;
 }
 
 .simple-summary-sub-container {
-  /* border: 1px solid blue; */
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  margin: 6px;
-  padding: 5px;
+    /* border: 1px solid blue; */
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 6px;
+    padding: 5px;
 }
 
-.simple-summary-canvas-container {
-  margin: 0px;
-  /* border: 2px solid red; */
-  padding: 3px;
-  height: 100;
-  width: 100%;
-  justify-content: center;
+#simple-summary-tooltip-button {
+    margin: 5px;
 }
-
 
 /* =========== HEADER =========== */
 
 .main-content-section-div {
-  /* outline: 1px dashed blue; */
+    /* outline: 1px dashed white; */
 }
 
 #header-content {
-  background-color: #1c6da6;
-  color: #fff;
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 5px;
+    background-color: #1c6da6;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 3px;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
 }
 
 #logo-div {
-  padding-left: 4px;
-  width: 42px;
-  flex-shrink: 0;
+    padding-left: 4px;
+    width: 42px;
+    flex-shrink: 0;
 }
 
 #logo-img {
-  height: 40px;
+    height: 40px;
 }
 
 #title-div {
-  /* flex-grow: 1; */
-  flex-shrink: 0;
+    /* flex-grow: 1; */
+    flex-shrink: 0;
 }
 
 #main-title {
-  /* outline: 1px dashed red; */
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  padding-left: 15px;
-  line-height: 25px;
+    /* outline: 1px dashed red; */
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 15px;
+    line-height: 25px;
 }
 
 #title-div-sub-title {
-  /* outline: 1px dashed red; */
-  line-height: 22px;
+    /* outline: 1px dashed red; */
+    line-height: 22px;
 }
 
 #subtitle-a {
-  color: white;
-  font-size: 13px;
-  text-decoration: none;
-  padding-left: 15px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    padding-left: 15px;
 }
 
 #preset-views-div {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
 }
 
 #preset-buttons-label {
-  margin: 10px;
-  color: white;
+    margin: 10px;
+    color: white;
+    font-size: 18.72px;
 }
 
 #preset-buttons-div {
-  display: flex;
+    display: flex;
 }
 
 .presetViewButton {
-  margin: 5px;
+    margin: 5px;
 }
 
- #noise-preset-view-btn {
-  --calcite-ui-brand: #d17a1d; 
-  --calcite-ui-brand-hover: #bc6e1a; 
+#noise-preset-view-btn {
+    --calcite-color-brand: #d17a1d;
+    --calcite-color-brand-hover: #c2711b;
+    width: 111px;
 }
 
 #air-preset-view-btn {
-  --calcite-ui-brand: #3e7dc9;
-  --calcite-ui-brand-hover: #3871b7; 
+    --calcite-color-brand: #173d72;
+    --calcite-color-brand-hover: #13315c;
+    width: 111px;
 }
 
 .header-divider {
-  width: 10px;
-  flex-grow: 1;
-  flex-shrink: 0;
+    width: 10px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+#disclaimer-div {
+    padding: 8px;
+}
+
+#disclaimer-label {
+    color: white;
+    font-size: 14px;
+    margin: 10px;
+    /* color: white; */
+}
+
+#disclaimer-label:hover {
+    text-decoration: underline;
 }
 
 #version-div {
-  justify-items: center;
-  width: 150px;
-  margin-right: 7px;
-  color: white;
-  font-size: 13px;
-  text-decoration: none;
-  padding-left: 15px;
+    justify-items: center;
+    width: 150px;
+    margin-right: 7px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    padding-left: 15px;
 }

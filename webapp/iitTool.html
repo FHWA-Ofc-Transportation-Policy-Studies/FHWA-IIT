@@ -11,6 +11,30 @@
 
 <body>
 
+  <calcite-modal id="disclaimer-modal" hidden>
+    
+    <div slot="header" id="disclaimer-modal-title">Disclaimer</div>
+    
+    <div slot="content" id="disclaimer-modal-content">
+      <p>
+        Due to uncertainty inherent in this type of modeling, IIT estimates should not be used in 
+        federal processes such as the National Environmental Policy Act (NEPA), conformity, State
+        Implementation Plan (SIP), or similar State processes, and cannot be used for noise analysis
+        as required under 23 CFR 772. This analysis only estimates PM2.5 and does not account for
+        other emissions, relationship to standards or attainment status, or the background levels 
+        of pollution. The pollutant dispersion is modeled based on average meteorological
+        conditions from a wide sample of locations, while specific local conditions alter
+        the dispersion. The methodologies, data, and results presented here do not introduce any new requirements.
+      </p>
+      <p>
+        By clicking OK, I acknowledge that I have read and fully understand the disclaimer language.
+      </p> 
+    </div>
+
+    <calcite-button slot="primary" id="diclaimer-modal-ok-btn" width="auto" label="Open disclaimer">OK</calcite-button>
+   
+  </calcite-modal>
+
   <calcite-modal id="show-fltr-modal" hidden>
     <div slot="header" id="show-fltr-modal-title"></div>
     <div slot="content" id="show-fltr-modal-content"></div>
@@ -23,22 +47,11 @@
     <calcite-button id="reset-all-modal-no-btn" slot="secondary" width="full">No</calcite-button>
   </calcite-modal>
 
-  <calcite-modal id="simple-summary-info-modal" hidden>
-    <div slot="header" id="simple-summary-info-title">Details on Summary Numbers</div>
-    <div slot="content" id="simple-summary-info-content">
-      <ul>
-        <li>
-          All numbers are based on features currently shown on the map. Feature which are no longer visible due to filtering will not be included in the statistics. Polygon and line features which are only partialy on the map will also be included in the statistics.
-        </li>
-      </ul>
-    </div>
-  </calcite-modal>
-
   <calcite-shell content-behind>
 
-    <header slot="header" id="page-header">
+    <header slot="header" id="page-header" >
 
-      <div id="header-content">
+      <div id="header-content" style="display:none">
     
         <div class="main-content-section-div" id="logo-div">
           <img src="./FHWA_logo_square.png" id="logo-img" alt="DOT Logo">
@@ -53,7 +66,7 @@
           </div>
     
           <div id="title-div-sub-title">
-            <a id="subtitle-a" href="https://www.fhwa.dot.gov/policy/otps/">
+            <a id="subtitle-a">
               FHWA Office of Transportation Policy Studies</a>
             </a>
           </div>
@@ -62,16 +75,24 @@
 
         <div class="main-content-section-div header-divider"></div>
 
-        <div class="main-content-section-div" id="preset-views-div">
-          <h3 id="preset-buttons-label">See Preset Views</h3>
-          <div id="preset-buttons-div">
-            <calcite-button class="presetViewButton" id="air-preset-view-btn" width="full">Air Cost</calcite-button>
-            <calcite-button class="presetViewButton" id="noise-preset-view-btn" width="full">Noise Cost</calcite-button>
+          <!-- set this part to start as not being visible until calcite is hydrated-->
+          <div class="main-content-section-div" id="preset-views-div" >
+            <a id="preset-buttons-label">Preset Views:</a>
+            <div id="preset-buttons-div" >
+              <calcite-button class="presetViewButton" id="air-preset-view-btn" width="full" label="Air Cost">Air Cost</calcite-button>
+              <calcite-button class="presetViewButton" id="noise-preset-view-btn" width="full" label="Noise Cost">Noise Cost</calcite-button>
+            </div>
           </div>
-        </div>
+        
+          <div class="main-content-section-div header-divider"></div>
+
+          <div class="main-content-section-div" id="disclaimer-div">
+
+            <span id="disclaimer-label">Disclaimer</span>
+          </div>   
 
         <div class="main-content-section-div header-divider"></div>
-    
+
         <div class="main-content-section-div" id="version-div">
     
           <div id="version-div-name">
@@ -96,7 +117,7 @@
       <calcite-action-bar slot="action-bar">
 
         <calcite-action-group>
-          <calcite-action data-action-id="home" icon="home" text="Reset" textenabled="true"></calcite-action>
+          <calcite-action data-action-id="home" icon="home" text="Reset" textenabled="true" label="Home"></calcite-action>
         </calcite-action-group>
 
         <calcite-action-group>
@@ -114,72 +135,47 @@
 
       </calcite-action-bar>
 
-      <!--panels which provide a div for JS API widgets -->
+      <!--panels which provide a div for JS API widgets (and the custom simple summary)-->
 
-      <calcite-panel heading="Layers" height-scale="l" width-scale="s" data-panel-id="layers" hidden closable>
+      <calcite-panel heading="Layers" height-scale="l" width-scale="s" data-panel-id="layers"  closable closed hidden>
         <div id="layers-container"></div>
       </calcite-panel>
 
-      <calcite-panel heading="Legend" data-panel-id="legend" height-scale="l" width-scale="l" hidden closable>
+      <calcite-panel heading="Legend" height-scale="l" width-scale="l" data-panel-id="legend"  closable closed hidden>
         <div id="legend-container"></div>
       </calcite-panel>
 
-      <calcite-panel heading="Basemaps" height-scale="l" width-scale="s" data-panel-id="basemaps" hidden closable>
+      <calcite-panel heading="Basemaps" height-scale="l" width-scale="s" data-panel-id="basemaps"  closable closed hidden>
         <div id="basemaps-container"></div>
       </calcite-panel>
 
-      <!--Simple Summary Chart -->
-      <!-- ---------------------->
-
-      <calcite-panel heading="Simple Summary" height-scale="l" width-scale="l" data-panel-id="simpleChart" hidden closable>
-
-        <calcite-action icon="information" text-enabled text="Additional Information" slot="header-menu-actions" id="simple-summary-info"></calcite-action>
+      <calcite-panel heading="Simple Summary" height-scale="l" width-scale="s" data-panel-id="simpleChart"  closable closed hidden>
 
         <div id="simple-summary-main-div">
 
-          <div class="simple-summary-stat-box">
-            <strong id="simple-summary-acs-text">ACS Population</strong>
-            <div id="simple-summary-acs">0</div>
-          </div>
-
-          <div class="simple-summary-stat-box">
-            <strong>FARS Fatalities (all)</strong>
-            <div id="simple-summary-farsfatals">-</div>
-          </div>
-
-          <div class="simple-summary-stat-box">
-            <strong>Average Noise Cost Bin</strong>
-            <div id="simple-summary-noiseCost">0</div>
-          </div>
-
-          <div class="simple-summary-stat-box">
-            <strong id="simple-summary-noise-equity-text">Total Noise Cost Dollars</strong>
-            <div id="simple-summary-noiseEquity">0</div>
-          </div>
-
-          <div class="simple-summary-stat-box">
-            <strong>Average Air Cost Bin</strong>
-            <div id="simple-summary-airCost">0</div>
-          </div>
-
-          <div class="simple-summary-stat-box">
-            <strong id="simple-summary-air-equity-text">Total Air Cost Dollars</strong>
-            <div id="simple-summary-airEquity">0</div>
-          </div>
+          <calcite-list selection-mode="none">
+            <calcite-list-item id="simple-summary-acs" label="ACS Population" description="initial"></calcite-list-item>
+            <calcite-list-item id="simple-summary-farsFatals" label="FARS Fatalities (all)" description="initial"></calcite-list-item>
+            <calcite-list-item id="simple-summary-noiseCost" label="Average Noise Cost Bin" description="initial"></calcite-list-item>
+            <calcite-list-item id="simple-summary-noiseEquity" label="Total Noise Cost Dollars" description="initial"></calcite-list-item>
+            <calcite-list-item id="simple-summary-airCost" label="Average Air Cost Bin" description="initial"></calcite-list-item>
+            <calcite-list-item id="simple-summary-airEquity" label="Total Air Cost Dollars" description="initial"></calcite-list-item>
+          </calcite-list>
 
           <div class="simple-summary-sub-container">
             <calcite-button id="simple-summary-btn">Update</calcite-button>
           </div>
 
           <div class="simple-summary-sub-container">
-            <div class="simple-summary-canvas-container">
-            </div>
+            <calcite-link id="simple-summary-tooltip-button">Note on Summary Data</calcite-link>
+            <calcite-tooltip label="Data disclaimer" reference-element="simple-summary-tooltip-button">
+                <span>All numbers are based on features currently shown on the map. Feature which are no longer visible due to filtering will not be included in the statistics. Polygon and line features which are only partialy on the map will also be included in the statistics.</span>
+            </calcite-tooltip>        
           </div>
-
+    
         </div>
 
       </calcite-panel>
-
 
     </calcite-shell-panel>
 
@@ -189,10 +185,9 @@
 
     <calcite-shell-panel slot="panel-end" position="end" id="right-shell-panel" height-scale="l" display-mode="float">
 
-
       <!-- ============================= FARS ============================== -->
 
-      <calcite-panel heading="FARS (number of crashes) Filter" id="fars-fltr-panel" hidden closable>
+      <calcite-panel heading="FARS (number of crashes) Filter" id="fars-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="fars-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="fars-show-fltr"></calcite-action>
@@ -232,10 +227,9 @@
 
       </calcite-panel>
 
-
       <!-- =============================== Cost =============================== -->
 
-      <calcite-panel heading="Noise Cost Filter" id="noiseCost-fltr-panel" hidden closable>
+      <calcite-panel heading="Noise Cost Filter" id="noiseCost-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseCost-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseCost-show-fltr"></calcite-action>
@@ -262,7 +256,7 @@
 
       </calcite-panel>
 
-      <calcite-panel heading="Air Cost Filter" id="airCost-fltr-panel" hidden closable>
+      <calcite-panel heading="Air Cost Filter" id="airCost-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airCost-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airCost-show-fltr"></calcite-action>
@@ -291,7 +285,7 @@
 
       <!-- =============================== Equity Ratio =============================== -->
 
-      <calcite-panel heading="Noise Equity Filter" id="noiseEquity-fltr-panel" hidden closable>
+      <calcite-panel heading="Noise Equity Filter" id="noiseEquity-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="noiseEquity-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="noiseEquity-show-fltr"></calcite-action>
@@ -398,7 +392,7 @@
 
       </calcite-panel>
 
-      <calcite-panel heading="Air Equity Filter" id="airEquity-fltr-panel" hidden closable>
+      <calcite-panel heading="Air Equity Filter" id="airEquity-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="airEquity-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="airEquity-show-fltr"></calcite-action>
@@ -502,7 +496,7 @@
 
       </calcite-panel>
 
-      <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" hidden closable>
+      <calcite-panel heading="Noise Equity Symbology" width-scale="l" id="noiseEquity-symbology-panel" closable closed hidden>
         <calcite-block heading="Select Noise Equity Ratio Demographic" open>
           <calcite-select id="noiseEquity-symbology-select">
             <calcite-option label="Non White" value="noiseEquityRendererNonWhite"></calcite-option>
@@ -518,7 +512,7 @@
         </calcite-block>
       </calcite-panel>
 
-      <calcite-panel heading="Air Equity Symbology" width-scale="l" id="airEquity-symbology-panel" hidden closable>
+      <calcite-panel heading="Air Equity Symbology" width-scale="l" id="airEquity-symbology-panel" closable closed hidden>
         <calcite-block heading="Select Air Equity Ratio Demographic" open>
           <calcite-select id="airEquity-symbology-select">
             <calcite-option label="Non White" value="airEquityRendererNonWhite"></calcite-option>
@@ -536,11 +530,10 @@
 
       <!-- =============================== ACS population =============================== -->
 
-      <calcite-panel heading="ACS Population Filter" id="acs-fltr-panel" hidden closable>
+      <calcite-panel heading="ACS Population Filter" id="acs-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="acs-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="acs-show-fltr"></calcite-action>
-
 
         <calcite-block collapsible heading="Population" id="acs-fltr-block-population">
           <calcite-label class="slider-label" id="acs-fltr-sel-population-slider-label" alignment="center"></calcite-label>
@@ -592,13 +585,9 @@
           <calcite-slider class="slider" id="acs-fltr-sel-pctnonpoverty-slider" snap min="0" min-value="0" max-value="100" max="100" step="1"></calcite-slider>
         </calcite-block>
 
-
-
-
       </calcite-panel>
 
-
-      <calcite-panel heading="ACS Population Symbology" width-scale="l" id="acs-symbology-panel" hidden closable>
+      <calcite-panel heading="ACS Population Symbology" width-scale="l" id="acs-symbology-panel" closable closed hidden>
         <calcite-block heading="Select % Population Attribute" open>
           <calcite-select id="acs-symbology-select">
             <calcite-option label="Non White" value="acsRendererNonWhite"></calcite-option>
@@ -614,10 +603,9 @@
         </calcite-block>
       </calcite-panel>
 
-
       <!-- =============================== STATES =============================== -->
 
-      <calcite-panel heading="States Filter" id="states-fltr-panel" hidden closable>
+      <calcite-panel heading="States Filter" id="states-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="states-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="states-show-fltr"></calcite-action>
@@ -687,7 +675,7 @@
 
       <!-- =========================== Disadvantaged =========================== -->
 
-      <calcite-panel heading="Disadvantaged Filter" id="disadvantaged-fltr-panel" hidden closable class="calcite-theme-auto">
+      <calcite-panel heading="Disadvantaged Filter" class="calcite-theme-auto" id="disadvantaged-fltr-panel" closable closed hidden>
 
         <calcite-action icon="reset" text-enabled text="Reset" slot="header-menu-actions" id="disadvantaged-fltr-reset"></calcite-action>
         <calcite-action icon="file-text" text-enabled text="Show Current Filter" slot="header-menu-actions" id="disadvantaged-show-fltr"></calcite-action>

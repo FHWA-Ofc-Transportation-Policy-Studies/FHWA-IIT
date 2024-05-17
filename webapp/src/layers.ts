@@ -13,10 +13,8 @@ import {
     universityRenderer,
     redliningRenderer
 } from './renderers'
-import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer'
 
-// ################################################################
-//#region LAYER CREATION
+import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer'
 
 export const statesLayer = new FeatureLayer({
     title: 'States',
@@ -87,7 +85,9 @@ export const noiseCostLayer = new FeatureLayer({
     visible: true,
     outFields: ['*'],
     renderer: noiseRenderer as __esri.RendererProperties,
-    popupTemplate: noisePopupTemplate
+    popupTemplate: noisePopupTemplate,
+    minScale: 5000000,
+    maxScale: 0
     //definitionExpression: "fclass = 1"
 })
 
@@ -97,7 +97,9 @@ export const airCostLayer = new FeatureLayer({
     visible: false,
     outFields: ['*'],
     renderer: airRenderer as __esri.RendererProperties,
-    popupTemplate: airPopupTemplate
+    popupTemplate: airPopupTemplate,
+    minScale: 5000000,
+    maxScale: 0
     //definitionExpression: "fclass = 1"
 })
 
@@ -107,7 +109,7 @@ export const noiseEquityLayer = new FeatureLayer({
     visible: true,
     outFields: ['*'],
     renderer: noiseEquityRendererNonWhite as __esri.RendererProperties,
-    popupTemplate: noiseEquityPopupTemplate,
+    popupTemplate: noiseEquityPopupTemplate
     // blendMode: "normal"
 })
 noiseEquityLayer.opacity = 0.66
@@ -118,7 +120,7 @@ export const airEquityLayer = new FeatureLayer({
     visible: false,
     outFields: ['*'],
     renderer: airEquityRendererNonWhite as __esri.RendererProperties,
-    popupTemplate: airEquityPopupTemplate,
+    popupTemplate: airEquityPopupTemplate
     // blendMode: "normal"
 })
 airEquityLayer.opacity = 0.66
@@ -132,7 +134,7 @@ export const acsLayer = new FeatureLayer({
     popupTemplate: acsPopupTemplate,
     definitionExpression: 'population > 0'
 })
-acsLayer.opacity = .80
+acsLayer.opacity = 0.8
 
 export const urbanLayer = new FeatureLayer({
     title: 'Adjusted Urban Area Boundaries',
@@ -191,7 +193,7 @@ export const redliningLayer = new FeatureLayer({
     url: 'https://services.arcgis.com/ak2bo87wLfUpMrt1/arcgis/rest/services/HOLC_Redlining_Polygons_v1/FeatureServer',
     visible: false,
     outFields: ['*'],
-    // renderer: redliningRenderer,
+    renderer: redliningRenderer,
     popupTemplate: {
         title: 'Redlined Neighborhood',
         content: [
@@ -203,4 +205,9 @@ export const redliningLayer = new FeatureLayer({
     }
 })
 
-//#endregion
+// TODO: which fields to include?
+export const pm25Layer = new FeatureLayer({
+    title: 'Particulate Matter - 2.5',
+    url: 'https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Nonattainment_Areas_and_Designations/FeatureServer/7',
+    visible: false
+})

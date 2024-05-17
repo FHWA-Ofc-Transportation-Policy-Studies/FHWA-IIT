@@ -1,7 +1,7 @@
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer'
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol'
-import UniqueValueRenderer from "@arcgis/core/renderers/UniqueValueRenderer.js"
-import Color from "@arcgis/core/Color.js"
+import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js'
+import Color from '@arcgis/core/Color.js'
 
 //#region COST RENDERERERS (roads)
 
@@ -112,7 +112,6 @@ let airEquityStops = [
     { value: 1.2, color: '#83a0d5' },
     { value: 1.4, color: '#3e7dc9' } // blue
 ]
-
 
 let equityDottedLineSymbol = {
     type: 'simple-fill',
@@ -335,7 +334,7 @@ export let airEquityRendererPoverty = new SimpleRenderer({
     ]
 } as __esri.SimpleRendererProperties)
 
-//#endregion 
+//#endregion
 
 //#region ACS RENDERERS
 
@@ -353,7 +352,6 @@ let acsStops = [
     { value: 65.0, color: '#756bb1' },
     { value: 80.0, color: '#54278f' } // dark purple
 ]
-
 
 export let acsRendererNonWhite = new SimpleRenderer({
     // type: 'simple',
@@ -485,7 +483,6 @@ export let farsRender = {
         outline: { width: 0.5, color: 'black' }
     }
 }
-
 
 let universityMarkerSymbol = new CIMSymbol({
     data: {
@@ -692,7 +689,6 @@ let universityMarkerSymbol = new CIMSymbol({
     }
 })
 
-
 export let urbanRender = {
     type: 'simple',
     symbol: {
@@ -708,30 +704,58 @@ export let universityRenderer = new SimpleRenderer({
     symbol: universityMarkerSymbol
 } as __esri.SimpleRendererProperties)
 
+let redliningLayerOutlineColor = new Color('#999999')
+redliningLayerOutlineColor.a = 0.75
+
 export let redliningRenderer: UniqueValueRenderer = {
     type: 'unique-value',
-    field: 'Grade',
-    defaultSymbol: { type: 'simple-fill', color: new Color('#808080')},
+    field: 'holc_grade',
+    //defaultSymbol: { type: 'simple-fill', color: new Color('#808080') },
     uniqueValueInfos: [
         {
             value: 'A',
-            symbol: { type: 'simple-fill', color: new Color('#BD0026') }
+            label: 'A (Best)',
+            symbol: {
+                type: 'simple-fill',
+                color: new Color('#82a26c'),
+                outline: { width: 1, color: redliningLayerOutlineColor }
+            }
         },
         {
             value: 'B',
-            symbol: { type: 'simple-fill', color: new Color('#F03B20')}
+            label: 'B (Desirable)',
+            symbol: {
+                type: 'simple-fill',
+                color: new Color('#87afbc'),
+                outline: { width: 1, color: redliningLayerOutlineColor }
+            }
         },
         {
             value: 'C',
-            symbol: { type: 'simple-fill', color: new Color('#FD8D3C')}
+            label: 'C (Declining)',
+            symbol: {
+                type: 'simple-fill',
+                color: new Color('#cbc264'),
+                outline: { width: 1, color: redliningLayerOutlineColor }
+            }
         },
         {
             value: 'D',
-            symbol: { type: 'simple-fill', color: new Color('#FEB24C')}
+            label: 'D (Hazardous)',
+            symbol: {
+                type: 'simple-fill',
+                color: new Color('#d77186'),
+                outline: { width: 1, color: redliningLayerOutlineColor }
+            }
         },
         {
             value: 'E',
-            symbol: { type: 'simple-fill', color: new Color('#FED976')}
+            label: 'E (Other)',
+            symbol: {
+                type: 'simple-fill',
+                color: new Color('#adadad'),
+                outline: { width: 1, color: redliningLayerOutlineColor }
+            }
         }
     ]
 }

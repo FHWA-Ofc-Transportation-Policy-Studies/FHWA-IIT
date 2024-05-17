@@ -26,7 +26,7 @@
           </div>
     
           <div id="title-div-sub-title">
-            <a id="subtitle-a" href="https://www.fhwa.dot.gov/policy/otps/">
+            <a id="subtitle-a">
               FHWA Office of Transportation Policy Studies</a>
             </a>
           </div>
@@ -55,19 +55,23 @@
         <div class="main-content-section-div" id="overview-and-screenshot-div">
 
           <div class="sub-content-section-div" id="overview-div">
-            <span class="main-content-header-section-text">Overview</span>
-            <p id="overview-text">
-            The Inequity Identification Tool (IIT) is an interactive mapping application to highlight highway externalities, such as noise and air pollution, and who they affect. In addition to featuring road segments with estimates of the magnitude of externality costs, the IIT includes county level equity ratios—the percent of highway externality cost borne by a demographic divided by their percent of the population within the county—for each externality type and demographic. It also includes layers such as population and demographic data at the census block group level from the Census database, fatal crashes from the FARS database, school locations, and historic redlining maps from the ArcGIS Living Atlas. The IIT can be helpful for anyone interested in the equity of highway externality exposure. Currently, the IIT covers noise and air pollution from highways, with other modules in development. For more information on the methodology and data please see the below resources and documentation.
-            </p>
+            <span class="main-content-header-section-text">Overview&nbsp;-&nbsp;</span>
+            <span id="overview-text">
+            The Inequity Identification Tool (IIT) is an interactive mapping application to highlight highway externalities, such as noise and air pollution, and who they affect. In addition to featuring road segments with estimates of the magnitude of externality costs, the IIT includes county level equity ratios—the percent of highway externality cost borne by a demographic divided by their percent of the population within the county—for each externality type and demographic. It also includes layers such as population and demographic data at the Census block group level from the Census database, fatal crashes from the FARS database, school locations, and historic redlining maps from the ArcGIS Living Atlas. The IIT can be helpful for anyone interested in the equity of highway externality exposure. Currently, the IIT covers noise and air pollution from highways, with other modules in development. For more information on the methodology and data please see the below resources and documentation.
+            </span>
+
+            <div class="main-content-section-div spacer"></div>
   
-            <p id="note-text">
-              <b>Note:</b>&nbsp;Although IIT estimates the cost externalities at the road segment-level, due to its focus on the analysis of the system-level rather than the road segment-level and the uncertainty inherent in this type of modeling, it should not be taken as a precise estimate for use in other federal processes such as NEPA. Users should supplement IIT’s results with tools designed for a finer spatial scale to conduct project-level analysis.
-            </p>
+            <span class="main-content-header-section-text">Disclaimer&nbsp;-&nbsp;</span>
+            <span id="disclaimer-text">
+            Due to uncertainty inherent in this type of modeling, IIT estimates should not be used in federal processes such as the National Environmental Policy Act (NEPA), conformity, State Implementation Plan (SIP), or similar State processes, and cannot be used for noise analysis as required under 23 CFR 772. This analysis only estimates PM2.5 and does not account for other emissions, relationship to standards or attainment status, or the background levels of pollution. The pollutant dispersion is modeled based on average meteorological conditions from a wide sample of locations, while specific local conditions alter the dispersion. The methodologies, data, and results presented here do not introduce any new requirements.
+            </span>
+            
           </div>
   
           <div class="sub-content-section-div" id="screenshot-and-button-div">
             <div class="sub-content-section-div" id="screenshot-div">
-              <img id="screenshot" src="./screenshot.jpg">
+              <img id="screenshot" src="./screenshot.jpg" title="IIT Tool">
             </div>
             <div class="sub-content-section-div" id="open-map-btn-div">
               <calcite-button id="open-map-btn" width="auto">Open Map</calcite-button>
@@ -75,85 +79,136 @@
           </div>
 
         </div>
-    
-        <div class="main-content-section-div" id="additional-resources-and-datafiles-div">
-          <div class="sub-content-section-div" id="additional-resources-div">
-            <span class="main-content-header-section-text">Additional Resources</span>
-            <ul class="myul">
-  
-              <li>
-                <a href="https://www.fhwa.dot.gov/policy/otps/" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Office of Transportation Policy Studies</a>
-              </li>
-  
-              <li>
-                <a href="./IIT User Guide.pdf" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  IIT User Guide</a>
-              </li>
-  
-  
-              <li>
-                <a href="https://journals.sagepub.com/doi/10.1177/03611981231205886" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Equity of Highway Noise Exposure Publication</a>
-              </li>
-  
-              <li>
-                <a href="https://storymaps.arcgis.com/stories/16790013e04c44b2a931789336b6e442" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Visualizing the External Costs of Highway Use</a>
-              </li>
-  
-              <li>
-                <a href="https://data.transportation.gov/stories/s/External-Costs-of-Highway-Users-Analysis-Tool-ECAT/wxwv-jbz8/" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  External Costs of Highway Users Analysis Tool (ECAT)</a>
-              </li>
-  
-              <li>
-                <a href="https://github.com/FHWA-Ofc-Transportation-Policy-Studies/FHWA-IIT" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Inequity Identification Tool GitHub Repository</a>
-              </li>
-  
-            </ul>
-          </div>
-          <div class="sub-content-section-div" id="resources-divider"></div>
-          <div class="sub-content-section-div" id="data-files-div">
-            <span class="main-content-header-section-text">Data Files</span>
-            <ul class="myul">
-  
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=f89a8dd9f9664aaabf506288a6a34c25" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Noise Cost Feature Service</a>
-              </li>
-  
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=2cb147af9f484778b36c40fd8597376d" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Noise Equity Ratio Feature Service</a>
-              </li>
-  
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=7aa62d0752774a19bd94b3f4fb865c85" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Air Cost Feature Service</a>
-              </li>
-  
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=79c1aa58e3f7497b8805b755b5173126" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  Air Equity Ratio Feature Service</a>
-              </li>
-  
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=75ee26021dd046f2af802878ed30a1df" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  ACS Population Feature Service</a>
-              </li>
 
-              <li>
-                <a href="https://usdot.maps.arcgis.com/home/item.html?id=0b8737105a3a44608827c56690cbe308" style="font-weight:bold; color: #194178;text-decoration: none;line-height:23px" target="_blank" ;>
-                  FARS Feature Service</a>
-              </li>
-  
-            </ul>
-          </div>
+        <div class="main-content-section-div" id="additional-resources-and-datafiles-div">
+
+                <div class="sub-content-section-div" id="iit-resources-div">
+                  <span class="main-content-header-section-text">IIT Resources</span>
+                  <ul class="myul">
+        
+                    <li>
+                      <a href="https://www.fhwa.dot.gov/policy/otps/" class="ulResource" target="_blank" ;>
+                        Office of Transportation Policy Studies</a>
+                    </li>
+        
+                    <li>
+                      <a href="./IIT User Guide.pdf" class="ulResource" target="_blank" ;>
+                        IIT User Guide</a>
+                    </li>
+        
+        
+                    <li>
+                      <a href="https://journals.sagepub.com/doi/10.1177/03611981231205886" class="ulResource" target="_blank" ;>
+                        Equity of Highway Noise Exposure Publication</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://storymaps.arcgis.com/stories/16790013e04c44b2a931789336b6e442" class="ulResource" target="_blank" ;>
+                        Visualizing the External Costs of Highway Use</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://data.transportation.gov/stories/s/External-Costs-of-Highway-Users-Analysis-Tool-ECAT/wxwv-jbz8/" class="ulResource" target="_blank" ;>
+                        External Costs of Highway Users Analysis Tool</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://github.com/FHWA-Ofc-Transportation-Policy-Studies/FHWA-IIT" class="ulResource" target="_blank" ;>
+                        Inequity Identification Tool GitHub Repository</a>
+                    </li>
+        
+                  </ul>
+                </div>
+
+            <div class="sub-content-section-div" id="resources-divider"></div>
+
+                <div class="sub-content-section-div" id="data-files-div">
+                  <span class="main-content-header-section-text">Data Files</span>
+                  <ul class="myul">
+        
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=f89a8dd9f9664aaabf506288a6a34c25" class="ulResource" target="_blank" ;>
+                        Noise Cost Feature Service</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=2cb147af9f484778b36c40fd8597376d" class="ulResource" target="_blank" ;>
+                        Noise Equity Ratio Feature Service</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=7aa62d0752774a19bd94b3f4fb865c85" class="ulResource" target="_blank" ;>
+                        Air Cost Feature Service</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=79c1aa58e3f7497b8805b755b5173126" class="ulResource" target="_blank" ;>
+                        Air Equity Ratio Feature Service</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=75ee26021dd046f2af802878ed30a1df" class="ulResource" target="_blank" ;>
+                        ACS Population Feature Service</a>
+                    </li>
+
+                    <li>
+                      <a href="https://usdot.maps.arcgis.com/home/item.html?id=0b8737105a3a44608827c56690cbe308" class="ulResource" target="_blank" ;>
+                        FARS Feature Service</a>
+                    </li>
+        
+                  </ul>
+                </div>
+
+            <div class="sub-content-section-div" id="resources-divider"></div>
+
+                <div class="sub-content-section-div" id="additional-resources-div">
+                  <span class="main-content-header-section-text">Additional Resources</span>
+                  <ul class="myul">
+        
+                    <li>
+                      <a href="https://www.fhwa.dot.gov/environment/air_quality" class="ulResource" target="_blank" ;>
+                        FHWA Air Quality</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://www.fhwa.dot.gov/environment/noise" class="ulResource" target="_blank" ;>
+                        FHWA Noise</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://www.fhwa.dot.gov/environment/air_quality/conformity/2017_guide/fhwahep17034.pdf" class="ulResource" target="_blank" ;>
+                        FHWA Transportation Conformity Guide</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://fhwaapps.fhwa.dot.gov/planworks" class="ulResource" target="_blank" ;>
+                       FHWA PlanWorks</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://www.transportation.gov/grants/dot-navigator/fhwa-planning-and-equity-tool" class="ulResource" target="_blank" ;>
+                        FHWA Planning and Equity Tool</a>
+                    </li>
+        
+                    <li>
+                      <a href="https://www.fhwa.dot.gov/planning/health_in_transportation" class="ulResource" target="_blank" ;>
+                        FHWA Health in Transportation</a>
+                    </li>
+
+                    <li>
+                      <a href="https://www.transportation.gov/dot-navigator" class="ulResource" target="_blank" ;>
+                        USDOT Navigator</a>
+                    </li>
+
+               
+        
+                  </ul>
+                </div>
+
         </div>
 
-        <div class="main-content-section-div spacer"></div>
+        <div class="main-content-section-div spacer">
+        </div>
 
         <div class="main-content-section-div" id="disseminated-div">
           <span id="disseminated-text">
@@ -161,7 +216,8 @@
           </span>
         </div>
 
-        <div class="main-content-section-div spacer"></div>
+        <div class="main-content-section-div spacer">
+        </div>
  
       </div>
     </main>
@@ -173,6 +229,8 @@
       </div>
       
     </footer>
+
+  
 
   <script type="module" src="/src/index.ts"></script>
 
