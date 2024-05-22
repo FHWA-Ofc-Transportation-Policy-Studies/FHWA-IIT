@@ -714,7 +714,7 @@ export let redliningRenderer: UniqueValueRenderer = {
     uniqueValueInfos: [
         {
             value: 'A',
-            label: 'A (Best)',
+            label: 'A - "Best"',
             symbol: {
                 type: 'simple-fill',
                 color: new Color('#82a26c'),
@@ -723,7 +723,7 @@ export let redliningRenderer: UniqueValueRenderer = {
         },
         {
             value: 'B',
-            label: 'B (Desirable)',
+            label: 'B - "Desirable"',
             symbol: {
                 type: 'simple-fill',
                 color: new Color('#87afbc'),
@@ -732,7 +732,7 @@ export let redliningRenderer: UniqueValueRenderer = {
         },
         {
             value: 'C',
-            label: 'C (Declining)',
+            label: 'C - "Declining"',
             symbol: {
                 type: 'simple-fill',
                 color: new Color('#cbc264'),
@@ -741,7 +741,7 @@ export let redliningRenderer: UniqueValueRenderer = {
         },
         {
             value: 'D',
-            label: 'D (Hazardous)',
+            label: 'D - "Hazardous"',
             symbol: {
                 type: 'simple-fill',
                 color: new Color('#d77186'),
@@ -750,7 +750,7 @@ export let redliningRenderer: UniqueValueRenderer = {
         },
         {
             value: 'E',
-            label: 'E (Other)',
+            label: 'E - "Other"',
             symbol: {
                 type: 'simple-fill',
                 color: new Color('#adadad'),

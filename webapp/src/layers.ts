@@ -207,7 +207,7 @@ export const redliningLayer = new FeatureLayer({
 
 // TODO: which fields to include?
 export const pm25Layer = new FeatureLayer({
-    title: 'Particulate Matter - 2.5',
+    title: 'Nonattainment Area – PM2.5 (2012 Standard)',
     url: 'https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Nonattainment_Areas_and_Designations/FeatureServer/7',
     visible: false
 })
